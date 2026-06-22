@@ -113,7 +113,7 @@ function loadAtt(c){c.innerHTML=`<div><div class="cam-box"><video id="cam" autop
 
 async function startAttendance(){
     if(!modelsLoaded){notify('⏳ मोडेल लोड हुँदै... / Loading models...','warning');await preloadModels();}
-    try{stream=await navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'}});document.getElementById('cam').srcObject=stream;document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';document.getElementById('hudText').textContent='सक्रिय / Active';document.getElementById('hudDot').className='hud-dot on';attendanceActive=true;scanning=true;detectFaces();notify('✅ क्यामेरा सक्रिय! अनुहार देखाउनुहोस् / Camera Active!','success');}catch(e){notify('❌ क्यामेरा त्रुटि / Camera error','error');stopAttendance();}
+    try{stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});document.getElementById('cam').srcObject=stream;document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';document.getElementById('hudText').textContent='सक्रिय / Active';document.getElementById('hudDot').className='hud-dot on';attendanceActive=true;scanning=true;detectFaces();notify('✅ क्यामेरा सक्रिय! अनुहार देखाउनुहोस् / Camera Active!','success');}catch(e){notify('❌ क्यामेरा त्रुटि / Camera error','error');stopAttendance();}
 }
 function stopAttendance(){attendanceActive=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}document.getElementById('hudText').textContent='रोकिएको / Stopped';document.getElementById('hudDot').className='hud-dot off';document.getElementById('startBtn').style.display='inline-flex';document.getElementById('stopBtn').style.display='none';document.getElementById('successOverlay').style.display='none';document.getElementById('matchBadge').style.display='none';}
 
@@ -121,7 +121,7 @@ async function detectFaces(){
     if(!attendanceActive||!scanning)return;
     const video=document.getElementById('cam'),canvas=document.getElementById('overlay');if(!video||!canvas)return;
     try{
-        const faces=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:160,scoreThreshold:0.2})).withFaceLandmarks().withFaceDescriptors();
+        const faces=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:224,scoreThreshold:0.15})).withFaceLandmarks().withFaceDescriptors();
         canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
         const rs=faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});detectCount++;
         if(rs.length>0){
@@ -140,12 +140,12 @@ async function detectFaces(){
                 if(ik){const sid=bm.label;if(!markedToday[sid]){const r=await api('markAttendance',{studentName:sid,studentId:sid,class:'',section:'',rollNumber:'',confidence:(1-bm.distance).toFixed(2)});if(r&&r.success){markedToday[sid]=true;showSuccess(sid,r.status||'Present');}else scanning=true;}else{notify('⚠️ '+sid+' - आज पहिल्यै हाजिर भइसकेको! / Already marked!','warning');scanning=true;}}
                 else{pendingDescriptor=Array.from(d.descriptor);showRegModal();}
             }}
-        }else{document.getElementById('matchBadge').style.display='none';if(detectCount%30===0)notify('📷 अनुहार भेटिएन - क्यामेरा हेर्नुहोस् / No face detected','warning');}
+        }else{document.getElementById('matchBadge').style.display='none';if(detectCount%10===0)notify('📷 अनुहार खोज्दै... / Searching face...','warning');}
     }catch(e){}
     if(attendanceActive&&scanning)requestAnimationFrame(detectFaces);
 }
 
-function checkLive(detection){if(!detection.landmarks)return true;const lm=detection.landmarks,le=eyeAR(lm.positions,38,40,36,39),re=eyeAR(lm.positions,44,46,42,45),ear=(le+re)/2;let blinked=(ear<0.18&&prevEAR>0.18);prevEAR=ear;if(blinked){motionFrames=0;notify('✅ जीवन्तता पुष्टि: आँखा झिम्काइ / Liveness: Blink!','success');return true;}motionFrames++;if(motionFrames>8){motionFrames=0;notify('✅ जीवन्तता पुष्टि: चाल / Liveness: Motion','success');return true;}return false;}
+function checkLive(detection){if(!detection.landmarks)return true;const lm=detection.landmarks,le=eyeAR(lm.positions,38,40,36,39),re=eyeAR(lm.positions,44,46,42,45),ear=(le+re)/2;let blinked=(ear<0.18&&prevEAR>0.18);prevEAR=ear;if(blinked){motionFrames=0;notify('✅ जीवन्तता: आँखा झिम्काइ / Liveness: Blink!','success');return true;}motionFrames++;if(motionFrames>8){motionFrames=0;notify('✅ जीवन्तता: चाल / Liveness: Motion','success');return true;}return false;}
 function eyeAR(lm,t,b,lt,rt){const tp=lm[t],bp=lm[b],lp=lm[lt],rp=lm[rt],v=Math.abs(tp.y-bp.y),h=Math.abs(lp.x-rp.x);return h<.001?1:v/h;}
 
 function showSuccess(name,status){const ov=document.getElementById('successOverlay');ov.style.display='flex';ov.innerHTML=`<div class="success-card"><div class="success-icon">✅</div><h3 style="color:#00c853;margin-top:4px">${status}!</h3><p style="font-weight:700;font-size:1.1rem">${name}</p><p style="color:#64748b;font-size:.78rem;margin-top:4px">हाजिर भयो! / Marked Present!</p></div>`;setTimeout(()=>{ov.style.display='none';scanning=true;detectFaces();},2000);}
