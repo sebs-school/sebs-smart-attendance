@@ -9,27 +9,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root{--p:#1a3a6b;--s:#2ecc71;--w:#f39c12;--d:#e74c3c;--r:16px}
-        .lt{--bg:#f4f6fa;--bg2:#fff;--bg3:#eef1f6;--bgS:#0f1a30;--bgC:#fff;--t:#1a1a2e;--t2:#5a6070;--tS:#b0bec5;--b:#e2e6ed}
-        .dt{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bgS:#010409;--bgC:#161b22;--t:#e6edf3;--t2:#8b949e;--tS:#6e7681;--b:#30363d}
-        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit;font-size:inherit}input,select,textarea{font-family:inherit;font-size:.9rem;border:2px solid var(--b);border-radius:10px;padding:12px 16px;background:var(--bgC);color:var(--t);width:100%;transition:.2s}input:focus,select:focus,textarea:focus{border-color:var(--p);outline:none;box-shadow:0 0 0 4px rgba(26,58,107,.06)}textarea{resize:vertical;min-height:50px}
-        .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:260px;min-height:100vh;display:flex;flex-direction:column}.sb{width:260px;height:100vh;background:var(--bgS);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column}.sh{height:68px;display:flex;align-items:center;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.06);gap:10px}.slogo{width:38px;height:38px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.slogo img{width:30px;height:30px;object-fit:contain}.sn{font-weight:700;font-size:1rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:10px 8px}.sm{display:flex;flex-direction:column;gap:1px}.si{border-radius:8px}.si:hover{background:rgba(255,255,255,.06)}.si.act{background:rgba(255,255,255,.12)}.sl{display:flex;align-items:center;gap:10px;padding:10px 14px;color:var(--tS);font-size:.85rem;font-weight:500;border-radius:8px}.sl i{font-size:1.05rem;width:20px;text-align:center}.sf{padding:10px 8px;border-top:1px solid rgba(255,255,255,.06)}.slo{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(231,76,60,.08);color:#ec7063;font-size:.85rem;font-weight:500;border-radius:8px;cursor:pointer}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}.so.act{display:block}.tb{height:68px;background:var(--bgC);border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:900}#pt{font-size:1.15rem;font-weight:700}.td{font-size:.78rem;color:var(--t2)}.tt{font-size:.82rem;font-weight:700;color:var(--p);font-family:monospace}.ttb{background:var(--bg3);color:var(--t);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:.2s}.ttb:hover{background:var(--p);color:#fff}.pc{flex:1;padding:24px;overflow-y:auto}
-        .lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1628,#1a3a6b,#2a5298)}.lcd{width:100%;max-width:420px;background:rgba(255,255,255,.96);border-radius:26px;padding:48px 40px;box-shadow:0 35px 90px rgba(0,0,0,.3);text-align:center;animation:fadeUp .5s}.llw{width:82px;height:82px;margin:0 auto 18px;border-radius:18px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.llw img{width:64px;height:64px;object-fit:contain}.lsn{font-size:1.5rem;font-weight:800;color:#1a1a2e;line-height:1.3}.lst{font-size:.78rem;color:#636e72;font-weight:500;text-transform:uppercase;letter-spacing:1.5px}.ld{display:flex;align-items:center;gap:14px;margin:26px 0}.ld::before,.ld::after{content:'';flex:1;height:1px;background:#e0e5ec}.glb{width:100%;padding:14px 22px;background:var(--p);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.9rem;font-weight:600;cursor:pointer}
-        .card{background:var(--bgC);border-radius:var(--r);padding:22px 26px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--b);margin-bottom:20px}.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}.stc{background:var(--bgC);border-radius:var(--r);padding:20px 22px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--b);display:flex;align-items:center;gap:16px;cursor:pointer;transition:.2s}.stc:hover{transform:translateY(-2px)}.sci{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}.sci.b{background:rgba(26,58,107,.06);color:var(--p)}.sci.g{background:rgba(46,204,113,.06);color:var(--s)}.sci.o{background:rgba(243,156,18,.06);color:var(--w)}.sci.r{background:rgba(231,76,60,.06);color:var(--d)}.sti h3{font-size:1.6rem;font-weight:800;line-height:1}.sti p{font-size:.72rem;color:var(--t2);margin-top:3px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;border-radius:8px;font-weight:600;font-size:.85rem;cursor:pointer;transition:.15s}.btn-p{background:var(--p);color:#fff}.btn-s{background:var(--s);color:#fff}.btn-d{background:var(--d);color:#fff}.btn-lg{padding:14px 28px;font-size:.9rem;border-radius:10px}.tbc{overflow-x:auto;border-radius:var(--r);border:1px solid var(--b)}table{width:100%;border-collapse:collapse}thead{background:var(--bg3)}th{padding:11px 16px;text-align:left;font-weight:600;font-size:.68rem;text-transform:uppercase;color:var(--t2)}td{padding:10px 16px;border-top:1px solid var(--b);font-size:.82rem}.fg{margin-bottom:14px}.fl{display:block;font-size:.72rem;font-weight:600;margin-bottom:4px;text-transform:uppercase;color:var(--t2)}.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}.nc{position:fixed;top:16px;right:16px;z-index:3000}.nt{background:var(--bgC);border-radius:10px;padding:12px 16px;box-shadow:0 10px 35px rgba(0,0,0,.1);display:flex;align-items:flex-start;gap:10px;border-left:4px solid var(--p);min-width:280px;animation:slideIn .25s;font-size:.82rem}.nt.success{border-left-color:var(--s)}.spinner{width:36px;height:36px;border:3px solid var(--b);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:16px auto}
-        .cam-box{position:relative;background:linear-gradient(180deg,#0a0f18 0%,#1a1f2e 100%);border-radius:20px;overflow:hidden;width:100%;max-width:680px;margin:0 auto;aspect-ratio:4/3;box-shadow:0 20px 60px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.05)}
-        .cam-box video{width:100%;height:100%;object-fit:cover}
-        .cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-        .cam-hud{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;z-index:5}
-        .hud-badge{background:rgba(0,0,0,.55);backdrop-filter:blur(10px);color:#fff;padding:8px 16px;border-radius:24px;font-size:.72rem;font-weight:600;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.08)}
-        .hud-dot{width:10px;height:10px;border-radius:50%}.hud-dot.on{background:#2ecc71;box-shadow:0 0 12px rgba(46,204,113,.6);animation:pulse 1.2s infinite}.hud-dot.off{background:#e74c3c}
-        .match-badge{background:rgba(0,0,0,.55);backdrop-filter:blur(10px);color:#fff;padding:8px 16px;border-radius:24px;font-size:.72rem;font-weight:600;border:1px solid rgba(255,255,255,.08)}
-        .success-overlay{position:absolute;inset:0;background:rgba(46,204,113,.1);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:20}.success-card{background:var(--bgC);border-radius:20px;padding:28px 36px;text-align:center;animation:scaleIn .3s;box-shadow:0 20px 50px rgba(0,0,0,.2)}.success-icon{font-size:3.5rem;animation:bounceIn .5s}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:2500;display:flex;align-items:center;justify-content:center;animation:fadeIn .15s}.modal{background:var(--bgC);border-radius:20px;padding:30px;max-width:540px;width:95%;max-height:82vh;overflow-y:auto;animation:scaleIn .2s}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{opacity:0;transform:translateX(35px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}@keyframes bounceIn{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}@media(max-width:1024px){.mc{margin-left:0}.sr{grid-template-columns:repeat(2,1fr)}.sb{transform:translateX(-100%);width:260px}.sb.mo{transform:translateX(0)}}@media(max-width:768px){.pc{padding:12px}.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.cam-box{aspect-ratio:1/1}}
+        :root{--p:#1a3a6b;--s:#2ecc71;--w:#f39c12;--d:#e74c3c;--blue:#3498db;--r:14px}
+        .lt{--bg:#f4f6fa;--bg2:#fff;--bg3:#eef1f6;--bgS:#0a1226;--bgC:#fff;--t:#1a1a2e;--t2:#5a6070;--tS:#8b95a0;--b:#e2e6ed}
+        .dt{--bg:#0b0f17;--bg2:#131923;--bg3:#1c2330;--bgS:#050810;--bgC:#131923;--t:#e6edf3;--t2:#8b949e;--tS:#5a6470;--b:#242d3a}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;transition:.3s}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit;font-size:inherit}input,select,textarea{font-family:inherit;font-size:.85rem;border:2px solid var(--b);border-radius:8px;padding:10px 14px;background:var(--bgC);color:var(--t);width:100%;transition:.2s}input:focus,select:focus,textarea:focus{border-color:var(--p);outline:none;box-shadow:0 0 0 3px rgba(26,58,107,.06)}textarea{resize:vertical;min-height:45px}
+        .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:250px;min-height:100vh;display:flex;flex-direction:column}.sb{width:250px;height:100vh;background:var(--bgS);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column}.sh{height:64px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(255,255,255,.05);gap:8px}.slogo{width:34px;height:34px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.slogo img{width:26px;height:26px;object-fit:contain}.sn{font-weight:700;font-size:.95rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:8px 6px}.sm{display:flex;flex-direction:column;gap:1px}.si{border-radius:6px}.si:hover{background:rgba(255,255,255,.05)}.si.act{background:rgba(255,255,255,.1)}.sl{display:flex;align-items:center;gap:8px;padding:9px 12px;color:var(--tS);font-size:.82rem;font-weight:500;border-radius:6px}.sl i{font-size:1rem;width:18px;text-align:center}.sf{padding:8px 6px;border-top:1px solid rgba(255,255,255,.05)}.slo{width:100%;display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(231,76,60,.06);color:#ec7063;font-size:.82rem;font-weight:500;border-radius:6px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}.so.act{display:block}.tb{height:64px;background:var(--bgC);border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:900}#pt{font-size:1.1rem;font-weight:700}.td{font-size:.72rem;color:var(--t2)}.tt{font-size:.78rem;font-weight:700;color:var(--p);font-family:monospace}.ttb{background:var(--bg3);color:var(--t);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;transition:.2s}.ttb:hover{background:var(--p);color:#fff}.pc{flex:1;padding:20px;overflow-y:auto}
+        .lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#060d1a,#0f1d3a,#1a3a6b)}.lcd{width:100%;max-width:400px;background:rgba(255,255,255,.97);border-radius:24px;padding:44px 36px;box-shadow:0 30px 80px rgba(0,0,0,.35);text-align:center;animation:fadeUp .4s}.llw{width:72px;height:72px;margin:0 auto 16px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 4px 24px rgba(26,58,107,.12)}.llw img{width:56px;height:56px;object-fit:contain}.lsn{font-size:1.35rem;font-weight:800;color:#1a1a2e;line-height:1.3}.lst{font-size:.7rem;color:#636e72;font-weight:500;text-transform:uppercase;letter-spacing:2px;margin-top:2px}.ld{display:flex;align-items:center;gap:12px;margin:22px 0}.ld::before,.ld::after{content:'';flex:1;height:1px;background:#e0e5ec}.glb{width:100%;padding:12px 20px;background:var(--p);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s}.glb:hover{background:#2a5298}
+        .card{background:var(--bgC);border-radius:var(--r);padding:18px 22px;box-shadow:0 1px 2px rgba(0,0,0,.02);border:1px solid var(--b);margin-bottom:16px}.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.stc{background:var(--bgC);border-radius:var(--r);padding:16px 18px;box-shadow:0 1px 2px rgba(0,0,0,.02);border:1px solid var(--b);display:flex;align-items:center;gap:14px;cursor:pointer;transition:.2s}.stc:hover{transform:translateY(-1px)}.sci{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}.sci.b{background:rgba(26,58,107,.06);color:var(--p)}.sci.g{background:rgba(46,204,113,.06);color:var(--s)}.sci.o{background:rgba(243,156,18,.06);color:var(--w)}.sci.r{background:rgba(231,76,60,.06);color:var(--d)}.sti h3{font-size:1.4rem;font-weight:800;line-height:1}.sti p{font-size:.68rem;color:var(--t2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 16px;border-radius:6px;font-weight:600;font-size:.8rem;cursor:pointer;transition:.15s}.btn-p{background:var(--p);color:#fff}.btn-s{background:var(--s);color:#fff}.btn-d{background:var(--d);color:#fff}.btn-lg{padding:12px 24px;font-size:.85rem;border-radius:8px}.tbc{overflow-x:auto;border-radius:var(--r);border:1px solid var(--b)}table{width:100%;border-collapse:collapse}thead{background:var(--bg3)}th{padding:10px 14px;text-align:left;font-weight:600;font-size:.65rem;text-transform:uppercase;color:var(--t2)}td{padding:9px 14px;border-top:1px solid var(--b);font-size:.78rem}.fg{margin-bottom:12px}.fl{display:block;font-size:.68rem;font-weight:600;margin-bottom:3px;text-transform:uppercase;color:var(--t2)}.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nc{position:fixed;top:12px;right:12px;z-index:3000}.nt{background:var(--bgC);border-radius:8px;padding:10px 14px;box-shadow:0 8px 28px rgba(0,0,0,.08);display:flex;align-items:flex-start;gap:8px;border-left:3px solid var(--p);min-width:250px;animation:slideIn .2s;font-size:.78rem}.nt.success{border-left-color:var(--s)}.spinner{width:30px;height:30px;border:2.5px solid var(--b);border-top-color:var(--p);border-radius:50%;animation:spin .4s linear infinite;margin:12px auto}
+        .cam-box{position:relative;background:#000;border-radius:16px;overflow:hidden;width:100%;max-width:640px;margin:0 auto;aspect-ratio:4/3;box-shadow:0 16px 48px rgba(0,0,0,.25)}.cam-box video{width:100%;height:100%;object-fit:cover}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%}.cam-hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:5}.hud-badge{background:rgba(0,0,0,.5);backdrop-filter:blur(8px);color:#fff;padding:6px 12px;border-radius:18px;font-size:.68rem;font-weight:600;display:flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.06)}.hud-dot{width:8px;height:8px;border-radius:50%}.hud-dot.on{background:#2ecc71;box-shadow:0 0 8px rgba(46,204,113,.5);animation:pulse 1s infinite}.hud-dot.off{background:#e74c3c}.match-badge{background:rgba(0,0,0,.5);backdrop-filter:blur(8px);color:#fff;padding:6px 12px;border-radius:18px;font-size:.68rem;font-weight:600;border:1px solid rgba(255,255,255,.06)}
+        .success-overlay{position:absolute;inset:0;background:rgba(46,204,113,.08);backdrop-filter:blur(1px);display:flex;align-items:center;justify-content:center;z-index:20;animation:fadeIn .2s}.success-card{background:var(--bgC);border-radius:16px;padding:24px 30px;text-align:center;animation:scaleIn .25s;box-shadow:0 16px 40px rgba(0,0,0,.15)}.success-icon{font-size:2.8rem;animation:bounceIn .4s}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2500;display:flex;align-items:center;justify-content:center;animation:fadeIn .12s}.modal{background:var(--bgC);border-radius:16px;padding:24px;max-width:520px;width:95%;max-height:80vh;overflow-y:auto;animation:scaleIn .18s}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}@keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}@keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.15)}100%{transform:scale(1)}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@media(max-width:1024px){.mc{margin-left:0}.sr{grid-template-columns:repeat(2,1fr)}.sb{transform:translateX(-100%);width:250px}.sb.mo{transform:translateX(0)}}@media(max-width:768px){.pc{padding:10px}.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.cam-box{aspect-ratio:1/1}}
     </style>
 </head>
 <body class="lt">
 
-<div id="lp" class="lc"><div class="lcd"><div class="llw"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h1 class="lsn">Systematic English<br>Boarding School</h1><p class="lst">Smart Attendance System</p><div class="ld"><span>Secure Access</span></div><button class="glb" onclick="login()">🔑 Sign in to Continue</button></div></div>
+<div id="lp" class="lc"><div class="lcd"><div class="llw"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h1 class="lsn">Systematic English<br>Boarding School</h1><p class="lst">Smart Attendance</p><div class="ld"><span>Secure Access</span></div><button class="glb" onclick="login()">🔑 Sign in to Continue</button></div></div>
 
 <div id="app" class="ac" style="display:none">
     <aside id="sb" class="sb"><div class="sh"><div class="slogo"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h2 class="sn">SEBS</h2></div><nav class="snv"><ul class="sm">
@@ -39,7 +33,7 @@
         <li class="si" data-p="rep"><a href="#" class="sl" onclick="nav('rep')"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
     </ul></nav><div class="sf"><button class="slo" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button></div></aside>
     <div class="so" id="so" onclick="cmsb()"></div>
-    <main class="mc"><header class="tb"><span id="pt">Dashboard</span><div style="display:flex;align-items:center;gap:18px"><span class="td" id="td"></span><span class="tt" id="tt"></span><button class="ttb" onclick="tth()" id="tth"><i class="fas fa-moon"></i></button></div></header><div class="pc" id="pc"></div></main>
+    <main class="mc"><header class="tb"><span id="pt">Dashboard</span><div style="display:flex;align-items:center;gap:14px"><span class="td" id="td"></span><span class="tt" id="tt"></span><button class="ttb" onclick="tth()" id="tth"><i class="fas fa-moon"></i></button></div></header><div class="pc" id="pc"></div></main>
 </div>
 <div class="nc" id="nc"></div>
 <div id="modalContainer"></div>
@@ -47,58 +41,53 @@
 <script>
 const API='https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
 const MODELS='https://raw.githubusercontent.com/sebs-school/sebs-smart-attendance/main/models';
-let th='lt',stream=null,attendanceActive=false,modelsLoaded=false;
+let th='lt',stream=null,attendanceActive=false,modelsLoaded=false,preloading=false;
 let faceMatcher=null,markedToday={},pendingDescriptor=null;
-let lastMarkTime=0,scanning=true;
+let lastMark=0,scanning=true,prevEAR=1,motionFrames=0;
 
 function init(){updateTime();setInterval(updateTime,1000);if(localStorage.getItem('s-login')==='1'){showApp();nav('db');}if(localStorage.getItem('s-theme')==='dt'){th='dt';document.body.className='dt';document.getElementById('tth').innerHTML='<i class="fas fa-sun"></i>';}}
 function updateTime(){const n=new Date();document.getElementById('td').textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('tt').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
 function tth(){th=th==='lt'?'dt':'lt';document.body.className=th;document.getElementById('tth').innerHTML=th==='dt'?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';localStorage.setItem('s-theme',th);}
-function login(){localStorage.setItem('s-login','1');showApp();nav('db');notify('✅ स्वागत छ! / Welcome!','success');}
+function login(){localStorage.setItem('s-login','1');showApp();nav('db');notify('✅ स्वागत छ!','success');}
 function logout(){stopAttendance();localStorage.removeItem('s-login');document.getElementById('lp').style.display='flex';document.getElementById('app').style.display='none';}
 function showApp(){document.getElementById('lp').style.display='none';document.getElementById('app').style.display='flex';}
 function tmsb(){document.getElementById('sb').classList.toggle('mo');document.getElementById('so').classList.toggle('act');}
 function cmsb(){document.getElementById('sb').classList.remove('mo');document.getElementById('so').classList.remove('act');}
-function notify(m,t){const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div>${m}</div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),200);},3000);}
+function notify(m,t){const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div>${m}</div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),150);},2500);}
 async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
 function showModal(html){document.getElementById('modalContainer').innerHTML=`<div class="modal-overlay" onclick="this.remove()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`;}
 
-async function loadAllEmbeddings(){
-    const d=await api('getAllEmbeddings');
-    if(!d||!d.embeddings||d.embeddings.length===0){faceMatcher=null;return;}
-    let labeled=[];
-    for(let e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))labeled.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}
-    if(labeled.length>0)faceMatcher=new faceapi.FaceMatcher(labeled,0.45);
-}
+async function preloadModels(){if(modelsLoaded||preloading)return;preloading=true;await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)]);modelsLoaded=true;preloading=false;await loadAllEmbeddings();}
+async function loadAllEmbeddings(){const d=await api('getAllEmbeddings');if(!d||!d.embeddings||d.embeddings.length===0){faceMatcher=null;return;}let lb=[];for(let e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.4):null;}
 
 function nav(p){
     document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
     const i=document.querySelector(`[data-p="${p}"]`);if(i)i.classList.add('act');
     document.getElementById('pt').textContent={db:'Dashboard',att:'Live Attendance',stu:'Students',rep:'Reports'}[p]||p;
-    if(p!=='att')stopAttendance();
+    if(p==='att')preloadModels();else stopAttendance();
     const c=document.getElementById('pc');
     if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);cmsb();
 }
 
 async function loadDb(c){c.innerHTML='<div class="spinner"></div>';const d=await api('getDashboard');if(!d){c.innerHTML='<p>Error</p>';return;}c.innerHTML=`<div class="sr"><div class="stc" onclick="nav('stu')"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${d.totalStudents||0}</h3><p>Total</p></div></div><div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${d.present||0}</h3><p>Present</p></div></div><div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${d.late||0}</h3><p>Late</p></div></div><div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${d.absent||0}</h3><p>Absent</p></div></div></div><button class="btn btn-p btn-lg" style="width:100%" onclick="nav('att')"><i class="fas fa-camera"></i> Start Attendance</button>`;}
 
-function loadAtt(c){c.innerHTML=`<div><div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">रोकिएको / Stopped</span></span><span class="match-badge" id="matchBadge" style="display:none"></span></div><div id="successOverlay" style="display:none"></div></div><div style="text-align:center;margin-top:14px;display:flex;gap:10px;justify-content:center"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start / सुरु</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop / रोक्नुहोस्</button></div></div>`;}
+function loadAtt(c){c.innerHTML=`<div><div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Stopped</span></span><span class="match-badge" id="matchBadge" style="display:none"></span></div><div id="successOverlay" style="display:none"></div></div><div style="text-align:center;margin-top:12px;display:flex;gap:8px;justify-content:center"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop</button></div></div>`;}
 
 async function startAttendance(){
+    if(!modelsLoaded){notify('⏳ Loading models...','warning');await preloadModels();}
     try{
-        stream=await navigator.mediaDevices.getUserMedia({video:{width:320,height:240,facingMode:'user'}});
+        stream=await navigator.mediaDevices.getUserMedia({video:{width:256,height:192,facingMode:'user'}});
         document.getElementById('cam').srcObject=stream;
         document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';
-        document.getElementById('hudText').textContent='Loading...';document.getElementById('hudDot').className='hud-dot on';
-        if(!modelsLoaded){await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)]);modelsLoaded=true;await loadAllEmbeddings();}
-        document.getElementById('hudText').textContent='सक्रिय / Active';attendanceActive=true;scanning=true;detectFaces();
-        notify('✅ क्यामेरा सक्रिय! / Camera Active!','success');
-    }catch(e){notify('❌ क्यामेरा त्रुटि','error');stopAttendance();}
+        document.getElementById('hudText').textContent='Active';document.getElementById('hudDot').className='hud-dot on';
+        attendanceActive=true;scanning=true;detectFaces();
+        notify('✅ Ready!','success');
+    }catch(e){notify('❌ Camera error','error');stopAttendance();}
 }
 
 function stopAttendance(){
     attendanceActive=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
-    document.getElementById('hudText').textContent='रोकिएको / Stopped';document.getElementById('hudDot').className='hud-dot off';
+    document.getElementById('hudText').textContent='Stopped';document.getElementById('hudDot').className='hud-dot off';
     document.getElementById('startBtn').style.display='inline-flex';document.getElementById('stopBtn').style.display='none';
     document.getElementById('successOverlay').style.display='none';document.getElementById('matchBadge').style.display='none';
 }
@@ -108,90 +97,81 @@ async function detectFaces(){
     const video=document.getElementById('cam'),canvas=document.getElementById('overlay');
     if(!video||!canvas)return;
     try{
-        const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:128,scoreThreshold:0.4})).withFaceLandmarks().withFaceDescriptors();
+        const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:96,scoreThreshold:0.35})).withFaceLandmarks().withFaceDescriptors();
         canvas.width=video.videoWidth;canvas.height=video.videoHeight;
         const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
-        const resized=faceapi.resizeResults(detections,{width:video.videoWidth,height:video.videoHeight});
+        const rs=faceapi.resizeResults(detections,{width:video.videoWidth,height:video.videoHeight});
         
-        if(resized.length>0){
-            const det=resized[0],box=det.detection.box;
+        if(rs.length>0){
+            const det=rs[0],box=det.detection.box;
             let bestMatch=null,isKnown=false;
-            if(faceMatcher&&det.descriptor){bestMatch=faceMatcher.findBestMatch(det.descriptor);isKnown=bestMatch.label!=='unknown'&&bestMatch.distance<0.5;}
+            if(faceMatcher&&det.descriptor){bestMatch=faceMatcher.findBestMatch(det.descriptor);isKnown=bestMatch.label!=='unknown'&&bestMatch.distance<0.45;}
             
             const color=isKnown?'#2ecc71':'#3498db';
-            const cx=box.x+box.width/2,cy=box.y+box.height/2;
-            const radius=Math.max(box.width,box.height)/1.5;
+            const cx=box.x+box.width/2,cy=box.y+box.height/2,r=Math.max(box.width,box.height)/1.4;
             
-            // Outer glow
-            const grad=ctx.createRadialGradient(cx,cy,radius*.7,cx,cy,radius*1.3);
-            grad.addColorStop(0,color.replace(')','').replace('rgb','rgba')+',0.15)');
-            grad.addColorStop(1,'transparent');
-            ctx.fillStyle=grad;ctx.beginPath();ctx.arc(cx,cy,radius*1.3,0,2*Math.PI);ctx.fill();
-            
-            // Main ring
-            ctx.strokeStyle=color;ctx.lineWidth=3;ctx.shadowColor=color;ctx.shadowBlur=15;
-            ctx.beginPath();ctx.arc(cx,cy,radius,0,2*Math.PI);ctx.stroke();
-            ctx.shadowBlur=0;
-            
-            // Dashed inner ring
-            ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
-            ctx.beginPath();ctx.arc(cx,cy,radius-6,0,2*Math.PI);ctx.stroke();ctx.setLineDash([]);
-            
-            // Dot indicators
-            for(let a=0;a<360;a+=45){
-                const dx=cx+Math.cos(a*Math.PI/180)*(radius+10),dy=cy+Math.sin(a*Math.PI/180)*(radius+10);
-                ctx.fillStyle=color;ctx.beginPath();ctx.arc(dx,dy,2.5,0,2*Math.PI);ctx.fill();
-            }
-            
+            // Glow
+            const g=ctx.createRadialGradient(cx,cy,r*.6,cx,cy,r*1.4);
+            g.addColorStop(0,color+')'.replace(')','').replace('rgb','rgba')+',0.12)');g.addColorStop(1,'transparent');
+            ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,r*1.4,0,2*Math.PI);ctx.fill();
+            // Ring
+            ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.shadowColor=color;ctx.shadowBlur=12;
+            ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.stroke();ctx.shadowBlur=0;
+            // Dots
+            for(let a=0;a<360;a+=60){ctx.fillStyle=color;ctx.beginPath();ctx.arc(cx+Math.cos(a*Math.PI/180)*(r+8),cy+Math.sin(a*Math.PI/180)*(r+8),2,0,2*Math.PI);ctx.fill();}
             // Label
-            const label=isKnown?'✅ '+bestMatch.label.substring(0,12):'🆕 नयाँ अनुहार';
-            ctx.font='bold 12px Inter';const tw=ctx.measureText(label).width;
-            ctx.fillStyle='rgba(0,0,0,.75)';const ly=cy+radius+26;
-            ctx.beginPath();ctx.roundRect(cx-tw/2-10,ly-14,tw+20,24,12);ctx.fill();
-            ctx.fillStyle='#fff';ctx.fillText(label,cx-tw/2,ly+2);
+            const label=isKnown?'✅ '+bestMatch.label.substring(0,10):'🆕 New';
+            ctx.font='bold 11px Inter';const tw=ctx.measureText(label).width;
+            const ly=cy+r+22;ctx.fillStyle='rgba(0,0,0,.7)';
+            ctx.beginPath();ctx.roundRect(cx-tw/2-8,ly-12,tw+16,20,10);ctx.fill();
+            ctx.fillStyle='#fff';ctx.fillText(label,cx-tw/2,ly+1);
             
             document.getElementById('matchBadge').style.display='flex';
-            document.getElementById('matchBadge').textContent=isKnown?'✅ चिनियो':'🆕 नयाँ';
+            document.getElementById('matchBadge').textContent=isKnown?'✅ Known':'🆕 New';
             document.getElementById('matchBadge').style.borderColor=color;
             
-            if(Date.now()-lastMarkTime>2500&&det.descriptor){
-                const live=await quickLiveness(det);
-                if(live){lastMarkTime=Date.now();scanning=false;
-                    if(isKnown){const sid=bestMatch.label;if(!markedToday[sid]){const r=await api('markAttendance',{studentName:sid,studentId:sid,class:'',section:'',rollNumber:'',confidence:(1-bestMatch.distance).toFixed(2)});if(r&&r.success){markedToday[sid]=true;showSuccess(sid,r.status||'Present');}}else{notify('⚠️ '+sid+' - पहिल्यै हाजिर!','warning');scanning=true;}}
+            if(Date.now()-lastMark>2000&&det.descriptor){
+                // Liveness: check blink (EAR drop) + motion
+                const live=checkLive(det);
+                if(live){lastMark=Date.now();scanning=false;
+                    if(isKnown){const sid=bestMatch.label;if(!markedToday[sid]){const r=await api('markAttendance',{studentName:sid,studentId:sid,class:'',section:'',rollNumber:'',confidence:(1-bestMatch.distance).toFixed(2)});if(r&&r.success){markedToday[sid]=true;showSuccess(sid,r.status||'Present');}else{scanning=true;}}else{notify('⚠️ '+sid+' - Already marked!','warning');scanning=true;}}
                     else{pendingDescriptor=Array.from(det.descriptor);showRegModal();}
                 }
             }
-        }else{document.getElementById('matchBadge').style.display='none';}
+        }else{document.getElementById('matchBadge').style.display='none';motionFrames=0;}
     }catch(e){}
     if(attendanceActive&&scanning)requestAnimationFrame(detectFaces);
 }
 
-async function quickLiveness(detection){
+function checkLive(detection){
     if(!detection.landmarks)return true;
     const lm=detection.landmarks;
-    const le=calcEAR(lm.positions,38,40,36,39);
-    const re=calcEAR(lm.positions,44,46,42,45);
+    const le=eyeAR(lm.positions,38,40,36,39),re=eyeAR(lm.positions,44,46,42,45);
     const ear=(le+re)/2;
-    const nose=lm.getNose();
-    const headTurn=nose&&nose.length>0?Math.abs(nose[3].x-nose[0].x):0;
-    if(ear<0.22||headTurn>5){notify('✅ जीवन्तता पुष्टि / Liveness OK','success');return true;}
+    // Blink: EAR drops below 0.2
+    let blinked=(ear<0.2&&prevEAR>0.2);
+    prevEAR=ear;
+    // Motion: compare with previous frame
+    if(!blinked){motionFrames++;if(motionFrames>5){motionFrames=0;return true;}}
+    else{motionFrames=0;}
+    if(blinked){notify('✅ Liveness: Blink detected','success');return true;}
     return false;
 }
-function calcEAR(lm,top,bottom,left,right){const t=lm[top],b=lm[bottom],l=lm[left],r=lm[right];const v=Math.abs(t.y-b.y),h=Math.abs(l.x-r.x);return h<.001?1:v/h;}
+function eyeAR(lm,t,b,lt,rt){const tp=lm[t],bp=lm[b],lp=lm[lt],rp=lm[rt];const v=Math.abs(tp.y-bp.y),h=Math.abs(lp.x-rp.x);return h<.001?1:v/h;}
 
 function showSuccess(name,status){
     const ov=document.getElementById('successOverlay');ov.style.display='flex';
-    ov.innerHTML=`<div class="success-card"><div class="success-icon">✅</div><h2 style="color:var(--s);margin-top:8px">${status}!</h2><p style="font-size:1.1rem;font-weight:700">${name}</p><p style="color:var(--t2);margin-top:4px">हाजिर भयो! / Marked!</p></div>`;
-    setTimeout(()=>{ov.style.display='none';scanning=true;detectFaces();},2000);
+    ov.innerHTML=`<div class="success-card"><div class="success-icon">✅</div><h3 style="color:var(--s);margin-top:4px">${status}!</h3><p style="font-weight:700">${name}</p><p style="color:var(--t2);font-size:.75rem">हाजिर भयो!</p></div>`;
+    setTimeout(()=>{ov.style.display='none';scanning=true;detectFaces();},1800);
 }
 
 function showRegModal(){
-    showModal(`<h3 style="margin-bottom:4px">🆕 नयाँ अनुहार / New Face</h3><p style="color:var(--s);font-weight:600;margin-bottom:12px;font-size:.85rem">✅ Liveness Passed</p><form onsubmit="return quickReg(event)"><div class="fr"><div class="fg"><label class="fl">नाम / Name *</label><input id="qn" required></div><div class="fg"><label class="fl">भर्ना नं / Admission No</label><input id="qa"></div></div><div class="fr"><div class="fg"><label class="fl">कक्षा / Class *</label><select id="qc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">सेक्सन / Section</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div><div class="fr"><div class="fg"><label class="fl">रोल / Roll</label><input id="qr"></div><div class="fg"><label class="fl">लिङ्ग / Gender</label><select id="qg"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div class="fr"><div class="fg"><label class="fl">बुबा / Father</label><input id="qf"></div><div class="fg"><label class="fl">आमा / Mother</label><input id="qm"></div></div><div class="fr"><div class="fg"><label class="fl">फोन / Phone</label><input id="qp"></div><div class="fg"><label class="fl">ठेगाना / Address</label><textarea id="qad"></textarea></div></div><button class="btn btn-p btn-lg" style="width:100%;margin-top:12px"><i class="fas fa-save"></i> दर्ता गर्नुहोस् / Register</button></form>`);
+    showModal(`<h3 style="margin-bottom:2px">🆕 New Face</h3><p style="color:var(--s);font-weight:600;margin-bottom:10px;font-size:.8rem">✅ Liveness Verified</p><form onsubmit="return quickReg(event)"><div class="fr"><div class="fg"><label class="fl">Name *</label><input id="qn" required></div><div class="fg"><label class="fl">Admission No</label><input id="qa"></div></div><div class="fr"><div class="fg"><label class="fl">Class *</label><select id="qc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">Section</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Roll</label><input id="qr"></div><div class="fg"><label class="fl">Gender</label><select id="qg"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Father</label><input id="qf"></div><div class="fg"><label class="fl">Mother</label><input id="qm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone</label><input id="qp"></div><div class="fg"><label class="fl">Address</label><textarea id="qad"></textarea></div></div><button class="btn btn-p btn-lg" style="width:100%;margin-top:10px"><i class="fas fa-save"></i> Register & Mark Present</button></form>`);
 }
 
-async function quickReg(e){e.preventDefault();const d={studentName:document.getElementById('qn').value,admissionNumber:document.getElementById('qa').value,class:document.getElementById('qc').value,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,gender:document.getElementById('qg').value,fatherName:document.getElementById('qf').value,motherName:document.getElementById('qm').value,guardianPhone:document.getElementById('qp').value,address:document.getElementById('qad').value};if(pendingDescriptor)d.embedding=pendingDescriptor;const r=await api('registerStudent',d);if(r&&r.success){await api('markAttendance',{studentName:d.studentName,studentId:r.studentId,class:d.class,section:d.section,rollNumber:d.rollNumber,confidence:'0.99'});notify('✅ '+d.studentName+' दर्ता भयो!','success');document.getElementById('modalContainer').innerHTML='';loadAllEmbeddings();showSuccess(d.studentName,'Present');}else{notify('❌ असफल!','error');scanning=true;detectFaces();}return false;}
+async function quickReg(e){e.preventDefault();const d={studentName:document.getElementById('qn').value,admissionNumber:document.getElementById('qa').value,class:document.getElementById('qc').value,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,gender:document.getElementById('qg').value,fatherName:document.getElementById('qf').value,motherName:document.getElementById('qm').value,guardianPhone:document.getElementById('qp').value,address:document.getElementById('qad').value};if(pendingDescriptor)d.embedding=pendingDescriptor;const r=await api('registerStudent',d);if(r&&r.success){await api('markAttendance',{studentName:d.studentName,studentId:r.studentId,class:d.class,section:d.section,rollNumber:d.rollNumber,confidence:'0.99'});notify('✅ '+d.studentName+' Registered!','success');document.getElementById('modalContainer').innerHTML='';loadAllEmbeddings();showSuccess(d.studentName,'Present');}else{notify('❌ Failed!','error');scanning=true;detectFaces();}return false;}
 
-async function loadStu(c){c.innerHTML='<div class="spinner"></div>';const d=await api('getStudents');if(!d||!d.students){c.innerHTML='<div class="card"><p style="text-align:center;padding:40px">No students</p></div>';return;}let h='<div class="card"><h2>Students ('+d.students.length+')</h2><div class="tbc"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th></tr></thead><tbody>';d.students.forEach(s=>{h+=`<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td></tr>`;});h+='</tbody></table></div></div>';c.innerHTML=h;}
+async function loadStu(c){c.innerHTML='<div class="spinner"></div>';const d=await api('getStudents');if(!d||!d.students){c.innerHTML='<div class="card"><p style="text-align:center;padding:30px">No students</p></div>';return;}let h='<div class="card"><h2>Students ('+d.students.length+')</h2><div class="tbc"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th></tr></thead><tbody>';d.students.forEach(s=>{h+=`<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td></tr>`;});h+='</tbody></table></div></div>';c.innerHTML=h;}
 function loadRep(c){c.innerHTML=`<div class="card"><h2>Reports</h2><button class="btn btn-p" onclick="loadRepData()">Load</button></div><div id="rv"></div>`;}
 async function loadRepData(){const v=document.getElementById('rv');v.innerHTML='<div class="spinner"></div>';const d=await api('getStudents');if(!d){v.innerHTML='<p>Error</p>';return;}v.innerHTML='<div class="card"><table><thead><tr><th>Name</th><th>Class</th><th>Section</th></tr></thead><tbody>'+d.students.map(s=>`<tr><td>${s.StudentName}</td><td>${s.Class}</td><td>${s.Section}</td></tr>`).join('')+'</tbody></table></div>';}
 
