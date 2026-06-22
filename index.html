@@ -1,152 +1,1660 @@
 <!DOCTYPE html>
 <html lang="ne">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBS Smart Attendance</title>
-    <link rel="icon" href="logo.png">
-    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root{--p:#1a3a6b;--s:#00c853;--w:#ff9800;--d:#e74c3c;--blue:#2196f3}
-        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f4f6fa;color:#1a1a2e;min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}input,select,textarea{font-family:inherit;font-size:.9rem;border:2px solid #dde4f0;border-radius:12px;padding:12px 16px;background:#fff;color:#1a1a2e;width:100%}textarea{resize:vertical;min-height:50px}
-        .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:250px;display:flex;flex-direction:column}.sb{width:250px;height:100vh;background:linear-gradient(180deg,#0a1628,#1a3a6b);position:fixed;left:0;top:0;z-index:1000}.sh{padding:22px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06)}.slogo{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.slogo img{width:32px;height:32px;object-fit:contain}.sn{font-weight:700;font-size:1rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:12px 8px}.sm{display:flex;flex-direction:column;gap:2px}.si{border-radius:10px}.si:hover{background:rgba(255,255,255,.05)}.si.act{background:rgba(255,255,255,.12)}.sl{display:flex;align-items:center;gap:12px;padding:11px 16px;color:#b8c9e0;font-size:.85rem;font-weight:500;border-radius:10px}.sl i{font-size:1.1rem;width:22px}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.06)}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 16px;background:rgba(231,76,60,.06);color:#f4877a;font-size:.85rem;font-weight:500;border-radius:10px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}.so.act{display:block}
-        .tb{height:70px;background:rgba(255,255,255,.92);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:900}#pt{font-size:1.2rem;font-weight:700}.td{font-size:.78rem;color:#64748b}.tt{font-size:.82rem;font-weight:700;color:var(--p);font-family:monospace}.ttb{background:#edf2f9;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}.pc{flex:1;padding:28px;overflow-y:auto}
-        .lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#060d1f,#1a3a6b,#2a5298);position:relative}.lcd{position:relative;z-index:1;width:100%;max-width:420px;background:#fff;border-radius:28px;padding:52px 40px;box-shadow:0 35px 100px rgba(0,0,0,.3);text-align:center}.llw{width:80px;height:80px;margin:0 auto 18px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.llw img{width:62px;height:62px;object-fit:contain}.lsn{font-size:1.5rem;font-weight:800;color:#1a1a2e}.lst{font-size:.72rem;color:#64748b;text-transform:uppercase;letter-spacing:2px}.ld{display:flex;align-items:center;gap:14px;margin:28px 0}.ld span{color:#94a3b8;font-size:.7rem;font-weight:600}.ld::before,.ld::after{content:'';flex:1;height:1px;background:#e2e8f0}
-        .glb{display:block;width:100%;padding:15px 24px;background:linear-gradient(135deg,var(--p),#2a5298);color:#fff;border-radius:14px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;text-align:center;transition:.2s}.glb:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,58,107,.3)}
-        .card{background:#fff;border-radius:16px;padding:22px 26px;box-shadow:0 2px 8px rgba(0,0,0,.03);border:1px solid #eef2f8;margin-bottom:18px}.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.stc{background:#fff;border-radius:16px;padding:20px 22px;box-shadow:0 2px 8px rgba(0,0,0,.03);border:1px solid #eef2f8;display:flex;align-items:center;gap:16px;cursor:pointer}.sci{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sci.b{background:rgba(26,58,107,.08);color:var(--p)}.sci.g{background:rgba(0,200,83,.08);color:var(--s)}.sti h3{font-size:1.6rem;font-weight:800}.sti p{font-size:.7rem;color:#64748b;text-transform:uppercase}
-        .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.84rem;cursor:pointer;border:none}.btn-p{background:linear-gradient(135deg,var(--p),#2a5298);color:#fff}.btn-s{background:linear-gradient(135deg,#00c853,#00e676);color:#fff}.btn-d{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}.btn-lg{padding:15px 28px;font-size:.92rem;border-radius:12px}
-        .tbc{overflow-x:auto;border-radius:14px;border:1px solid #eef2f8}table{width:100%;border-collapse:collapse}thead{background:#f8fafd}th{padding:13px 18px;text-align:left;font-weight:600;font-size:.7rem;text-transform:uppercase;color:#64748b}td{padding:11px 18px;border-top:1px solid #f4f7fb;font-size:.82rem}
-        .fg{margin-bottom:14px}.fl{display:block;font-size:.72rem;font-weight:600;margin-bottom:5px;text-transform:uppercase;color:#64748b}.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-        .nc{position:fixed;top:18px;right:18px;z-index:3000}.nt{background:#fff;border-radius:12px;padding:14px 18px;box-shadow:0 10px 35px rgba(0,0,0,.12);display:flex;align-items:flex-start;gap:10px;border-left:4px solid var(--p);min-width:280px;animation:slideIn .25s;font-size:.82rem}.nt.success{border-left-color:var(--s)}
-        .cam-box{position:relative;background:#000;border-radius:20px;overflow:hidden;width:100%;max-width:700px;margin:0 auto;aspect-ratio:4/3}.cam-box video{width:100%;height:100%;object-fit:cover}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-        .cam-hud{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;z-index:5}.hud-badge{background:rgba(0,0,0,.5);color:#fff;padding:8px 16px;border-radius:22px;font-size:.72rem;display:flex;align-items:center;gap:8px}.hud-dot{width:10px;height:10px;border-radius:50%}.hud-dot.on{background:#00e676;animation:pulse 1s infinite}.hud-dot.off{background:#e74c3c}
-        .success-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:20}.success-card{background:#fff;border-radius:22px;padding:32px;text-align:center;animation:scaleIn .3s}
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2500;display:flex;align-items:center;justify-content:center}.modal{background:#fff;border-radius:22px;padding:30px;max-width:560px;width:95%;max-height:82vh;overflow-y:auto}
-        @media print{body{background:#fff}.sb,.tb,.so,.nc,.modal-overlay{display:none!important}.mc{margin-left:0!important}.pc{padding:0!important}.card{box-shadow:none;border:1px solid #ccc}}
-        @keyframes slideIn{from{opacity:0;transform:translateX(35px)}to{opacity:1;transform:translateX(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}@keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-        @media(max-width:1024px){.mc{margin-left:0}.sr{grid-template-columns:repeat(2,1fr)}.sb{transform:translateX(-100%)}.sb.mo{transform:translateX(0)}}@media(max-width:768px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.cam-box{aspect-ratio:1/1}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEBS Smart Attendance</title>
+<link rel="icon" href="logo.png">
+<script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────────────────────── */
+:root{
+  --p:#1a3a6b; --p2:#2a5298; --s:#00c853; --w:#ff9800;
+  --d:#e74c3c; --blue:#2196f3;
+  --bg:#f0f4fb; --card:#fff; --border:#e2eaf6;
+  --text:#1a1a2e; --sub:#64748b;
+  --sb-bg:linear-gradient(180deg,#07111f 0%,#0f2044 60%,#1a3a6b 100%);
+  --radius:18px; --radius-sm:12px;
+  --shadow:0 2px 16px rgba(26,58,107,.07);
+  --shadow-lg:0 8px 40px rgba(26,58,107,.13);
+  --transition:.22s cubic-bezier(.4,0,.2,1);
+}
+body.dark{
+  --bg:#0d1b2a; --card:#111e30; --border:#1e3050;
+  --text:#e8f0fe; --sub:#8ba4c8;
+  --shadow:0 2px 16px rgba(0,0,0,.3);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.4);
+}
+
+/* ─── RESET ──────────────────────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--transition),color var(--transition)}
+a{text-decoration:none;color:inherit}ul{list-style:none}
+button{cursor:pointer;border:none;outline:none;font-family:inherit;transition:var(--transition)}
+input,select,textarea{font-family:inherit;font-size:.88rem;border:2px solid var(--border);border-radius:var(--radius-sm);padding:11px 15px;background:var(--card);color:var(--text);width:100%;transition:border-color var(--transition)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--p)}
+textarea{resize:vertical;min-height:52px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes ringPulse{0%{box-shadow:0 0 0 0 rgba(0,200,83,.5)}70%{box-shadow:0 0 0 18px rgba(0,200,83,0)}100%{box-shadow:0 0 0 0 rgba(0,200,83,0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ─── LAYOUT ─────────────────────────────────────────────────────────── */
+.ac{display:flex;min-height:100vh}
+.mc{flex:1;margin-left:260px;display:flex;flex-direction:column;min-height:100vh}
+.pc{flex:1;padding:28px 32px;overflow-y:auto}
+
+/* ─── SIDEBAR ────────────────────────────────────────────────────────── */
+.sb{
+  width:260px;height:100vh;
+  background:var(--sb-bg);
+  position:fixed;left:0;top:0;z-index:1000;
+  display:flex;flex-direction:column;
+  box-shadow:4px 0 24px rgba(0,0,0,.18);
+}
+.sh{
+  padding:22px 20px 18px;
+  display:flex;align-items:center;gap:13px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.slogo{
+  width:44px;height:44px;border-radius:13px;
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex-shrink:0;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.slogo img{width:34px;height:34px;object-fit:contain}
+.sn{font-weight:800;font-size:1.08rem;color:#fff;line-height:1.2}
+.sn small{font-size:.62rem;font-weight:400;color:rgba(255,255,255,.45);display:block;letter-spacing:.5px}
+.snv{flex:1;overflow-y:auto;padding:14px 10px}
+.snv::-webkit-scrollbar{width:4px}
+.snv::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+.sm{display:flex;flex-direction:column;gap:3px}
+.sg{margin-bottom:6px}
+.sg-label{font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.28);padding:8px 16px 4px;text-transform:uppercase}
+.si{border-radius:11px;overflow:hidden}
+.si:hover .sl{background:rgba(255,255,255,.07);color:#c8daf4}
+.si.act .sl{background:rgba(255,255,255,.14);color:#fff}
+.si.act .sl i{color:#4da6ff}
+.sl{display:flex;align-items:center;gap:12px;padding:11px 17px;color:rgba(255,255,255,.55);font-size:.83rem;font-weight:500;transition:var(--transition);border-radius:11px}
+.sl i{font-size:1rem;width:20px;text-align:center;color:rgba(255,255,255,.35);transition:var(--transition)}
+.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07);margin-top:auto}
+.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 17px;background:rgba(231,76,60,.08);color:#f4877a;font-size:.83rem;font-weight:500;border-radius:11px;transition:var(--transition)}
+.slo:hover{background:rgba(231,76,60,.16)}
+.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;backdrop-filter:blur(2px)}
+.so.act{display:block}
+
+/* ─── TOPBAR ─────────────────────────────────────────────────────────── */
+.tb{
+  height:68px;
+  background:rgba(255,255,255,.95);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;position:sticky;top:0;z-index:900;
+  backdrop-filter:blur(12px);
+  transition:background var(--transition);
+}
+body.dark .tb{background:rgba(17,30,48,.95)}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-hamburger{display:none;width:38px;height:38px;align-items:center;justify-content:center;border-radius:10px;background:var(--border);cursor:pointer;font-size:1rem;color:var(--text)}
+#pt{font-size:1.15rem;font-weight:800;color:var(--text)}
+.tb-right{display:flex;align-items:center;gap:16px}
+.td{font-size:.72rem;color:var(--sub);font-weight:500}
+.tt{font-size:.8rem;font-weight:700;color:var(--p);font-family:monospace;background:rgba(26,58,107,.07);padding:5px 10px;border-radius:8px}
+.ttb{background:var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:.9rem}
+.ttb:hover{background:var(--p);color:#fff}
+
+/* ─── LOGIN ──────────────────────────────────────────────────────────── */
+.lc{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#04091a 0%,#0a1628 40%,#1a3a6b 100%);
+  position:relative;overflow:hidden;
+}
+.lc::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 80%,rgba(42,82,152,.4) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 20%,rgba(0,200,83,.15) 0%,transparent 50%);
+}
+.lc-orb{
+  position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;
+}
+.lc-orb-1{width:500px;height:500px;background:rgba(26,58,107,.45);top:-100px;left:-100px}
+.lc-orb-2{width:400px;height:400px;background:rgba(0,200,83,.1);bottom:-80px;right:-80px}
+.lcd{
+  position:relative;z-index:1;width:100%;max-width:430px;
+  background:rgba(255,255,255,.98);
+  border-radius:28px;padding:52px 42px 44px;
+  box-shadow:0 40px 100px rgba(0,0,0,.35);
+  animation:scaleIn .4s;
+}
+.llw{
+  width:84px;height:84px;margin:0 auto 20px;
+  border-radius:20px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;box-shadow:0 8px 28px rgba(26,58,107,.18);
+}
+.llw img{width:66px;height:66px;object-fit:contain}
+.lsn{font-size:1.5rem;font-weight:900;color:#1a1a2e;line-height:1.25;margin-bottom:6px}
+.lst{font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:30px}
+.login-divider{display:flex;align-items:center;gap:14px;margin-bottom:28px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#e2e8f0}
+.login-divider span{color:#94a3b8;font-size:.7rem;font-weight:600;white-space:nowrap}
+.lbtn{
+  display:block;width:100%;padding:16px 24px;
+  background:linear-gradient(135deg,var(--p) 0%,var(--p2) 100%);
+  color:#fff;border-radius:14px;font-size:.92rem;font-weight:700;
+  cursor:pointer;border:none;text-align:center;transition:var(--transition);
+  box-shadow:0 6px 24px rgba(26,58,107,.3);
+  font-family:'Inter',sans-serif;
+}
+.lbtn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(26,58,107,.4)}
+.lbtn:active{transform:translateY(0)}
+.login-info{margin-top:20px;text-align:center;font-size:.72rem;color:#94a3b8}
+
+/* ─── CARDS & STATS ──────────────────────────────────────────────────── */
+.card{background:var(--card);border-radius:var(--radius);padding:24px 28px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:20px;transition:background var(--transition),border-color var(--transition)}
+.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px}
+.stc{
+  background:var(--card);border-radius:var(--radius);
+  padding:22px 24px;box-shadow:var(--shadow);border:1px solid var(--border);
+  display:flex;align-items:center;gap:18px;cursor:pointer;
+  transition:var(--transition);
+}
+.stc:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.sci{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.sci.b{background:rgba(26,58,107,.08);color:var(--p)}
+.sci.g{background:rgba(0,200,83,.1);color:var(--s)}
+.sci.o{background:rgba(255,152,0,.1);color:var(--w)}
+.sci.r{background:rgba(231,76,60,.1);color:var(--d)}
+.sti h3{font-size:1.8rem;font-weight:900;line-height:1}
+.sti p{font-size:.68rem;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.sti .trend{font-size:.7rem;font-weight:600;margin-top:4px}
+.trend.up{color:var(--s)}.trend.dn{color:var(--d)}
+
+/* ─── BUTTONS ────────────────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:.84rem;cursor:pointer;border:none;transition:var(--transition);font-family:'Inter',sans-serif}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-p{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;box-shadow:0 4px 16px rgba(26,58,107,.25)}
+.btn-s{background:linear-gradient(135deg,#00c853,#00e676);color:#fff;box-shadow:0 4px 16px rgba(0,200,83,.25)}
+.btn-d{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;box-shadow:0 4px 16px rgba(231,76,60,.25)}
+.btn-o{background:linear-gradient(135deg,#ff9800,#f57c00);color:#fff;box-shadow:0 4px 16px rgba(255,152,0,.25)}
+.btn-ghost{background:var(--border);color:var(--text)}
+.btn-lg{padding:14px 28px;font-size:.92rem;border-radius:14px}
+.btn-sm{padding:8px 14px;font-size:.78rem;border-radius:9px}
+.btn-block{width:100%;justify-content:center}
+
+/* ─── TABLE ──────────────────────────────────────────────────────────── */
+.tbc{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;min-width:600px}
+thead{background:rgba(26,58,107,.04)}
+body.dark thead{background:rgba(255,255,255,.03)}
+th{padding:13px 18px;text-align:left;font-weight:700;font-size:.68rem;text-transform:uppercase;color:var(--sub);letter-spacing:.5px;white-space:nowrap}
+td{padding:12px 18px;border-top:1px solid var(--border);font-size:.82rem;vertical-align:middle}
+tbody tr:hover{background:rgba(26,58,107,.025)}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:.7rem;font-weight:600}
+.badge-g{background:rgba(0,200,83,.12);color:#00a544}
+.badge-r{background:rgba(231,76,60,.12);color:#c0392b}
+.badge-o{background:rgba(255,152,0,.12);color:#e65c00}
+
+/* ─── FORM ───────────────────────────────────────────────────────────── */
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:.7rem;font-weight:700;margin-bottom:6px;text-transform:uppercase;color:var(--sub);letter-spacing:.3px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fr-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.section-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--p);margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--p);display:inline-block}
+
+/* ─── CAMERA / ATTENDANCE ────────────────────────────────────────────── */
+.cam-wrap{max-width:720px;margin:0 auto}
+.cam-box{
+  position:relative;background:#000;
+  border-radius:22px;overflow:hidden;
+  width:100%;aspect-ratio:4/3;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+.cam-box video{width:100%;height:100%;object-fit:cover;display:block}
+.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.cam-hud{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-start;z-index:5;gap:8px}
+.hud-badge{
+  background:rgba(7,17,31,.72);backdrop-filter:blur(8px);
+  color:#fff;padding:8px 14px;border-radius:22px;
+  font-size:.72rem;display:flex;align-items:center;gap:8px;
+  border:1px solid rgba(255,255,255,.08);
+}
+.hud-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.hud-dot.on{background:#00e676;animation:pulse .9s infinite}
+.hud-dot.off{background:#e74c3c}
+.hud-dot.loading{background:#ff9800;animation:pulse .5s infinite}
+.cam-footer{
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;margin-top:16px;flex-wrap:wrap;
+}
+.cam-status{
+  text-align:center;margin-top:10px;
+  font-size:.8rem;color:var(--sub);min-height:20px;
+}
+/* Today marked list */
+.marked-strip{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin-top:10px;min-height:36px;
+}
+.marked-chip{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);
+  color:#00a544;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;
+  animation:slideIn .25s;
+}
+
+/* Success overlay */
+.success-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.45);
+  display:flex;align-items:center;justify-content:center;z-index:20;
+  backdrop-filter:blur(4px);
+}
+.success-card{
+  background:#fff;border-radius:22px;padding:34px 40px;
+  text-align:center;animation:scaleIn .3s;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  max-width:280px;
+}
+body.dark .success-card{background:#111e30;color:var(--text)}
+.success-icon{font-size:4rem;line-height:1;margin-bottom:8px}
+.success-name{font-size:1.2rem;font-weight:800;color:var(--p)}
+.success-msg{font-size:.8rem;color:var(--sub);margin-top:6px}
+
+/* Liveness instruction */
+.liveness-tip{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  background:rgba(7,17,31,.82);backdrop-filter:blur(8px);
+  color:#fff;padding:10px 20px;border-radius:20px;
+  font-size:.75rem;text-align:center;white-space:nowrap;z-index:10;
+  border:1px solid rgba(255,255,255,.1);
+}
+
+/* ─── MODAL ──────────────────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:2500;display:flex;align-items:center;justify-content:center;
+  padding:16px;backdrop-filter:blur(4px);animation:fadeIn .2s;
+}
+.modal{
+  background:var(--card);border-radius:22px;padding:30px 34px;
+  max-width:580px;width:100%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 30px 80px rgba(0,0,0,.3);animation:scaleIn .25s;
+  border:1px solid var(--border);
+}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.modal-title{font-size:1.1rem;font-weight:800}
+.modal-close{width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--sub);transition:var(--transition)}
+.modal-close:hover{background:var(--d);color:#fff}
+
+/* ─── NOTIFICATION ───────────────────────────────────────────────────── */
+.nc{position:fixed;top:18px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.nt{
+  background:var(--card);border-radius:12px;
+  padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.15);
+  display:flex;align-items:flex-start;gap:10px;
+  border-left:4px solid var(--p);min-width:260px;max-width:340px;
+  animation:slideIn .25s;font-size:.82rem;pointer-events:auto;
+  border:1px solid var(--border);border-left-width:4px;
+}
+.nt.success{border-left-color:var(--s)}
+.nt.error{border-left-color:var(--d)}
+.nt.warning{border-left-color:var(--w)}
+.nt-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.nt-body{flex:1}
+.nt-title{font-weight:700;margin-bottom:2px}
+.nt-msg{color:var(--sub);font-size:.78rem}
+
+/* ─── DASHBOARD EXTRAS ───────────────────────────────────────────────── */
+.db-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.rate-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px}
+.rate-num{font-size:4rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--p),var(--p2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.rate-label{font-size:.72rem;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-top:6px}
+.quick-grid{display:flex;flex-direction:column;gap:10px}
+
+/* ─── REPORTS ────────────────────────────────────────────────────────── */
+.report-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.rtab{padding:9px 18px;border-radius:10px;font-size:.82rem;font-weight:600;background:var(--border);color:var(--sub);cursor:pointer;transition:var(--transition)}
+.rtab.act{background:var(--p);color:#fff;box-shadow:0 4px 14px rgba(26,58,107,.25)}
+.filter-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.filter-bar input,.filter-bar select{width:auto;min-width:140px}
+
+/* ─── LOADING ────────────────────────────────────────────────────────── */
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .55s linear infinite;margin:0 auto}
+.loading-box{text-align:center;padding:48px 24px}
+.loading-box p{color:var(--sub);margin-top:14px;font-size:.85rem}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────── */
+@media(max-width:1100px){.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}}
+@media(max-width:860px){
+  .mc{margin-left:0}
+  .sb{transform:translateX(-100%);transition:transform var(--transition)}
+  .sb.mo{transform:translateX(0)}
+  .tb-hamburger{display:flex}
+  .sr{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .sr{grid-template-columns:1fr}
+  .fr,.fr-3{grid-template-columns:1fr}
+  .pc{padding:18px}
+  .tb{padding:0 18px}
+  .cam-box{aspect-ratio:1/1}
+  .modal{padding:22px 18px}
+}
+@media print{
+  body{background:#fff!important;color:#000!important}
+  .sb,.tb,.so,.nc,.modal-overlay,#app > .so,
+  .cam-footer,.cam-status,
+  button.no-print,.btn{display:none!important}
+  .mc{margin-left:0!important}
+  .pc{padding:0!important}
+  .card{box-shadow:none!important;border:1px solid #ccc!important}
+}
+</style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- ══════ LOGIN ══════ -->
 <div id="lp" class="lc">
-    <div class="lcd">
-        <div class="llw"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div>
-        <h1 class="lsn">Systematic English<br>Boarding School</h1>
-        <p class="lst">Smart Attendance System</p>
-        <div class="ld"><span>Secure Access</span></div>
-        <a href="javascript:void(0)" onclick="doLogin();return false;" style="display:block;width:100%;padding:15px 24px;background:linear-gradient(135deg,#1a3a6b,#2a5298);color:#fff;border-radius:14px;font-size:.92rem;font-weight:600;cursor:pointer;text-align:center;text-decoration:none;transition:.2s;box-sizing:border-box" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(26,58,107,.3)'" onmouseout="this.style.transform='none';this.style.boxShadow='none'">🔑 Sign in to Continue</a>
+  <div class="lc-orb lc-orb-1"></div>
+  <div class="lc-orb lc-orb-2"></div>
+  <div class="lcd">
+    <div class="llw">
+      <img src="logo.png" alt="SEBS" id="loginLogo" onerror="this.outerHTML='<span style=font-size:2rem>🏫</span>'">
     </div>
+    <h1 class="lsn">Systematic English<br>Boarding School</h1>
+    <p class="lst">Smart Attendance System</p>
+    <div class="login-divider"><span>Secure Access</span></div>
+    <button class="lbtn" onclick="doLogin()">
+      <i class="fas fa-sign-in-alt" style="margin-right:8px"></i>Sign in to Continue
+    </button>
+    <p class="login-info">Powered by Face Recognition AI</p>
+  </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- ══════ MAIN APP ══════ -->
 <div id="app" class="ac" style="display:none">
-    <aside id="sb" class="sb"><div class="sh"><div class="slogo"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h2 class="sn">SEBS</h2></div><nav class="snv"><ul class="sm">
-        <li class="si act" data-p="db"><a href="#" class="sl" onclick="nav('db');return false;"><i class="fas fa-th-large"></i><span>Dashboard</span></a></li>
-        <li class="si" data-p="att"><a href="#" class="sl" onclick="nav('att');return false;"><i class="fas fa-camera"></i><span>Live Attendance</span></a></li>
-        <li class="si" data-p="reg"><a href="#" class="sl" onclick="nav('reg');return false;"><i class="fas fa-user-plus"></i><span>Registration</span></a></li>
-        <li class="si" data-p="stu"><a href="#" class="sl" onclick="nav('stu');return false;"><i class="fas fa-users"></i><span>Students</span></a></li>
-        <li class="si" data-p="rep"><a href="#" class="sl" onclick="nav('rep');return false;"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
-    </ul></nav><div class="sf"><button class="slo" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button></div></aside>
-    <div class="so" id="so" onclick="cmsb()"></div>
-    <main class="mc"><header class="tb"><span id="pt">Dashboard</span><div style="display:flex;gap:16px"><span class="td" id="td"></span><span class="tt" id="tt"></span><button class="ttb" onclick="tth()" id="tth"><i class="fas fa-moon"></i></button></div></header><div class="pc" id="pc"></div></main>
+
+  <!-- SIDEBAR -->
+  <aside id="sb" class="sb">
+    <div class="sh">
+      <div class="slogo">
+        <img src="logo.png" alt="SEBS" onerror="this.outerHTML='<span style=font-size:1.4rem>🏫</span>'">
+      </div>
+      <div>
+        <h2 class="sn">SEBS<small>Smart Attendance</small></h2>
+      </div>
+    </div>
+    <nav class="snv">
+      <ul class="sm">
+        <li class="sg"><span class="sg-label">Main</span></li>
+        <li class="si act" data-p="db">
+          <a href="#" class="sl" onclick="nav('db');return false">
+            <i class="fas fa-th-large"></i><span>Dashboard</span>
+          </a>
+        </li>
+        <li class="si" data-p="att">
+          <a href="#" class="sl" onclick="nav('att');return false">
+            <i class="fas fa-camera"></i><span>Live Attendance</span>
+          </a>
+        </li>
+        <li class="sg"><span class="sg-label">Manage</span></li>
+        <li class="si" data-p="reg">
+          <a href="#" class="sl" onclick="nav('reg');return false">
+            <i class="fas fa-user-plus"></i><span>Registration</span>
+          </a>
+        </li>
+        <li class="si" data-p="stu">
+          <a href="#" class="sl" onclick="nav('stu');return false">
+            <i class="fas fa-users"></i><span>Students</span>
+          </a>
+        </li>
+        <li class="si" data-p="rep">
+          <a href="#" class="sl" onclick="nav('rep');return false">
+            <i class="fas fa-chart-bar"></i><span>Reports</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sf">
+      <button class="slo" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+      </button>
+    </div>
+  </aside>
+  <div class="so" id="so" onclick="cmsb()"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="mc">
+    <header class="tb">
+      <div class="tb-left">
+        <div class="tb-hamburger" onclick="tmsb()"><i class="fas fa-bars"></i></div>
+        <span id="pt">Dashboard</span>
+      </div>
+      <div class="tb-right">
+        <span class="td" id="td"></span>
+        <span class="tt" id="tt"></span>
+        <button class="ttb" onclick="tth()" id="tthBtn" title="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </header>
+    <div class="pc" id="pc"></div>
+  </main>
 </div>
+
+<!-- NOTIFICATION CONTAINER -->
 <div class="nc" id="nc"></div>
 <div id="modalContainer"></div>
 
 <script>
-// ==================== CONFIG ====================
-const API='https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
-const MODELS='https://raw.githubusercontent.com/sebs-school/sebs-smart-attendance/main/models';
-let th='lt',stream=null,attendanceActive=false,modelsLoaded=false,preloading=false;
-let faceMatcher=null,markedToday={},cooldowns={},pendingDescriptor=null;
-let lastMark=0,scanning=true,prevEAR=1,motionFrames=0,detectCount=0;
-let allStudents=[],dashboardData=null;
+/* ════════════════════════════════════════════════════════
+   CONFIG
+════════════════════════════════════════════════════════ */
+const API = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
+const MODELS = 'https://raw.githubusercontent.com/sebs-school/sebs-smart-attendance/main/models';
 
-// ==================== INIT ====================
-function init(){updateTime();setInterval(updateTime,1000);if(localStorage.getItem('s-login')==='1'){showApp();nav('db');}}
-function updateTime(){const n=new Date();const de=document.getElementById('td'),te=document.getElementById('tt');if(de)de.textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});if(te)te.textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
-function tth(){th=th==='lt'?'dt':'lt';document.body.style.background=th==='dt'?'#0d1b2a':'';document.getElementById('tth').innerHTML=th==='dt'?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';localStorage.setItem('s-theme',th);}
+/* ════════════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════════════ */
+let darkMode = false;
+let stream = null;
+let attendanceActive = false;
+let modelsLoaded = false;
+let modelsLoading = false;
+let faceMatcher = null;
+let markedToday = {};       // {studentId: timestamp}
+let cooldowns = {};         // {studentId: timestamp}  30s cooldown
+let pendingDescriptor = null;
+let lastMarkTime = 0;
+let scanning = true;
+let detectionPaused = false;
+let allStudents = [];
+let dashboardData = null;
+let livenessState = {
+  prevEAR: 1,
+  blinkFrames: 0,
+  motionBuffer: [],
+  passed: false,
+  attempts: 0,
+  lastNosePos: null,
+  headMoveFrames: 0
+};
+let rafId = null;
 
-// ==================== LOGIN ====================
-function doLogin(){localStorage.setItem('s-login','1');document.getElementById('lp').style.display='none';document.getElementById('app').style.display='flex';nav('db');notify('✅ स्वागत छ! / Welcome!','success');}
-function logout(){stopAttendance();localStorage.removeItem('s-login');document.getElementById('lp').style.display='flex';document.getElementById('app').style.display='none';}
-function showApp(){document.getElementById('lp').style.display='none';document.getElementById('app').style.display='flex';}
-function tmsb(){document.getElementById('sb').classList.toggle('mo');document.getElementById('so').classList.toggle('act');}
-function cmsb(){document.getElementById('sb').classList.remove('mo');document.getElementById('so').classList.remove('act');}
-function notify(m,t){const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div>${m}</div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>n.remove(),3000);}
-async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
-function showModal(html){document.getElementById('modalContainer').innerHTML=`<div class="modal-overlay" onclick="this.remove()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`;}
-
-// ==================== MODELS ====================
-async function preloadModels(){if(modelsLoaded||preloading)return;preloading=true;notify('⏳ Loading models...','warning');await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)]);modelsLoaded=true;preloading=false;await loadEmbeddings();notify('✅ Ready!','success');}
-async function loadEmbeddings(){const d=await api('getAllEmbeddings');if(!d||!d.embeddings){faceMatcher=null;return;}let lb=[];for(let e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.45):null;}
-async function loadAllStudents(){const d=await api('getStudents');if(d&&d.students)allStudents=d.students;}
-async function loadDashboardData(){dashboardData=await api('getDashboard');}
-
-// ==================== NAVIGATION ====================
-function nav(p){
-    document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));const i=document.querySelector(`[data-p="${p}"]`);if(i)i.classList.add('act');
-    document.getElementById('pt').textContent={db:'Dashboard',att:'Live Attendance',reg:'Registration',stu:'Students',rep:'Reports'}[p]||p;
-    if(p==='att')preloadModels();else stopAttendance();const c=document.getElementById('pc');
-    if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);cmsb();
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+function init() {
+  updateTime();
+  setInterval(updateTime, 1000);
+  if (localStorage.getItem('s-login') === '1') {
+    showApp();
+    nav('db');
+  }
+  // restore dark mode
+  if (localStorage.getItem('s-theme') === 'dark') {
+    applyDark(true);
+  }
 }
 
-// ==================== DASHBOARD ====================
-async function loadDb(c){
-    c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid #eef2f8;border-top-color:#1a3a6b;border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div><p style="color:#64748b;margin-top:12px">Loading...</p></div>';
-    await loadDashboardData();const d=dashboardData||{};
-    c.innerHTML='<div class="sr"><div class="stc" onclick="nav(\'stu\')"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>'+(d.totalStudents||0)+'</h3><p>Total</p></div></div><div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>'+(d.present||0)+'</h3><p>Present</p></div></div><div class="stc"><div class="sci" style="background:rgba(255,152,0,.08);color:#ff9800"><i class="fas fa-clock"></i></div><div class="sti"><h3>'+(d.late||0)+'</h3><p>Late</p></div></div><div class="stc"><div class="sci" style="background:rgba(231,76,60,.08);color:#e74c3c"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>'+(d.absent||0)+'</h3><p>Absent</p></div></div></div><div style="display:grid;grid-template-columns:2fr 1fr;gap:18px"><div class="card" style="text-align:center;padding:36px"><div style="font-size:3.5rem;font-weight:900;color:#1a3a6b">'+(d.percentage||0)+'%</div><p style="color:#64748b">Rate</p></div><div class="card"><h3 style="margin-bottom:14px">Quick Actions</h3><button class="btn btn-p btn-lg" style="width:100%;margin-bottom:8px" onclick="nav(\'att\')"><i class="fas fa-camera"></i> Start Attendance</button><button class="btn btn-lg" style="width:100%;background:#00c853;color:#fff" onclick="nav(\'reg\')"><i class="fas fa-user-plus"></i> Register</button></div></div>';
+function updateTime() {
+  const n = new Date();
+  const de = document.getElementById('td');
+  const te = document.getElementById('tt');
+  if (de) de.textContent = n.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  if (te) te.textContent = n.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
 }
 
-// ==================== REGISTRATION ====================
-function loadReg(c){c.innerHTML='<div class="card" style="max-width:700px;margin:0 auto"><h2>📝 Registration</h2><form id="rf" onsubmit="return submitReg()"><div class="fr"><div class="fg"><label class="fl">Name *</label><input id="sn" required></div><div class="fg"><label class="fl">Admission No</label><input id="sa"></div></div><div class="fr"><div class="fg"><label class="fl">Class *</label><select id="sc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">Section</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Roll</label><input id="sr"></div><div class="fg"><label class="fl">Gender</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Father</label><input id="sf"></div><div class="fg"><label class="fl">Mother</label><input id="sm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone</label><input id="sp"></div><div class="fg"><label class="fl">Address</label><textarea id="saddr"></textarea></div></div><button class="btn btn-p btn-lg" style="width:100%"><i class="fas fa-save"></i> Register</button></form></div>';}
-async function submitReg(){const b=document.querySelector('#rf .btn');b.disabled=true;b.innerHTML='Saving...';const d={studentName:document.getElementById('sn').value,admissionNumber:document.getElementById('sa').value,class:document.getElementById('sc').value,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender:document.getElementById('sg').value,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};if(pendingDescriptor)d.embedding=Array.from(pendingDescriptor);const r=await api('registerStudent',d);b.disabled=false;b.innerHTML='<i class="fas fa-save"></i> Register';if(r&&r.success){notify('✅ '+d.studentName+' Registered!','success');document.getElementById('rf').reset();loadEmbeddings();loadAllStudents();pendingDescriptor=null;}else notify('❌ Failed','error');return false;}
-
-// ==================== ATTENDANCE ====================
-function loadAtt(c){c.innerHTML='<div><div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Stopped</span></span><span class="hud-badge" id="matchBadge" style="display:none"></span></div><div id="successOverlay" style="display:none"></div></div><div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop</button></div></div>';}
-async function startAttendance(){if(!modelsLoaded){await preloadModels();}try{stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});document.getElementById('cam').srcObject=stream;document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';document.getElementById('hudText').textContent='Active';document.getElementById('hudDot').className='hud-dot on';attendanceActive=true;scanning=true;detectFaces();notify('✅ Show face','success');}catch(e){notify('❌ Camera error','error');stopAttendance();}}
-function stopAttendance(){attendanceActive=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}document.getElementById('hudText').textContent='Stopped';document.getElementById('hudDot').className='hud-dot off';document.getElementById('startBtn').style.display='inline-flex';document.getElementById('stopBtn').style.display='none';document.getElementById('successOverlay').style.display='none';document.getElementById('matchBadge').style.display='none';}
-
-async function detectFaces(){
-    if(!attendanceActive||!scanning)return;
-    const video=document.getElementById('cam'),canvas=document.getElementById('overlay');if(!video||!canvas)return;
-    try{
-        const faces=await faceapi.detectAllFaces(video,new faceapi.SsdMobilenetv1Options({minConfidence:0.3})).withFaceLandmarks().withFaceDescriptors();
-        canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
-        const rs=faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});detectCount++;
-        if(rs.length>0){
-            const d=rs[0],box=d.detection.box;let bm=null,ik=false;
-            if(faceMatcher&&d.descriptor){bm=faceMatcher.findBestMatch(d.descriptor);ik=bm.label!=='unknown'&&bm.distance<0.5;}
-            const color=ik?'#00c853':'#2196f3',cx=box.x+box.width/2,cy=box.y+box.height/2,rad=Math.max(box.width,box.height)/1.35;
-            ctx.strokeStyle=color;ctx.lineWidth=3;ctx.shadowColor=color;ctx.shadowBlur=16;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();ctx.shadowBlur=0;
-            const lb=ik?'✅ '+bm.label.substring(0,12):'🆕 New';ctx.font='bold 12px Inter';const tw=ctx.measureText(lb).width;ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(cx-tw/2-8,cy+rad+10,tw+16,20);ctx.fillStyle='#fff';ctx.fillText(lb,cx-tw/2,cy+rad+22);
-            document.getElementById('matchBadge').style.display='flex';document.getElementById('matchBadge').textContent=ik?'✅ Known':'🆕 New';
-            if(d.descriptor&&Date.now()-lastMark>2500){const live=checkLive(d);if(live){lastMark=Date.now();scanning=false;
-                if(ik){const sid=bm.label;const now=Date.now();if(!cooldowns[sid]||now-cooldowns[sid]>30000){cooldowns[sid]=now;if(!markedToday[sid]){const r=await api('markAttendance',{studentName:sid,studentId:sid,confidence:(1-bm.distance).toFixed(2)});if(r&&r.success){markedToday[sid]=true;showSuccess(sid);}else scanning=true;}else{notify('⚠️ Already marked','warning');scanning=true;}}else{scanning=true;}}
-                else{pendingDescriptor=Array.from(d.descriptor);showRegModal();}
-            }}
-        }else{document.getElementById('matchBadge').style.display='none';}
-    }catch(e){}
-    if(attendanceActive&&scanning)requestAnimationFrame(detectFaces);
+/* ════════════════════════════════════════════════════════
+   THEME
+════════════════════════════════════════════════════════ */
+function applyDark(on) {
+  darkMode = on;
+  document.body.classList.toggle('dark', on);
+  const btn = document.getElementById('tthBtn');
+  if (btn) btn.innerHTML = on ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  localStorage.setItem('s-theme', on ? 'dark' : 'light');
 }
-function checkLive(d){if(!d.landmarks)return true;const lm=d.landmarks,le=eyeAR(lm.positions,38,40,36,39),re=eyeAR(lm.positions,44,46,42,45),ear=(le+re)/2;let bl=(ear<0.22&&prevEAR>0.22);prevEAR=ear;if(bl){motionFrames=0;notify('✅ Blink!','success');return true;}motionFrames++;if(motionFrames>10){motionFrames=0;notify('✅ Movement!','success');return true;}return false;}
-function eyeAR(lm,t,b,lt,rt){const tp=lm[t],bp=lm[b],lp=lm[lt],rp=lm[rt],v=Math.abs(tp.y-bp.y),h=Math.abs(lp.x-rp.x);return h<.001?1:v/h;}
-function showSuccess(name){const ov=document.getElementById('successOverlay');ov.style.display='flex';ov.innerHTML='<div class="success-card"><h1 style="color:#00c853;font-size:3rem">✅</h1><h3 style="color:#00c853">Marked!</h3><p style="font-weight:700;font-size:1.1rem">'+name+'</p></div>';setTimeout(()=>{ov.style.display='none';scanning=true;detectFaces();},1500);}
-function showRegModal(){showModal('<h3 style="color:#2196f3">🆕 New Face</h3><p style="color:#00c853">✅ Liveness Passed</p><form onsubmit="return quickReg(event)"><div class="fr"><div class="fg"><label class="fl">Name *</label><input id="qn" required></div><div class="fg"><label class="fl">Class *</label><select id="qc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Section</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="fg"><label class="fl">Roll</label><input id="qr"></div></div><div class="fr"><div class="fg"><label class="fl">Gender</label><select id="qg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">Phone</label><input id="qp"></div></div><button class="btn btn-p btn-lg" style="width:100%;margin-top:10px"><i class="fas fa-save"></i> Register & Mark</button></form>');}
-async function quickReg(e){e.preventDefault();const d={studentName:document.getElementById('qn').value,class:document.getElementById('qc').value,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,gender:document.getElementById('qg').value,guardianPhone:document.getElementById('qp').value};if(pendingDescriptor)d.embedding=Array.from(pendingDescriptor);const r=await api('registerStudent',d);if(r&&r.success){await api('markAttendance',{studentName:d.studentName,studentId:r.studentId,confidence:'0.99'});notify('✅ '+d.studentName+' Registered & Marked!','success');document.getElementById('modalContainer').innerHTML='';loadEmbeddings();loadAllStudents();showSuccess(d.studentName);}else{notify('❌ Failed','error');scanning=true;detectFaces();}return false;}
+function tth() { applyDark(!darkMode); }
 
-// ==================== STUDENTS ====================
-async function loadStu(c){c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid #eef2f8;border-top-color:#1a3a6b;border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div><p style="color:#64748b">Loading...</p></div>';await loadAllStudents();if(!allStudents.length){c.innerHTML='<div class="card"><p style="text-align:center;padding:30px">No students</p></div>';return;}let h='<div class="card"><h2>Students ('+allStudents.length+')</h2><div class="tbc"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Address</th></tr></thead><tbody>';allStudents.forEach(s=>{h+='<tr><td><small>'+(s.StudentID||'-')+'</small></td><td><strong>'+(s.StudentName||'-')+'</strong></td><td>'+(s.Class||'-')+'</td><td>'+(s.Section||'-')+'</td><td>'+(s.RollNumber||'-')+'</td><td>'+(s.Gender||'-')+'</td><td>'+(s.GuardianPhone||'-')+'</td><td>'+(s.Address||'-').substring(0,25)+'</td></tr>';});h+='</tbody></table></div></div>';c.innerHTML=h;}
+/* ════════════════════════════════════════════════════════
+   AUTH
+════════════════════════════════════════════════════════ */
+function doLogin() {
+  localStorage.setItem('s-login', '1');
+  document.getElementById('lp').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  nav('db');
+  notify('✅ स्वागत छ! Welcome!', 'success');
+}
+function logout() {
+  stopAttendance();
+  localStorage.removeItem('s-login');
+  document.getElementById('lp').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pc').innerHTML = '';
+}
+function showApp() {
+  document.getElementById('lp').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+}
 
-// ==================== REPORTS ====================
-function loadRep(c){c.innerHTML='<div class="card"><h2>📊 Reports</h2><p style="margin-bottom:16px">Date: <strong>'+new Date().toISOString().split('T')[0]+'</strong></p><button class="btn btn-p btn-lg" onclick="printReport()"><i class="fas fa-print"></i> Print Report</button></div>';}
-function printReport(){const w=window.open('','_blank','width=900,height=700');w.document.write('<!DOCTYPE html><html><head><title>SEBS Report</title><style>@page{size:A4 landscape}body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:8px}</style></head><body><div style="text-align:center"><img src="logo.png" width="60"><h2>Systematic English Boarding School</h2><h3>Attendance Report</h3><p>'+new Date().toLocaleString()+'</p></div><div id="dt">Loading...</div><script>fetch("'+API+'?action=getStudents").then(r=>r.json()).then(d=>{let h="<table><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th></tr>";if(d&&d.students)d.students.forEach((s,i)=>{h+="<tr><td>"+(i+1)+"</td><td>"+(s.StudentID||"-")+"</td><td>"+(s.StudentName||"-")+"</td><td>"+(s.Class||"-")+"</td><td>"+(s.Section||"-")+"</td><td>"+(s.RollNumber||"-")+"</td></tr>";});h+="</table>";document.getElementById("dt").innerHTML=h;setTimeout(()=>{print();},800);});<\/script></body></html>');w.document.close();}
+/* ════════════════════════════════════════════════════════
+   SIDEBAR
+════════════════════════════════════════════════════════ */
+function tmsb() {
+  document.getElementById('sb').classList.toggle('mo');
+  document.getElementById('so').classList.toggle('act');
+}
+function cmsb() {
+  document.getElementById('sb').classList.remove('mo');
+  document.getElementById('so').classList.remove('act');
+}
 
-document.addEventListener('DOMContentLoaded',init);
+/* ════════════════════════════════════════════════════════
+   NOTIFICATIONS
+════════════════════════════════════════════════════════ */
+function notify(msg, type = 'info', title = '') {
+  const nc = document.getElementById('nc');
+  const icons = { success:'✅', error:'❌', warning:'⚠️', info:'ℹ️' };
+  const n = document.createElement('div');
+  n.className = `nt ${type}`;
+  n.innerHTML = `
+    <span class="nt-icon">${icons[type]||'ℹ️'}</span>
+    <div class="nt-body">
+      ${title ? `<div class="nt-title">${title}</div>` : ''}
+      <div class="nt-msg">${msg}</div>
+    </div>`;
+  nc.appendChild(n);
+  setTimeout(() => n.style.opacity = '0', 2700);
+  setTimeout(() => n.remove(), 3000);
+}
+
+/* ════════════════════════════════════════════════════════
+   API
+════════════════════════════════════════════════════════ */
+async function api(action, data = null) {
+  try {
+    if (data) {
+      const r = await fetch(API, {
+        method: 'POST',
+        body: JSON.stringify({ action, ...data })
+      });
+      const json = await r.json();
+      return json;
+    } else {
+      const r = await fetch(`${API}?action=${action}`);
+      return await r.json();
+    }
+  } catch (e) {
+    console.error('API error:', e);
+    return null;
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   MODAL
+════════════════════════════════════════════════════════ */
+function showModal(html, closable = true) {
+  document.getElementById('modalContainer').innerHTML = `
+    <div class="modal-overlay" ${closable ? 'onclick="if(event.target===this)closeModal()"' : ''}>
+      <div class="modal" onclick="event.stopPropagation()">
+        ${html}
+      </div>
+    </div>`;
+}
+function closeModal() {
+  document.getElementById('modalContainer').innerHTML = '';
+}
+
+/* ════════════════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════════════════ */
+function nav(p) {
+  document.querySelectorAll('.si').forEach(e => e.classList.remove('act'));
+  const item = document.querySelector(`[data-p="${p}"]`);
+  if (item) item.classList.add('act');
+
+  const titles = { db:'Dashboard', att:'Live Attendance', reg:'Registration', stu:'Students', rep:'Reports' };
+  document.getElementById('pt').textContent = titles[p] || p;
+
+  if (p !== 'att') stopAttendance();
+  if (p === 'att') preloadModels();
+
+  const c = document.getElementById('pc');
+  if (p === 'db') loadDb(c);
+  else if (p === 'att') loadAtt(c);
+  else if (p === 'reg') loadReg(c);
+  else if (p === 'stu') loadStu(c);
+  else if (p === 'rep') loadRep(c);
+  cmsb();
+}
+
+/* ════════════════════════════════════════════════════════
+   FACE-API MODELS
+════════════════════════════════════════════════════════ */
+async function preloadModels() {
+  if (modelsLoaded || modelsLoading) return;
+  modelsLoading = true;
+  notify('⏳ Loading AI models...', 'info', 'Please wait');
+  try {
+    await Promise.all([
+      faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)
+    ]);
+    modelsLoaded = true;
+    modelsLoading = false;
+    await loadEmbeddings();
+    notify('✅ Models loaded! Ready.', 'success');
+  } catch (e) {
+    modelsLoading = false;
+    notify('❌ Model load failed. Check internet.', 'error');
+  }
+}
+
+async function loadEmbeddings() {
+  const d = await api('getAllEmbeddings');
+  if (!d || !d.embeddings || !d.embeddings.length) {
+    faceMatcher = null;
+    return;
+  }
+  const lb = [];
+  for (const e of d.embeddings) {
+    if (e.embedding && Array.isArray(e.embedding)) {
+      lb.push(new faceapi.LabeledFaceDescriptors(
+        e.studentId,
+        [new Float32Array(e.embedding)]
+      ));
+    }
+  }
+  faceMatcher = lb.length > 0 ? new faceapi.FaceMatcher(lb, 0.48) : null;
+  console.log(`Loaded ${lb.length} face embeddings`);
+}
+
+async function loadAllStudents() {
+  const d = await api('getStudents');
+  if (d && d.students) allStudents = d.students;
+  return allStudents;
+}
+
+/* ════════════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════════════ */
+async function loadDb(c) {
+  c.innerHTML = loadingBox('Loading dashboard...');
+  const d = await api('getDashboard') || {};
+  dashboardData = d;
+
+  const pct = d.percentage || 0;
+  const todayList = d.todayList || [];
+
+  c.innerHTML = `
+    <div class="sr">
+      <div class="stc" onclick="nav('stu')">
+        <div class="sci b"><i class="fas fa-users"></i></div>
+        <div class="sti">
+          <h3>${d.totalStudents || 0}</h3>
+          <p>Total Students</p>
+        </div>
+      </div>
+      <div class="stc" onclick="nav('att')">
+        <div class="sci g"><i class="fas fa-check-circle"></i></div>
+        <div class="sti">
+          <h3>${d.present || 0}</h3>
+          <p>Present Today</p>
+        </div>
+      </div>
+      <div class="stc">
+        <div class="sci o"><i class="fas fa-clock"></i></div>
+        <div class="sti">
+          <h3>${d.late || 0}</h3>
+          <p>Late Today</p>
+        </div>
+      </div>
+      <div class="stc">
+        <div class="sci r"><i class="fas fa-times-circle"></i></div>
+        <div class="sti">
+          <h3>${d.absent || 0}</h3>
+          <p>Absent Today</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="db-grid">
+      <div class="card" style="text-align:center">
+        <div class="rate-ring">
+          <div class="rate-num">${pct}%</div>
+          <div class="rate-label">Today's Attendance Rate</div>
+        </div>
+        <div id="todayList" style="margin-top:8px">
+          ${todayList.length
+            ? `<p style="font-size:.72rem;color:var(--sub);margin-bottom:10px">Marked today (${todayList.length}):</p>
+               <div class="marked-strip" style="justify-content:center">
+                 ${todayList.slice(0,12).map(n=>`<div class="marked-chip"><i class="fas fa-check"></i>${n}</div>`).join('')}
+                 ${todayList.length>12?`<div class="marked-chip">+${todayList.length-12} more</div>`:''}
+               </div>`
+            : '<p style="font-size:.78rem;color:var(--sub)">No attendance marked yet today.</p>'
+          }
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:16px;font-size:.95rem">⚡ Quick Actions</h3>
+        <div class="quick-grid">
+          <button class="btn btn-p btn-lg btn-block" onclick="nav('att')">
+            <i class="fas fa-camera"></i> Start Attendance
+          </button>
+          <button class="btn btn-s btn-lg btn-block" onclick="nav('reg')">
+            <i class="fas fa-user-plus"></i> Register Student
+          </button>
+          <button class="btn btn-o btn-lg btn-block" onclick="nav('rep')">
+            <i class="fas fa-print"></i> Print Report
+          </button>
+          <button class="btn btn-ghost btn-lg btn-block" onclick="loadDb(document.getElementById('pc'))">
+            <i class="fas fa-sync-alt"></i> Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function loadingBox(msg = 'Loading...') {
+  return `<div class="loading-box"><div class="spinner"></div><p>${msg}</p></div>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   REGISTRATION
+════════════════════════════════════════════════════════ */
+function loadReg(c) {
+  c.innerHTML = `
+    <div class="card" style="max-width:720px;margin:0 auto">
+      <h2 style="margin-bottom:20px"><i class="fas fa-user-plus" style="color:var(--p);margin-right:8px"></i>Student Registration</h2>
+
+      <span class="section-title">Personal Information</span>
+      <div class="fr" style="margin-top:12px">
+        <div class="fg"><label class="fl">Full Name *</label><input id="sn" required placeholder="Student full name"></div>
+        <div class="fg"><label class="fl">Admission No</label><input id="sa" placeholder="e.g. 2024-001"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Date of Birth</label><input type="date" id="sdob"></div>
+        <div class="fg"><label class="fl">Gender *</label>
+          <select id="sg"><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select>
+        </div>
+      </div>
+
+      <span class="section-title">Academic Details</span>
+      <div class="fr" style="margin-top:12px">
+        <div class="fg"><label class="fl">Class *</label>
+          <select id="sc" required>
+            <option value="">Select Class</option>
+            ${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Section</label>
+          <select id="ss">
+            <option value="">Select Section</option>
+            <option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Roll No</label><input id="sr" placeholder="e.g. 15"></div>
+      </div>
+
+      <span class="section-title">Guardian Details</span>
+      <div class="fr" style="margin-top:12px">
+        <div class="fg"><label class="fl">Father's Name</label><input id="sf" placeholder="Father's full name"></div>
+        <div class="fg"><label class="fl">Mother's Name</label><input id="sm" placeholder="Mother's full name"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Phone Number</label><input id="sp" placeholder="+977-98XXXXXXXX"></div>
+        <div class="fg"><label class="fl">Address</label><textarea id="saddr" placeholder="Home address"></textarea></div>
+      </div>
+
+      ${pendingDescriptor ? `
+        <div style="background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+          <i class="fas fa-face-smile" style="color:var(--s);font-size:1.2rem"></i>
+          <span style="font-size:.83rem;color:var(--s);font-weight:600">✅ Face data captured — will be saved automatically</span>
+        </div>` : `
+        <div style="background:rgba(255,152,0,.07);border:1px solid rgba(255,152,0,.2);border-radius:12px;padding:14px 18px;margin-bottom:16px;font-size:.82rem;color:var(--w)">
+          <i class="fas fa-info-circle" style="margin-right:6px"></i>
+          No face captured. Go to <strong>Live Attendance</strong> page to capture face first, or register without face data.
+        </div>`}
+
+      <button class="btn btn-p btn-lg btn-block" onclick="submitReg()">
+        <i class="fas fa-save"></i> Register Student
+      </button>
+    </div>
+  `;
+}
+
+async function submitReg() {
+  const name = document.getElementById('sn').value.trim();
+  const cls = document.getElementById('sc').value;
+  if (!name || !cls) { notify('Please fill required fields (Name, Class)', 'warning'); return; }
+
+  const btn = document.querySelector('#pc .btn-p');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
+  const data = {
+    studentName: name,
+    admissionNumber: document.getElementById('sa').value,
+    dateOfBirth: document.getElementById('sdob').value,
+    class: cls,
+    section: document.getElementById('ss').value,
+    rollNumber: document.getElementById('sr').value,
+    gender: document.getElementById('sg').value,
+    fatherName: document.getElementById('sf').value,
+    motherName: document.getElementById('sm').value,
+    guardianPhone: document.getElementById('sp').value,
+    address: document.getElementById('saddr').value
+  };
+  if (pendingDescriptor) data.embedding = Array.from(pendingDescriptor);
+
+  const r = await api('registerStudent', data);
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-save"></i> Register Student';
+
+  if (r && r.success) {
+    notify(`✅ ${name} registered!`, 'success', 'Registration Successful');
+    pendingDescriptor = null;
+    loadReg(document.getElementById('pc'));
+    await loadEmbeddings();
+    allStudents = [];
+  } else {
+    notify('❌ Registration failed. Check API.', 'error');
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   ATTENDANCE — CAMERA + DETECTION
+════════════════════════════════════════════════════════ */
+function loadAtt(c) {
+  c.innerHTML = `
+    <div class="cam-wrap">
+      <div class="cam-box" id="camBox">
+        <video id="cam" autoplay playsinline muted></video>
+        <canvas id="overlay"></canvas>
+        <div class="cam-hud">
+          <span class="hud-badge">
+            <span class="hud-dot off" id="hudDot"></span>
+            <span id="hudText">Camera off</span>
+          </span>
+          <span class="hud-badge" id="matchBadge" style="display:none">
+            <span id="matchText"></span>
+          </span>
+          <span class="hud-badge" id="modelBadge">
+            <span class="hud-dot loading" id="modelDot"></span>
+            <span id="modelText">Loading AI...</span>
+          </span>
+        </div>
+        <div class="liveness-tip" id="livenessTip" style="display:none">
+          👀 Please blink your eyes or move your head
+        </div>
+        <div id="successOverlay" style="display:none"></div>
+      </div>
+
+      <div class="cam-footer">
+        <button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()">
+          <i class="fas fa-play"></i> Start Camera
+        </button>
+        <button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none">
+          <i class="fas fa-stop"></i> Stop
+        </button>
+        <button class="btn btn-ghost btn-lg" onclick="reloadEmbeddings()">
+          <i class="fas fa-sync-alt"></i> Reload Faces
+        </button>
+      </div>
+      <div class="cam-status" id="camStatus">Tap "Start Camera" to begin</div>
+
+      <div class="card" style="margin-top:18px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-weight:700;font-size:.88rem">✅ Marked Today</span>
+          <span id="markedCount" style="font-size:.78rem;color:var(--sub)">0 students</span>
+        </div>
+        <div class="marked-strip" id="markedStrip">
+          <span style="font-size:.78rem;color:var(--sub)">No one marked yet</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  updateModelBadge();
+}
+
+function updateModelBadge() {
+  const dot = document.getElementById('modelDot');
+  const txt = document.getElementById('modelText');
+  if (!dot || !txt) return;
+  if (modelsLoaded) {
+    dot.className = 'hud-dot on';
+    txt.textContent = 'AI Ready';
+  } else if (modelsLoading) {
+    dot.className = 'hud-dot loading';
+    txt.textContent = 'Loading...';
+    setTimeout(updateModelBadge, 1000);
+  } else {
+    dot.className = 'hud-dot off';
+    txt.textContent = 'AI Not Loaded';
+  }
+}
+
+async function startAttendance() {
+  if (!modelsLoaded) {
+    notify('Loading AI models first...', 'warning');
+    await preloadModels();
+    if (!modelsLoaded) return;
+  }
+
+  try {
+    // Try to get camera — prefer environment-facing for external webcam
+    const constraints = [
+      { video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } },
+      { video: { width: { ideal: 640 }, height: { ideal: 480 } } },
+      { video: true }
+    ];
+
+    let gotStream = false;
+    for (const c of constraints) {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(c);
+        gotStream = true;
+        break;
+      } catch {}
+    }
+    if (!gotStream) throw new Error('No camera');
+
+    const video = document.getElementById('cam');
+    video.srcObject = stream;
+    await new Promise(resolve => { video.onloadedmetadata = resolve; });
+    video.play();
+
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('stopBtn').style.display = 'inline-flex';
+    document.getElementById('hudDot').className = 'hud-dot on';
+    document.getElementById('hudText').textContent = 'Scanning...';
+    attendanceActive = true;
+    scanning = true;
+    resetLiveness();
+    updateModelBadge();
+    setStatus('👁️ Scanning for faces...');
+    detectLoop();
+  } catch (e) {
+    notify('❌ Camera error: ' + (e.message || 'Permission denied'), 'error');
+  }
+}
+
+function stopAttendance() {
+  attendanceActive = false;
+  scanning = false;
+  if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+
+  const el = id => document.getElementById(id);
+  if (el('hudDot')) el('hudDot').className = 'hud-dot off';
+  if (el('hudText')) el('hudText').textContent = 'Stopped';
+  if (el('startBtn')) el('startBtn').style.display = 'inline-flex';
+  if (el('stopBtn')) el('stopBtn').style.display = 'none';
+  if (el('successOverlay')) el('successOverlay').style.display = 'none';
+  if (el('matchBadge')) el('matchBadge').style.display = 'none';
+  if (el('livenessTip')) el('livenessTip').style.display = 'none';
+  setStatus('Camera stopped');
+}
+
+async function reloadEmbeddings() {
+  notify('🔄 Reloading face data...', 'info');
+  await loadEmbeddings();
+  notify('✅ Face data refreshed', 'success');
+}
+
+function setStatus(msg) {
+  const el = document.getElementById('camStatus');
+  if (el) el.textContent = msg;
+}
+
+function id(s) { return document.getElementById(s); }
+
+/* ─── LIVENESS ─────────────────────────────────────── */
+function resetLiveness() {
+  livenessState = {
+    prevEAR: 1,
+    blinkFrames: 0,
+    motionBuffer: [],
+    passed: false,
+    attempts: 0,
+    lastNosePos: null,
+    headMoveFrames: 0
+  };
+}
+
+function eyeAspectRatio(landmarks, topIdx, botIdx, leftIdx, rightIdx) {
+  const pts = landmarks.positions;
+  const top = pts[topIdx], bot = pts[botIdx];
+  const left = pts[leftIdx], right = pts[rightIdx];
+  const vertical = Math.hypot(top.x - bot.x, top.y - bot.y);
+  const horizontal = Math.hypot(left.x - right.x, left.y - right.y);
+  return horizontal < 0.5 ? 1 : vertical / horizontal;
+}
+
+function checkLiveness(detection) {
+  if (!detection.landmarks) return false;
+
+  const pts = detection.landmarks.positions;
+
+  // Eye Aspect Ratio blink detection
+  // Left eye: 37,41,36,39 — Right eye: 43,47,42,45 (0-indexed)
+  const leftEAR  = eyeAspectRatio(detection.landmarks, 37, 41, 36, 39);
+  const rightEAR = eyeAspectRatio(detection.landmarks, 43, 47, 42, 45);
+  const ear = (leftEAR + rightEAR) / 2;
+
+  // Blink: EAR drops below threshold
+  if (ear < 0.20 && livenessState.prevEAR > 0.24) {
+    livenessState.blinkFrames++;
+    if (livenessState.blinkFrames >= 1) {
+      livenessState.prevEAR = ear;
+      setStatus('👁️ Blink detected! Processing...');
+      return true;
+    }
+  }
+  if (ear > 0.26) livenessState.blinkFrames = 0;
+  livenessState.prevEAR = ear;
+
+  // Head movement: track nose tip (pts[30])
+  const noseNow = { x: pts[30].x, y: pts[30].y };
+  if (livenessState.lastNosePos) {
+    const dx = Math.abs(noseNow.x - livenessState.lastNosePos.x);
+    const dy = Math.abs(noseNow.y - livenessState.lastNosePos.y);
+    if (dx > 8 || dy > 8) {
+      livenessState.headMoveFrames++;
+    } else {
+      livenessState.headMoveFrames = Math.max(0, livenessState.headMoveFrames - 1);
+    }
+    if (livenessState.headMoveFrames >= 5) {
+      livenessState.headMoveFrames = 0;
+      setStatus('🤙 Movement detected! Processing...');
+      return true;
+    }
+  }
+  livenessState.lastNosePos = noseNow;
+  return false;
+}
+
+/* ─── DETECTION LOOP ───────────────────────────────── */
+async function detectLoop() {
+  if (!attendanceActive) return;
+
+  const video = document.getElementById('cam');
+  const canvas = document.getElementById('overlay');
+  if (!video || !canvas || video.readyState < 2) {
+    rafId = requestAnimationFrame(detectLoop);
+    return;
+  }
+
+  try {
+    const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.28 });
+    const faces = await faceapi
+      .detectAllFaces(video, options)
+      .withFaceLandmarks()
+      .withFaceDescriptors();
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const results = faceapi.resizeResults(faces, {
+      width: video.videoWidth,
+      height: video.videoHeight
+    });
+
+    if (results.length === 0) {
+      id('matchBadge').style.display = 'none';
+      if (id('livenessTip')) id('livenessTip').style.display = 'none';
+      setStatus('👀 Looking for faces...');
+    }
+
+    for (const det of results) {
+      const box = det.detection.box;
+      const cx = box.x + box.width / 2;
+      const cy = box.y + box.height / 2;
+      const rad = Math.max(box.width, box.height) / 1.4;
+
+      let isKnown = false;
+      let matchLabel = '';
+      let matchDist = 1;
+
+      if (faceMatcher && det.descriptor) {
+        const bm = faceMatcher.findBestMatch(det.descriptor);
+        isKnown = bm.label !== 'unknown' && bm.distance < 0.5;
+        matchLabel = bm.label;
+        matchDist = bm.distance;
+      }
+
+      // Draw circular ring
+      const ringColor = isKnown ? '#00c853' : '#2196f3';
+      ctx.save();
+      ctx.shadowColor = ringColor;
+      ctx.shadowBlur = 20;
+      ctx.strokeStyle = ringColor;
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.arc(cx, cy, rad, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.restore();
+
+      // Inner glow
+      ctx.save();
+      ctx.strokeStyle = ringColor + '33';
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, rad + 5, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.restore();
+
+      // Label
+      const labelText = isKnown
+        ? `✅ ${matchLabel.substring(0, 16)} (${Math.round((1 - matchDist) * 100)}%)`
+        : '🆕 New Face';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      const tw = ctx.measureText(labelText).width;
+      const lx = cx - tw / 2 - 10;
+      const ly = cy + rad + 12;
+      ctx.fillStyle = 'rgba(0,0,0,.78)';
+      roundRect(ctx, lx, ly, tw + 20, 24, 6);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(labelText, cx - tw / 2, ly + 16);
+
+      // Update HUD
+      id('matchBadge').style.display = 'flex';
+      id('matchText').textContent = isKnown ? `✅ ${matchLabel}` : '🆕 New';
+
+      // Liveness check & marking — only one face at a time
+      if (scanning && !detectionPaused && Date.now() - lastMarkTime > 2000) {
+        const tipEl = id('livenessTip');
+        if (tipEl) tipEl.style.display = 'block';
+
+        const live = checkLiveness(det);
+        if (live) {
+          lastMarkTime = Date.now();
+          scanning = false;
+          if (tipEl) tipEl.style.display = 'none';
+          detectionPaused = true;
+
+          if (isKnown) {
+            await markStudent(matchLabel, matchDist, det.descriptor);
+          } else {
+            pendingDescriptor = det.descriptor ? Array.from(det.descriptor) : null;
+            showRegModal();
+          }
+          break; // process one face
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Detection error:', e);
+  }
+
+  if (attendanceActive) {
+    rafId = requestAnimationFrame(detectLoop);
+  }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+/* ─── MARK STUDENT ─────────────────────────────────── */
+async function markStudent(studentId, distance, descriptor) {
+  const now = Date.now();
+  const todayKey = new Date().toDateString();
+  const dayKey = `${studentId}_${todayKey}`;
+
+  // 30-second cooldown
+  if (cooldowns[studentId] && now - cooldowns[studentId] < 30000) {
+    const wait = Math.ceil((30000 - (now - cooldowns[studentId])) / 1000);
+    notify(`⏳ ${studentId} — wait ${wait}s`, 'warning');
+    resumeScanning(1500);
+    return;
+  }
+
+  // Already marked today
+  if (markedToday[dayKey]) {
+    notify(`✅ ${studentId} already marked today`, 'info');
+    resumeScanning(1500);
+    return;
+  }
+
+  cooldowns[studentId] = now;
+  setStatus(`⏳ Marking ${studentId}...`);
+
+  const r = await api('markAttendance', {
+    studentId,
+    confidence: (1 - distance).toFixed(3)
+  });
+
+  if (r && r.success) {
+    markedToday[dayKey] = true;
+    const displayName = r.studentName || studentId;
+    showSuccessOverlay(displayName);
+    addToMarkedStrip(displayName);
+    notify(`✅ ${displayName} — Present!`, 'success', 'Attendance Marked');
+  } else {
+    notify('❌ Mark failed. Retry.', 'error');
+    resumeScanning(1500);
+  }
+}
+
+function resumeScanning(delay = 1800) {
+  setTimeout(() => {
+    scanning = true;
+    detectionPaused = false;
+    resetLiveness();
+    if (attendanceActive) detectLoop();
+  }, delay);
+}
+
+/* ─── SUCCESS OVERLAY ──────────────────────────────── */
+function showSuccessOverlay(name) {
+  const ov = id('successOverlay');
+  if (!ov) return;
+  ov.style.display = 'flex';
+  ov.innerHTML = `
+    <div class="success-card">
+      <div class="success-icon">✅</div>
+      <div class="success-name">${name}</div>
+      <div class="success-msg">Attendance Marked!</div>
+      <div class="success-msg" style="color:var(--s);font-weight:600;margin-top:4px">हाजिर गरियो!</div>
+    </div>`;
+  setTimeout(() => {
+    if (ov) ov.style.display = 'none';
+    resumeScanning(0);
+  }, 1800);
+}
+
+function addToMarkedStrip(name) {
+  const strip = id('markedStrip');
+  const cnt = id('markedCount');
+  if (!strip) return;
+  // Clear placeholder
+  if (strip.querySelector('span')) strip.innerHTML = '';
+  const chip = document.createElement('div');
+  chip.className = 'marked-chip';
+  chip.innerHTML = `<i class="fas fa-check"></i>${name}`;
+  strip.appendChild(chip);
+  if (cnt) cnt.textContent = `${strip.querySelectorAll('.marked-chip').length} students`;
+}
+
+/* ─── QUICK REGISTRATION (from camera) ─────────────── */
+function showRegModal() {
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">🆕 New Face Detected</div>
+      <div class="modal-close" onclick="closeModal();resumeScanning()"><i class="fas fa-times"></i></div>
+    </div>
+    <div style="background:rgba(0,200,83,.07);border:1px solid rgba(0,200,83,.2);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.82rem;color:var(--s);font-weight:600">
+      <i class="fas fa-shield-alt" style="margin-right:6px"></i>✅ Liveness verified — Register this student
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Name *</label><input id="qn" required placeholder="Full name"></div>
+      <div class="fg"><label class="fl">Admission No</label><input id="qa" placeholder="2024-001"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Class *</label>
+        <select id="qc" required>
+          <option value="">Select</option>
+          ${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Section</label>
+        <select id="qs">
+          <option value="">Select</option>
+          <option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Roll No</label><input id="qr" placeholder="e.g. 12"></div>
+      <div class="fg"><label class="fl">Gender</label>
+        <select id="qg"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Father's Name</label><input id="qf" placeholder="Father's name"></div>
+      <div class="fg"><label class="fl">Guardian Phone</label><input id="qp" placeholder="+977..."></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn btn-p btn-lg" style="flex:1" onclick="quickReg()">
+        <i class="fas fa-save"></i> Register & Mark Present
+      </button>
+      <button class="btn btn-ghost" onclick="closeModal();resumeScanning()">
+        Skip
+      </button>
+    </div>
+  `);
+}
+
+async function quickReg() {
+  const name = document.getElementById('qn').value.trim();
+  const cls = document.getElementById('qc').value;
+  if (!name || !cls) { notify('Name and Class are required', 'warning'); return; }
+
+  const btn = document.querySelector('#modalContainer .btn-p');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
+  const data = {
+    studentName: name,
+    admissionNumber: document.getElementById('qa').value,
+    class: cls,
+    section: document.getElementById('qs').value,
+    rollNumber: document.getElementById('qr').value,
+    gender: document.getElementById('qg').value,
+    fatherName: document.getElementById('qf').value,
+    guardianPhone: document.getElementById('qp').value
+  };
+  if (pendingDescriptor) data.embedding = Array.from(pendingDescriptor);
+
+  const r = await api('registerStudent', data);
+  if (r && r.success) {
+    const mr = await api('markAttendance', {
+      studentId: r.studentId,
+      confidence: '0.99'
+    });
+    closeModal();
+    notify(`✅ ${name} registered & marked!`, 'success', 'Done!');
+    showSuccessOverlay(name);
+    addToMarkedStrip(name);
+    await loadEmbeddings();
+    allStudents = [];
+    pendingDescriptor = null;
+  } else {
+    notify('❌ Registration failed', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-save"></i> Register & Mark Present';
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   STUDENTS PAGE
+════════════════════════════════════════════════════════ */
+async function loadStu(c) {
+  c.innerHTML = loadingBox('Loading students...');
+  await loadAllStudents();
+
+  if (!allStudents.length) {
+    c.innerHTML = `
+      <div class="card" style="text-align:center;padding:60px">
+        <div style="font-size:3rem;margin-bottom:14px">👨‍🎓</div>
+        <h3>No students registered yet</h3>
+        <p style="color:var(--sub);margin:10px 0 20px">Register students first</p>
+        <button class="btn btn-p" onclick="nav('reg')"><i class="fas fa-user-plus"></i> Register First Student</button>
+      </div>`;
+    return;
+  }
+
+  const searchId = 'stuSearch';
+  c.innerHTML = `
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <h2><i class="fas fa-users" style="color:var(--p);margin-right:8px"></i>Students (${allStudents.length})</h2>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input id="${searchId}" placeholder="🔍 Search name / class..." style="width:220px" oninput="filterStudents()">
+          <button class="btn btn-p btn-sm" onclick="nav('reg')"><i class="fas fa-user-plus"></i> Add</button>
+          <button class="btn btn-ghost btn-sm" onclick="loadStu(document.getElementById('pc'))"><i class="fas fa-sync-alt"></i></button>
+        </div>
+      </div>
+      <div class="tbc">
+        <table id="stuTable">
+          <thead><tr>
+            <th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>DOB</th>
+          </tr></thead>
+          <tbody id="stuBody"></tbody>
+        </table>
+      </div>
+    </div>`;
+  renderStudentRows(allStudents);
+}
+
+function renderStudentRows(students) {
+  const tbody = document.getElementById('stuBody');
+  if (!tbody) return;
+  tbody.innerHTML = students.map((s, i) => `
+    <tr>
+      <td style="color:var(--sub)">${i + 1}</td>
+      <td><code style="font-size:.75rem;background:var(--bg);padding:2px 6px;border-radius:5px">${s.StudentID || '-'}</code></td>
+      <td><strong>${s.StudentName || '-'}</strong></td>
+      <td>${s.Class || '-'}</td>
+      <td>${s.Section || '-'}</td>
+      <td>${s.RollNumber || '-'}</td>
+      <td>${s.Gender || '-'}</td>
+      <td>${s.GuardianPhone || '-'}</td>
+      <td style="font-size:.75rem;color:var(--sub)">${s.DateOfBirth || '-'}</td>
+    </tr>`).join('');
+}
+
+function filterStudents() {
+  const q = document.getElementById('stuSearch').value.toLowerCase();
+  const filtered = allStudents.filter(s =>
+    (s.StudentName || '').toLowerCase().includes(q) ||
+    (s.Class || '').toLowerCase().includes(q) ||
+    (s.Section || '').toLowerCase().includes(q) ||
+    (s.StudentID || '').toLowerCase().includes(q)
+  );
+  renderStudentRows(filtered);
+}
+
+/* ════════════════════════════════════════════════════════
+   REPORTS
+════════════════════════════════════════════════════════ */
+function loadRep(c) {
+  const today = new Date().toISOString().split('T')[0];
+  const monthStart = today.substring(0, 7) + '-01';
+
+  c.innerHTML = `
+    <div class="card">
+      <h2 style="margin-bottom:18px"><i class="fas fa-chart-bar" style="color:var(--p);margin-right:8px"></i>Reports</h2>
+
+      <div class="report-tabs">
+        <div class="rtab act" onclick="setRepTab(this,'daily')">Daily Register</div>
+        <div class="rtab" onclick="setRepTab(this,'monthly')">Monthly Register</div>
+        <div class="rtab" onclick="setRepTab(this,'classwise')">Class-wise</div>
+      </div>
+
+      <div class="filter-bar">
+        <div>
+          <label class="fl">From Date</label>
+          <input type="date" id="rFrom" value="${today}" style="width:160px">
+        </div>
+        <div>
+          <label class="fl">To Date</label>
+          <input type="date" id="rTo" value="${today}" style="width:160px">
+        </div>
+        <div>
+          <label class="fl">Class</label>
+          <select id="rClass" style="width:120px">
+            <option value="">All Classes</option>
+            ${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <label class="fl">Section</label>
+          <select id="rSection" style="width:140px">
+            <option value="">All Sections</option>
+            <option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-p btn-lg" onclick="printReport('portrait')">
+          <i class="fas fa-print"></i> Print (Portrait)
+        </button>
+        <button class="btn btn-o btn-lg" onclick="printReport('landscape')">
+          <i class="fas fa-print"></i> Print (Landscape)
+        </button>
+        <button class="btn btn-s btn-lg" onclick="previewReport()">
+          <i class="fas fa-eye"></i> Preview
+        </button>
+        <button class="btn btn-ghost btn-lg" onclick="exportCSV()">
+          <i class="fas fa-file-csv"></i> Export CSV
+        </button>
+      </div>
+
+      <div id="repPreview" style="margin-top:24px"></div>
+    </div>`;
+}
+
+let currentRepTab = 'daily';
+function setRepTab(el, tab) {
+  document.querySelectorAll('.rtab').forEach(e => e.classList.remove('act'));
+  el.classList.add('act');
+  currentRepTab = tab;
+}
+
+async function previewReport() {
+  const pv = document.getElementById('repPreview');
+  pv.innerHTML = loadingBox('Loading report data...');
+  const data = await fetchReportData();
+  pv.innerHTML = buildReportHTML(data, false);
+}
+
+async function fetchReportData() {
+  const from = document.getElementById('rFrom').value;
+  const to = document.getElementById('rTo').value;
+  const cls = document.getElementById('rClass').value;
+  const sec = document.getElementById('rSection').value;
+
+  const d = await api('getReport', { reportType: currentRepTab, from, to, class: cls, section: sec });
+  return d || {};
+}
+
+function buildReportHTML(data, forPrint = true) {
+  const now = new Date().toLocaleString('en-US');
+  const from = document.getElementById('rFrom').value;
+  const to = document.getElementById('rTo').value;
+  const rows = (data.rows || []);
+  const summary = data.summary || {};
+
+  const tableRows = rows.length
+    ? rows.map((r, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${r.id || '-'}</td>
+          <td>${r.name || '-'}</td>
+          <td>${r.class || '-'}</td>
+          <td>${r.section || '-'}</td>
+          <td>${r.roll || '-'}</td>
+          <td>${r.status || '-'}</td>
+          <td>${r.time || '-'}</td>
+        </tr>`).join('')
+    : '<tr><td colspan="8" style="text-align:center;padding:24px;color:#666">No data found for selected filters</td></tr>';
+
+  return `
+    <div ${forPrint ? '' : 'style="border:1px solid var(--border);border-radius:14px;overflow:hidden"'}>
+      <div style="text-align:center;padding:24px 20px 16px;border-bottom:2px solid #1a3a6b">
+        <img src="logo.png" width="56" height="56" style="border-radius:12px;margin-bottom:8px" onerror="this.style.display='none'">
+        <h2 style="font-size:1.3rem;font-weight:900;color:#1a3a6b;margin-bottom:4px">Systematic English Boarding School</h2>
+        <p style="font-size:.75rem;color:#555;margin-bottom:4px">Smart Attendance Report</p>
+        <p style="font-size:.72rem;color:#777">Generated: ${now} | Period: ${from} to ${to}</p>
+      </div>
+      <div style="display:flex;justify-content:space-around;padding:14px 20px;background:#f8fafd;border-bottom:1px solid #e2e8f0;gap:8px;flex-wrap:wrap">
+        <div style="text-align:center"><strong style="font-size:1.4rem;color:#1a3a6b">${summary.total || 0}</strong><br><span style="font-size:.7rem;color:#666">Total</span></div>
+        <div style="text-align:center"><strong style="font-size:1.4rem;color:#00c853">${summary.present || 0}</strong><br><span style="font-size:.7rem;color:#666">Present</span></div>
+        <div style="text-align:center"><strong style="font-size:1.4rem;color:#e74c3c">${summary.absent || 0}</strong><br><span style="font-size:.7rem;color:#666">Absent</span></div>
+        <div style="text-align:center"><strong style="font-size:1.4rem;color:#1a3a6b">${summary.rate || '0'}%</strong><br><span style="font-size:.7rem;color:#666">Rate</span></div>
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:.8rem">
+        <thead style="background:#1a3a6b;color:#fff">
+          <tr>
+            <th style="padding:10px 12px;text-align:left">#</th>
+            <th style="padding:10px 12px;text-align:left">ID</th>
+            <th style="padding:10px 12px;text-align:left">Name</th>
+            <th style="padding:10px 12px;text-align:left">Class</th>
+            <th style="padding:10px 12px;text-align:left">Section</th>
+            <th style="padding:10px 12px;text-align:left">Roll</th>
+            <th style="padding:10px 12px;text-align:left">Status</th>
+            <th style="padding:10px 12px;text-align:left">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+      <div style="text-align:center;padding:14px;font-size:.7rem;color:#999;border-top:1px solid #e2e8f0">
+        Page 1 | SEBS Smart Attendance System | Printed: ${now}
+      </div>
+    </div>`;
+}
+
+async function printReport(orientation = 'portrait') {
+  const w = window.open('', '_blank', 'width=1000,height=750');
+  w.document.write(`<!DOCTYPE html><html><head>
+    <title>SEBS Attendance Report</title>
+    <style>
+      @page { size: A4 ${orientation}; margin: 15mm; }
+      body { font-family: sans-serif; padding: 0; margin: 0; color: #1a1a2e; }
+      table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+      th, td { border: 1px solid #ccc; padding: 8px 10px; }
+      thead th { background: #1a3a6b; color: #fff; }
+      tbody tr:nth-child(even) { background: #f8fafd; }
+      .no-print { display: none; }
+    </style>
+  </head><body><div id="content">Loading...</div>
+  <script>
+    async function go() {
+      const r = await fetch('${API}?action=getReport&reportType=${currentRepTab}&from='+document.getElementById('_f')?.value+'&to='+document.getElementById('_t')?.value).catch(()=>({}));
+    }
+  <\/script></body></html>`);
+
+  // Build with current data
+  const data = await fetchReportData();
+  const html = buildReportHTML(data, true);
+  w.document.getElementById('content').innerHTML = html;
+  w.document.close();
+  setTimeout(() => w.print(), 800);
+}
+
+async function exportCSV() {
+  const data = await fetchReportData();
+  if (!data.rows || !data.rows.length) {
+    notify('No data to export', 'warning');
+    return;
+  }
+  let csv = '#,ID,Name,Class,Section,Roll,Status,Time\n';
+  data.rows.forEach((r, i) => {
+    csv += `${i+1},"${r.id||''}","${r.name||''}","${r.class||''}","${r.section||''}","${r.roll||''}","${r.status||''}","${r.time||''}"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `sebs-attendance-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  notify('✅ CSV exported!', 'success');
+}
+
+/* ════════════════════════════════════════════════════════
+   BOOT
+════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
