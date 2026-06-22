@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBS Smart Attendance - TEST</title>
+    <title>SEBS Smart Attendance - TESTING</title>
     <link rel="icon" href="logo.png">
     <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
         <div class="llw"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div>
         <h1 class="lsn">Systematic English<br>Boarding School</h1>
         <p class="lst">Smart Attendance System</p>
-        <p style="color:#e67e22;font-weight:600;margin-top:8px">⚠️ TESTING MODE</p>
+        <p style="color:#e67e22;font-weight:600;margin-top:8px">⚠️ TESTING MODE - Auto Mark</p>
         <div class="ld"><span>Secure Access</span></div>
         <button class="glb" onclick="login()">🔑 Sign in to Continue</button>
         <p class="lit">🔒 Authorized administrators only</p>
@@ -62,7 +62,7 @@ let lastHeadX=null,lastHeadY=null,headMoved=false,lastMarkTime=0;
 function init(){updateTime();setInterval(updateTime,1000);if(localStorage.getItem('s-login')==='1'){showApp();nav('db');}if(localStorage.getItem('s-theme')==='dt'){th='dt';document.body.className='dt';document.getElementById('tth').innerHTML='<i class="fas fa-sun"></i>';}}
 function updateTime(){const n=new Date();const d=document.getElementById('td'),t=document.getElementById('tt');if(d)d.textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});if(t)t.textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
 function tth(){th=th==='lt'?'dt':'lt';document.body.className=th;document.getElementById('tth').innerHTML=th==='dt'?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';localStorage.setItem('s-theme',th);}
-function login(){localStorage.setItem('s-login','1');showApp();nav('db');notify('Welcome! Testing Mode','success');}
+function login(){localStorage.setItem('s-login','1');showApp();nav('db');notify('Welcome!','success');}
 function logout(){stopAttendance();localStorage.removeItem('s-login');document.getElementById('lp').style.display='flex';document.getElementById('app').style.display='none';}
 function showApp(){document.getElementById('lp').style.display='none';document.getElementById('app').style.display='flex';}
 function tgsb(){document.getElementById('sb').classList.toggle('collapsed');}
@@ -70,13 +70,12 @@ function tmsb(){document.getElementById('sb').classList.toggle('mo');document.ge
 function cmsb(){document.getElementById('sb').classList.remove('mo');document.getElementById('so').classList.remove('act');}
 function notify(m,t){const icons={success:'fa-check-circle',error:'fa-exclamation-circle',warning:'fa-exclamation-triangle'};const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div class="ni"><i class="fas ${icons[t]}"></i></div><div style="flex:1"><strong>${t}</strong><p style="font-size:.8rem">${m}</p></div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),300);},4000);}
 async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
-function getTimeStatus(){const n=new Date();const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');return{open:true,status:ct>='10:30'?'Late':'Present'};}
+function getTimeStatus(){return{open:true,status:new Date().getHours()>=10?'Late':'Present'};}
 
 function nav(p){
     document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
     const i=document.querySelector(`[data-p="${p}"]`);if(i)i.classList.add('act');
-    const t={db:'Dashboard',att:'Live Attendance',reg:'Registration',stu:'Students',rep:'Reports'};
-    document.getElementById('pt').textContent=t[p]||p;
+    document.getElementById('pt').textContent={db:'Dashboard',att:'Live Attendance',reg:'Registration',stu:'Students',rep:'Reports'}[p]||p;
     if(p!=='att')stopAttendance();
     const c=document.getElementById('pc');
     if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);
@@ -85,21 +84,20 @@ function nav(p){
 
 async function loadDb(c){
     c.innerHTML='<div class="spinner"></div>';
-    const d=await api('getDashboard');
-    if(!d){c.innerHTML='<p>Error</p>';return;}
-    const t=d.totalStudents||0,p=d.present||0,l=d.late||0,a=d.absent||0,pct=d.percentage||0;
-    c.innerHTML=`<div style="background:rgba(243,156,18,.1);border:1px solid var(--w);padding:8px 16px;border-radius:8px;margin-bottom:16px;text-align:center;color:var(--w);font-weight:600">⚠️ TESTING MODE - Auto Mark</div>
-        <div class="sr"><div class="stc" onclick="nav('stu')"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${t}</h3><p>Total</p></div></div>
+    const d=await api('getDashboard');if(!d){c.innerHTML='<p>Error</p>';return;}
+    const t=d.totalStudents||0,p=d.present||0,l=d.late||0,a=d.absent||0;
+    c.innerHTML=`<div style="background:rgba(243,156,18,.1);border:1px solid var(--w);padding:8px 16px;border-radius:8px;margin-bottom:16px;text-align:center;color:var(--w);font-weight:600">⚠️ TESTING MODE - Auto Mark 24/7</div>
+        <div class="sr"><div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${t}</h3><p>Total</p></div></div>
         <div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${p}</h3><p>Present</p></div></div>
         <div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${l}</h3><p>Late</p></div></div>
         <div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${a}</h3><p>Absent</p></div></div></div>`;
 }
 
-function loadReg(c){c.innerHTML=`<div class="card" style="max-width:700px;margin:0 auto"><h2>📝 Register Student</h2><form id="rf" onsubmit="return submitReg()"><div class="fr"><div class="fg"><label class="fl">Name *</label><input type="text" id="sn" required></div><div class="fg"><label class="fl">Admission No</label><input type="text" id="sa"></div></div><div class="fr3"><div class="fg"><label class="fl">Class *</label><select id="sc" required><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">Section</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="fg"><label class="fl">Roll</label><input type="text" id="sr"></div></div><div class="fr"><div class="fg"><label class="fl">Gender</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">DOB</label><input type="date" id="sd"></div></div><div class="fr"><div class="fg"><label class="fl">Father</label><input type="text" id="sf"></div><div class="fg"><label class="fl">Mother</label><input type="text" id="sm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone</label><input type="text" id="sp"></div><div class="fg"><label class="fl">Address</label><textarea id="saddr"></textarea></div></div><button type="submit" class="btn btn-p btn-lg"><i class="fas fa-save"></i> Register</button></form></div>`;}
-async function submitReg(){const btn=document.querySelector('#rf .btn');btn.disabled=true;btn.innerHTML='Saving...';const data={studentName:document.getElementById('sn').value,admissionNumber:document.getElementById('sa').value,class:document.getElementById('sc').value,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender:document.getElementById('sg').value,dateOfBirth:document.getElementById('sd').value,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};const r=await api('registerStudent',data);btn.disabled=false;btn.innerHTML='<i class="fas fa-save"></i> Register';if(r&&r.success){notify('✅ Registered!','success');document.getElementById('rf').reset();}else notify('❌ Failed!','error');return false;}
+function loadReg(c){c.innerHTML=`<div class="card" style="max-width:700px;margin:0 auto"><h2>Register Student</h2><form id="rf" onsubmit="return submitReg()"><div class="fr"><div class="fg"><label class="fl">Name *</label><input id="sn" required></div><div class="fg"><label class="fl">Admission No</label><input id="sa"></div></div><div class="fr3"><div class="fg"><label class="fl">Class *</label><select id="sc" required><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">Section</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="fg"><label class="fl">Roll</label><input id="sr"></div></div><div class="fr"><div class="fg"><label class="fl">Gender</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">DOB</label><input type="date" id="sd"></div></div><div class="fr"><div class="fg"><label class="fl">Father</label><input id="sf"></div><div class="fg"><label class="fl">Mother</label><input id="sm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone</label><input id="sp"></div><div class="fg"><label class="fl">Address</label><textarea id="saddr"></textarea></div></div><button class="btn btn-p btn-lg"><i class="fas fa-save"></i> Register</button></form></div>`;}
+async function submitReg(){const b=document.querySelector('#rf .btn');b.disabled=true;b.innerHTML='Saving...';const d={studentName:document.getElementById('sn').value,admissionNumber:document.getElementById('sa').value,class:document.getElementById('sc').value,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender:document.getElementById('sg').value,dateOfBirth:document.getElementById('sd').value,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};const r=await api('registerStudent',d);b.disabled=false;b.innerHTML='<i class="fas fa-save"></i> Register';if(r&&r.success){notify('Registered!','success');document.getElementById('rf').reset();}else notify('Failed!','error');return false;}
 
 function loadAtt(c){
-    c.innerHTML=`<div style="display:grid;grid-template-columns:2fr 1fr;gap:24px"><div class="card"><h2>📷 Live Face Recognition</h2><div class="cam-box" style="margin-top:16px"><video id="cam" autoplay playsinline muted></video><div class="cam-overlay"><span class="cam-badge inactive" id="camStatus">Stopped</span><span class="cam-badge" id="timeBadge">Ready</span></div><canvas id="overlay" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas></div><div style="text-align:center;margin-top:16px"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start Attendance</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop</button></div><div style="margin-top:12px;padding:16px;background:var(--bg3);border-radius:8px;text-align:center"><strong>Status:</strong> <span id="attStatus">🟢 Ready</span><p style="font-size:.8rem;color:var(--t2);margin-top:6px">⚠️ Testing: Auto-Mark | Blink + Head Move = Marked in 1-2 sec</p></div></div><div class="card"><h3>📋 Today</h3><div id="attList" style="max-height:400px;overflow-y:auto;margin-top:12px">Loading...</div></div></div>`;
+    c.innerHTML=`<div style="display:grid;grid-template-columns:2fr 1fr;gap:24px"><div class="card"><h2>Live Face Recognition</h2><div class="cam-box" style="margin-top:16px"><video id="cam" autoplay playsinline muted></video><div class="cam-overlay"><span class="cam-badge inactive" id="camStatus">Stopped</span><span class="cam-badge">Ready</span></div><canvas id="overlay" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas></div><div style="text-align:center;margin-top:16px"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop</button></div><div style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center"><span id="attStatus">🟢 Ready</span><p style="font-size:.75rem;color:var(--t2)">Blink + Head Move = Auto Mark</p></div></div><div class="card"><h3>Today</h3><div id="attList" style="max-height:400px;overflow-y:auto">Loading...</div></div></div>`;
     loadAttList();
 }
 
@@ -110,25 +108,20 @@ async function startAttendance(){
         document.getElementById('camStatus').textContent='Loading...';
         document.getElementById('startBtn').style.display='none';
         document.getElementById('stopBtn').style.display='inline-flex';
-        
-        if(!modelsLoaded){
-            await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)]);
-            modelsLoaded=true;
-        }
-        
+        if(!modelsLoaded){await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS)]);modelsLoaded=true;}
         document.getElementById('camStatus').textContent='Active';
         document.getElementById('camStatus').className='cam-badge active';
-        attendanceActive=true;
-        detectFaces();
-        notify('✅ Ready! Face detect + Auto mark','success');
-    }catch(e){notify('❌ Camera error: '+e.message,'error');stopAttendance();}
+        attendanceActive=true;detectFaces();
+        notify('Ready! Show face to camera','success');
+    }catch(e){notify('Camera error: '+e.message,'error');stopAttendance();}
 }
 
 function stopAttendance(){
     attendanceActive=false;
     if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
-    document.getElementById('camStatus').textContent='Stopped';document.getElementById('camStatus').className='cam-badge inactive';
-    document.getElementById('startBtn').style.display='inline-flex';document.getElementById('stopBtn').style.display='none';
+    const cs=document.getElementById('camStatus');if(cs){cs.textContent='Stopped';cs.className='cam-badge inactive';}
+    document.getElementById('startBtn').style.display='inline-flex';
+    document.getElementById('stopBtn').style.display='none';
 }
 
 async function detectFaces(){
@@ -136,7 +129,7 @@ async function detectFaces(){
     const video=document.getElementById('cam'),canvas=document.getElementById('overlay');
     if(!video||!canvas)return;
     try{
-        const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:160,scoreThreshold:0.5})).withFaceLandmarks().withFaceDescriptors();
+        const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions({inputSize:160,scoreThreshold:0.5})).withFaceLandmarks();
         const dSize={width:video.videoWidth,height:video.videoHeight};
         faceapi.matchDimensions(canvas,dSize);
         const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -145,10 +138,8 @@ async function detectFaces(){
         for(let i=0;i<resized.length;i++){
             const det=resized[i],box=det.detection.box;
             ctx.strokeStyle='#2ecc71';ctx.lineWidth=2;ctx.strokeRect(box.x,box.y,box.width,box.height);
-            ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillRect(box.x,box.y-20,100,18);
-            ctx.fillStyle='#fff';ctx.font='12px Inter';ctx.fillText('Face Detected',box.x+4,box.y-6);
             
-            if(det.descriptor&&(Date.now()-lastMarkTime>3000)){
+            if(det.landmarks&&(Date.now()-lastMarkTime>2000)){
                 const live=await checkLiveness(det);
                 if(live){
                     lastMarkTime=Date.now();
@@ -178,7 +169,7 @@ async function loadAttList(){
     const el=document.getElementById('attList');if(!el)return;
     const d=await api('getStudents');
     if(!d||!d.students){el.innerHTML='<p>No students</p>';return;}
-    el.innerHTML=d.students.map(s=>`<div style="padding:4px 0;border-bottom:1px solid var(--b)"><strong>${s.StudentName}</strong> <span class="badge bg-s">${s.Status||'Active'}</span></div>`).join('');
+    el.innerHTML=d.students.map(s=>`<div style="padding:4px 0;border-bottom:1px solid var(--b)"><strong>${s.StudentName}</strong></div>`).join('');
 }
 
 async function loadStu(c){
