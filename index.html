@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBS Smart Attendance | Systematic English Boarding School</title>
+    <title>SEBS Smart Attendance</title>
     <meta name="theme-color" content="#1a3a6b">
-    <link rel="icon" href="https://github.com/sebs-school/sebs-smart-attendance/blob/main/logo.png?raw=true">
+    <link rel="icon" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root{--primary:#1a3a6b;--primary-light:#2a5298;--primary-dark:#0f2444;--secondary:#4da8da;--accent:#d4a843;--success:#2ecc71;--warning:#f39c12;--danger:#e74c3c;--radius-sm:6px;--radius-md:10px;--radius-lg:16px;--radius-xl:24px}
-        .light-theme,[data-theme="light"]{--bg:#f8f9fc;--bg2:#fff;--bg3:#f1f3f9;--bgSidebar:#1a3a6b;--bgSidebarHover:#1f4478;--bgSidebarActive:#264f8a;--bgCard:#fff;--bgInput:#f8f9fc;--bgHover:#f1f3f9;--text:#1a1a2e;--text2:#636e72;--text3:#a0a8b0;--textSidebar:#c8d6e5;--border:#e0e5ec;--borderLight:#eef1f6}
-        .dark-theme,[data-theme="dark"]{--bg:#0f1923;--bg2:#1a2634;--bg3:#243447;--bgSidebar:#0d1117;--bgSidebarHover:#161b22;--bgSidebarActive:#1c2533;--bgCard:#1a2634;--bgInput:#243447;--bgHover:#243447;--text:#e8eaed;--text2:#9aa0a6;--text3:#6b7280;--textSidebar:#8b949e;--border:#2d3748;--borderLight:#364153}
-        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-        html{font-size:16px;-webkit-font-smoothing:antialiased}
-        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;transition:all 0.3s ease}
+        :root{--primary:#1a3a6b;--primary-light:#2a5298;--success:#2ecc71;--warning:#f39c12;--danger:#e74c3c;--radius:10px}
+        .light-theme{--bg:#f8f9fc;--bg2:#fff;--bg3:#f1f3f9;--bgSidebar:#1a3a6b;--bgCard:#fff;--bgInput:#f8f9fc;--text:#1a1a2e;--text2:#636e72;--textSidebar:#c8d6e5;--border:#e0e5ec}
+        .dark-theme{--bg:#0f1923;--bg2:#1a2634;--bg3:#243447;--bgSidebar:#0d1117;--bgCard:#1a2634;--bgInput:#243447;--text:#e8eaed;--text2:#9aa0a6;--textSidebar:#8b949e;--border:#2d3748}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all 0.3s}
         a{text-decoration:none;color:inherit}ul{list-style:none}
         button{cursor:pointer;border:none;outline:none;font-family:inherit;font-size:inherit}
-        input,select,textarea{font-family:inherit;font-size:inherit;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;background:var(--bgInput);color:var(--text);outline:none;transition:all 0.15s ease;width:100%}
-        input:focus,select:focus,textarea:focus{border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(26,58,107,0.1)}
+        input,select{font-family:inherit;font-size:inherit;border:1px solid var(--border);border-radius:6px;padding:10px 14px;background:var(--bgInput);color:var(--text);width:100%}
         ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg3)}::-webkit-scrollbar-thumb{background:#c1c9d6;border-radius:3px}
+        
         .app-container{display:flex;min-height:100vh}
-        .main-content{flex:1;margin-left:260px;transition:margin-left 0.3s ease;min-height:100vh;display:flex;flex-direction:column}
+        .main-content{flex:1;margin-left:260px;transition:margin-left 0.3s;min-height:100vh;display:flex;flex-direction:column}
         .sidebar.collapsed~.main-content{margin-left:72px}
-        .sidebar{width:260px;height:100vh;background:var(--bgSidebar);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;transition:all 0.3s ease;overflow:hidden}
+        
+        .sidebar{width:260px;height:100vh;background:var(--bgSidebar);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;transition:all 0.3s;overflow:hidden}
         .sidebar.collapsed{width:72px}
         .sidebar-header{height:64px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(255,255,255,0.08);gap:12px;flex-shrink:0}
         .sidebar-logo{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
@@ -35,9 +35,9 @@
         .sidebar.collapsed .sidebar-toggle i{transform:rotate(180deg)}
         .sidebar-nav{flex:1;overflow-y:auto;padding:12px 8px}
         .sidebar-menu{display:flex;flex-direction:column;gap:2px}
-        .sidebar-item{border-radius:10px;transition:all 0.15s ease}
-        .sidebar-item:hover{background:var(--bgSidebarHover)}
-        .sidebar-item.active{background:var(--bgSidebarActive)}
+        .sidebar-item{border-radius:10px;transition:all 0.15s}
+        .sidebar-item:hover{background:rgba(255,255,255,0.1)}
+        .sidebar-item.active{background:rgba(255,255,255,0.15)}
         .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px;color:var(--textSidebar);font-size:0.9rem;font-weight:500;border-radius:10px;white-space:nowrap;overflow:hidden}
         .sidebar-link i{font-size:1.2rem;width:22px;text-align:center;flex-shrink:0}
         .sidebar.collapsed .sidebar-link span{opacity:0;width:0}
@@ -47,22 +47,24 @@
         .sidebar.collapsed .sidebar-logout span{opacity:0;width:0}
         .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999}
         .sidebar-overlay.active{display:block}
+        
         .topbar{height:64px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:900}
         .topbar-left{display:flex;align-items:center;gap:16px}
-        .mobile-menu-btn{display:none;background:none;color:var(--text);font-size:1.4rem;padding:8px;border-radius:var(--radius-sm)}
+        .mobile-menu-btn{display:none;background:none;color:var(--text);font-size:1.4rem;padding:8px;border-radius:6px}
         #pageTitle{font-size:1.25rem;font-weight:600}
         .topbar-right{display:flex;align-items:center;gap:20px}
         .topbar-date,.topbar-time{font-size:0.85rem;color:var(--text2);font-weight:500}
         .topbar-time{font-weight:600;color:var(--primary);font-family:monospace}
-        .theme-toggle-btn{background:var(--bg3);color:var(--text);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 0.15s ease}
+        .theme-toggle-btn{background:var(--bg3);color:var(--text);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 0.15s}
         .theme-toggle-btn:hover{background:var(--primary);color:#fff}
-        .user-profile{display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:var(--radius-lg);cursor:pointer}
-        .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;overflow:hidden}
-        .user-avatar img{width:100%;height:100%;object-fit:cover}
+        .user-profile{display:flex;align-items:center;gap:10px}
+        .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
         .user-name{font-weight:600;font-size:0.9rem}
+        
         .page-content{flex:1;padding:24px;overflow-y:auto}
+        
         .login-container{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f2444,#1a3a6b,#2a5298,#4da8da)}
-        .login-card{width:100%;max-width:440px;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-radius:24px;padding:48px 40px;box-shadow:0 25px 80px rgba(0,0,0,0.25);text-align:center}
+        .login-card{width:100%;max-width:440px;background:rgba(255,255,255,0.95);border-radius:24px;padding:48px 40px;box-shadow:0 25px 80px rgba(0,0,0,0.25);text-align:center}
         .login-logo-wrapper{width:90px;height:90px;margin:0 auto 20px;border-radius:24px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(26,58,107,0.2);overflow:hidden}
         .login-logo-wrapper img{width:70px;height:70px;object-fit:contain}
         .login-school-name{font-size:1.6rem;font-weight:700;color:#1a1a2e;line-height:1.3;margin-bottom:6px}
@@ -70,52 +72,74 @@
         .login-divider{display:flex;align-items:center;gap:16px;margin:28px 0}
         .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#e0e5ec}
         .login-divider span{font-size:0.8rem;color:#a0a8b0;font-weight:500;text-transform:uppercase}
-        .google-login-btn{width:100%;padding:14px 24px;background:#fff;border:2px solid #e0e5ec;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:1rem;font-weight:600;color:#1a1a2e;cursor:pointer;transition:all 0.25s ease}
+        .google-login-btn{width:100%;padding:14px 24px;background:#fff;border:2px solid #e0e5ec;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:1rem;font-weight:600;color:#1a1a2e;cursor:pointer;transition:all 0.25s}
         .google-login-btn:hover{border-color:#4285F4;box-shadow:0 6px 24px rgba(66,133,244,0.2);transform:translateY(-2px)}
         .login-info-text{text-align:center;margin-top:20px;font-size:0.8rem;color:#a0a8b0}
         .login-footer{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid #eef1f6}
         .login-footer p{font-size:0.78rem;color:#a0a8b0}
-        .card{background:var(--bgCard);border-radius:var(--radius-lg);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid var(--borderLight)}
+        
+        .card{background:var(--bgCard);border-radius:var(--radius);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid var(--border)}
         .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px}
-        .stat-card{background:var(--bgCard);border-radius:var(--radius-lg);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid var(--borderLight);display:flex;align-items:flex-start;gap:16px;transition:all 0.3s ease;cursor:pointer}
+        .stat-card{background:var(--bgCard);border-radius:var(--radius);padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid var(--border);display:flex;align-items:flex-start;gap:16px;cursor:pointer;transition:all 0.3s}
         .stat-card:hover{transform:translateY(-4px)}
-        .stat-card-icon{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
-        .stat-card-icon.blue{background:rgba(26,58,107,0.1);color:var(--primary)}.stat-card-icon.green{background:rgba(46,204,113,0.1);color:var(--success)}.stat-card-icon.orange{background:rgba(243,156,18,0.1);color:var(--warning)}.stat-card-icon.red{background:rgba(231,76,60,0.1);color:var(--danger)}
-        .stat-card-info h3{font-size:1.8rem;font-weight:700;line-height:1}.stat-card-info p{font-size:0.85rem;color:var(--text2);margin-top:4px}
-        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:var(--radius-md);font-weight:600;font-size:0.9rem;transition:all 0.15s ease;cursor:pointer;white-space:nowrap}
-        .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}.btn-success{background:var(--success);color:#fff}.btn-warning{background:var(--warning);color:#fff}.btn-danger{background:var(--danger);color:#fff}.btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
-        .table-container{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border)}table{width:100%;border-collapse:collapse;background:var(--bgCard)}thead{background:var(--bg3)}th{padding:12px 16px;text-align:left;font-weight:600;font-size:0.8rem;text-transform:uppercase;color:var(--text2)}td{padding:10px 16px;border-top:1px solid var(--borderLight);font-size:0.9rem}tbody tr:hover{background:var(--bgHover)}
-        .badge{display:inline-flex;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600}.badge-success{background:rgba(46,204,113,0.12);color:#27ae60}.badge-warning{background:rgba(243,156,18,0.12);color:#e67e22}.badge-danger{background:rgba(231,76,60,0.12);color:#c0392b}
-        .form-group{margin-bottom:16px}.form-label{display:block;font-size:0.85rem;font-weight:600;margin-bottom:6px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2500;display:flex;align-items:center;justify-content:center}.modal{background:var(--bgCard);border-radius:var(--radius-xl);padding:32px;max-width:500px;width:90%}.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}.modal-title{font-size:1.25rem;font-weight:700}.modal-close{cursor:pointer;font-size:1.5rem;color:var(--text2);background:none}
-        .notification-container{position:fixed;top:20px;right:20px;z-index:3000;display:flex;flex-direction:column;gap:12px;max-width:400px}.notification{background:var(--bgCard);border-radius:var(--radius-md);padding:16px 20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);display:flex;align-items:flex-start;gap:12px;border-left:4px solid var(--primary);min-width:320px;animation:slideIn 0.3s ease}.notification.success{border-left-color:var(--success)}.notification.error{border-left-color:var(--danger)}.notification-icon{font-size:1.3rem}.notification.success .notification-icon{color:var(--success)}.notification.error .notification-icon{color:var(--danger)}
-        .camera-container{background:#000;border-radius:var(--radius-lg);overflow:hidden;position:relative;aspect-ratio:16/9;max-height:400px}.camera-container video{width:100%;height:100%;object-fit:cover}.camera-status{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;padding:8px 20px;border-radius:20px;font-size:0.85rem}
-        .empty-state{text-align:center;padding:60px 20px}.empty-state-icon{font-size:4rem;color:var(--text3);margin-bottom:16px}.empty-state h3{font-size:1.2rem;margin-bottom:8px;color:var(--text2)}.empty-state p{font-size:0.9rem;color:var(--text3)}
+        .stat-card-icon{width:48px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+        .stat-card-icon.blue{background:rgba(26,58,107,0.1);color:var(--primary)}
+        .stat-card-icon.green{background:rgba(46,204,113,0.1);color:var(--success)}
+        .stat-card-icon.orange{background:rgba(243,156,18,0.1);color:var(--warning)}
+        .stat-card-icon.red{background:rgba(231,76,60,0.1);color:var(--danger)}
+        .stat-card-info h3{font-size:1.8rem;font-weight:700;line-height:1}
+        .stat-card-info p{font-size:0.85rem;color:var(--text2);margin-top:4px}
+        
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:8px;font-weight:600;font-size:0.9rem;transition:all 0.15s;cursor:pointer;white-space:nowrap}
+        .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light)}
+        .btn-success{background:var(--success);color:#fff}.btn-warning{background:var(--warning);color:#fff}
+        .btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
+        .btn-lg{padding:14px 28px;font-size:1rem}
+        
+        .table-container{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+        table{width:100%;border-collapse:collapse;background:var(--bgCard)}
+        thead{background:var(--bg3)}th{padding:12px 16px;text-align:left;font-weight:600;font-size:0.8rem;text-transform:uppercase;color:var(--text2)}
+        td{padding:10px 16px;border-top:1px solid var(--border);font-size:0.9rem}tbody tr:hover{background:var(--bg3)}
+        
+        .badge{display:inline-flex;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600}
+        .badge-success{background:rgba(46,204,113,0.12);color:#27ae60}.badge-warning{background:rgba(243,156,18,0.12);color:#e67e22}
+        
+        .form-group{margin-bottom:16px}.form-label{display:block;font-size:0.85rem;font-weight:600;margin-bottom:6px}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+        
+        .notification-container{position:fixed;top:20px;right:20px;z-index:3000;display:flex;flex-direction:column;gap:12px;max-width:400px}
+        .notification{background:var(--bgCard);border-radius:8px;padding:16px 20px;box-shadow:0 10px 40px rgba(0,0,0,0.1);display:flex;align-items:flex-start;gap:12px;border-left:4px solid var(--primary);min-width:320px;animation:slideIn 0.3s}
+        .notification.success{border-left-color:var(--success)}.notification.error{border-left-color:var(--danger)}
+        .notification-icon{font-size:1.3rem}.notification.success .notification-icon{color:var(--success)}.notification.error .notification-icon{color:var(--danger)}
+        
+        .empty-state{text-align:center;padding:60px 20px}.empty-state-icon{font-size:4rem;margin-bottom:16px}
         .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:20px auto}
-        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        
+        @keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        
         @media(max-width:1024px){.main-content{margin-left:72px}.stats-row{grid-template-columns:repeat(2,1fr)}}
         @media(max-width:768px){.main-content{margin-left:0!important}.mobile-menu-btn{display:flex}.topbar-date,.user-name{display:none}.page-content{padding:16px}.sidebar{transform:translateX(-100%);width:260px}.sidebar.mobile-open{transform:translateX(0)}.stats-row{grid-template-columns:1fr}.form-row,.form-row-3{grid-template-columns:1fr}.notification-container{left:16px;right:16px;max-width:none}.notification{min-width:auto}}
     </style>
 </head>
 <body class="light-theme">
 
-    <!-- LOGIN PAGE -->
     <div id="loginPage" class="login-container">
         <div class="login-card">
-           <div class="login-logo-wrapper"><img src="logo.png" alt="SEBS Logo" onerror="this.parentElement.innerHTML='<span style=font-size:3rem>🏫</span>'"></div>
+            <div class="login-logo-wrapper"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div>
+            <h1 class="login-school-name">Systematic English<br>Boarding School</h1>
             <p class="login-system-tagline">Smart Attendance System</p>
             <div class="login-divider"><span>Secure Access</span></div>
-            <button class="google-login-btn" onclick="handleLogin()"><span>🔑 Sign in to Continue</span></button>
+            <button class="google-login-btn" onclick="handleLogin()">🔑 Sign in to Continue</button>
             <p class="login-info-text">🔒 Authorized administrators only</p>
             <div class="login-footer"><p>&copy; 2026 Systematic English Boarding School</p></div>
         </div>
     </div>
 
-    <!-- MAIN APP -->
     <div id="appContainer" class="app-container" style="display:none">
         <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
-               <div class="sidebar-logo"><img src="logo.png" alt="SEBS" onerror="this.parentElement.innerHTML='<span style=font-size:1.5rem>🏫</span>'"></div>
+                <div class="sidebar-logo"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div>
                 <h2 class="sidebar-school-name">SEBS</h2>
                 <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-chevron-left"></i></button>
             </div>
@@ -123,10 +147,9 @@
                 <ul class="sidebar-menu">
                     <li class="sidebar-item active" data-page="dashboard"><a href="#" class="sidebar-link" onclick="navigateTo('dashboard')"><i class="fas fa-th-large"></i><span>Dashboard</span></a></li>
                     <li class="sidebar-item" data-page="registration"><a href="#" class="sidebar-link" onclick="navigateTo('registration')"><i class="fas fa-user-plus"></i><span>Registration</span></a></li>
-                    <li class="sidebar-item" data-page="attendance"><a href="#" class="sidebar-link" onclick="navigateTo('attendance')"><i class="fas fa-camera"></i><span>Live Attendance</span></a></li>
+                    <li class="sidebar-item" data-page="attendance"><a href="#" class="sidebar-link" onclick="navigateTo('attendance')"><i class="fas fa-camera"></i><span>Attendance</span></a></li>
                     <li class="sidebar-item" data-page="students"><a href="#" class="sidebar-link" onclick="navigateTo('students')"><i class="fas fa-users"></i><span>Students</span></a></li>
                     <li class="sidebar-item" data-page="reports"><a href="#" class="sidebar-link" onclick="navigateTo('reports')"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
-                    <li class="sidebar-item" data-page="unknown"><a href="#" class="sidebar-link" onclick="navigateTo('unknown')"><i class="fas fa-question-circle"></i><span>Unknown Faces</span></a></li>
                     <li class="sidebar-item" data-page="settings"><a href="#" class="sidebar-link" onclick="navigateTo('settings')"><i class="fas fa-cog"></i><span>Settings</span></a></li>
                 </ul>
             </nav>
@@ -159,10 +182,8 @@
     <div class="notification-container" id="notificationContainer"></div>
 
     <script>
-        // CONFIGURATION
-      const API_URL = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
-        let isLoggedIn = false;
-        let currentTheme = 'light';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
+        let isLoggedIn = false, currentTheme = 'light';
 
         function init() {
             updateDateTime();
@@ -173,8 +194,7 @@
 
         function updateDateTime() {
             const now = new Date();
-            const d = document.getElementById('topbarDate');
-            const t = document.getElementById('topbarTime');
+            const d = document.getElementById('topbarDate'), t = document.getElementById('topbarTime');
             if(d) d.textContent = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
             if(t) t.textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
         }
@@ -186,7 +206,7 @@
             localStorage.setItem('sebs-theme', currentTheme);
         }
 
-        function handleLogin() { isLoggedIn = true; localStorage.setItem('sebs-login','true'); showApp(); navigateTo('dashboard'); showNotification('Welcome to SEBS','success'); }
+        function handleLogin() { isLoggedIn = true; localStorage.setItem('sebs-login','true'); showApp(); navigateTo('dashboard'); notify('Welcome!','success'); }
         function handleLogout() { isLoggedIn = false; localStorage.removeItem('sebs-login'); document.getElementById('loginPage').style.display='flex'; document.getElementById('appContainer').style.display='none'; }
         function showApp() { document.getElementById('loginPage').style.display='none'; document.getElementById('appContainer').style.display='flex'; }
 
@@ -198,231 +218,150 @@
             document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
             const item = document.querySelector(`[data-page="${page}"]`);
             if(item) item.classList.add('active');
-            const titles = {dashboard:'Dashboard',registration:'Student Registration',attendance:'Live Attendance',students:'Student Directory',reports:'Reports & Analytics',unknown:'Unknown Faces',settings:'Settings'};
+            const titles = {dashboard:'Dashboard',registration:'Registration',attendance:'Attendance',students:'Students',reports:'Reports',settings:'Settings'};
             document.getElementById('pageTitle').textContent = titles[page] || page;
             const c = document.getElementById('pageContent');
-            switch(page) {
-                case 'dashboard': renderDashboard(c); break;
-                case 'registration': renderRegistration(c); break;
-                case 'attendance': renderAttendance(c); break;
-                case 'students': renderStudents(c); break;
-                case 'reports': renderReports(c); break;
-                case 'unknown': renderUnknown(c); break;
-                case 'settings': renderSettings(c); break;
-            }
+            if(page==='dashboard') renderDashboard(c);
+            else if(page==='registration') renderReg(c);
+            else if(page==='attendance') renderAtt(c);
+            else if(page==='students') renderStudents(c);
+            else if(page==='reports') renderReports(c);
+            else if(page==='settings') c.innerHTML = '<div class="card"><h2>Settings</h2><p>Coming soon</p></div>';
             closeMobileSidebar();
         }
 
-        function showNotification(msg, type) {
-            const icons = {success:'fa-check-circle',error:'fa-exclamation-circle',warning:'fa-exclamation-triangle',info:'fa-info-circle'};
+        function notify(msg, type) {
+            const icons = {success:'fa-check-circle',error:'fa-exclamation-circle',warning:'fa-exclamation-triangle'};
             const n = document.createElement('div');
             n.className = `notification ${type}`;
-            n.innerHTML = `<div class="notification-icon"><i class="fas ${icons[type]}"></i></div><div style="flex:1"><strong>${type.charAt(0).toUpperCase()+type.slice(1)}</strong><p style="font-size:0.8rem">${msg}</p></div>`;
+            n.innerHTML = `<div class="notification-icon"><i class="fas ${icons[type]}"></i></div><div style="flex:1"><strong>${type}</strong><p style="font-size:0.8rem">${msg}</p></div>`;
             document.getElementById('notificationContainer').appendChild(n);
             setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),300)},4000);
         }
 
-        async function callSheet(range, method='GET', body=null) {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
-            const opts = method === 'POST' ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)} : {};
+        async function apiCall(action, data=null) {
             try {
-                const res = await fetch(url, opts);
-                return await res.json();
+                if(data) {
+                    const res = await fetch(API_URL, {method:'POST',body:JSON.stringify({action,...data})});
+                    return await res.json();
+                } else {
+                    const res = await fetch(`${API_URL}?action=${action}`);
+                    return await res.json();
+                }
             } catch(e) { return null; }
         }
 
-        // DASHBOARD
         async function renderDashboard(c) {
             c.innerHTML = '<div class="spinner"></div>';
-           let sData = null, aData = null;
-try {
-    const sRes = await fetch(API_URL + '?action=getStudents');
-    sData = await sRes.json();
-    const aRes = await fetch(API_URL + '?action=getDashboard');
-    aData = await aRes.json();
-} catch(e) { console.error(e); }
-            const today = new Date().toISOString().split('T')[0];
-            let total = 0, present = 0, late = 0;
-            if(aData) {
-    total = aData.totalStudents || 0;
-    present = aData.present || 0;
-    late = aData.late || 0;
-}
-            const pct = total>0 ? Math.round((present/total)*100) : 0;
+            const data = await apiCall('getDashboard');
+            if(!data) { c.innerHTML = '<p>Error loading dashboard</p>'; return; }
+            const t = data.totalStudents||0, p = data.present||0, l = data.late||0, a = data.absent||0, pct = data.percentage||0;
             c.innerHTML = `
                 <div class="stats-row">
-                    <div class="stat-card" onclick="navigateTo('students')"><div class="stat-card-icon blue"><i class="fas fa-users"></i></div><div class="stat-card-info"><h3>${total}</h3><p>Total Students</p></div></div>
-                    <div class="stat-card"><div class="stat-card-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-card-info"><h3>${present}</h3><p>Present Today</p></div></div>
-                    <div class="stat-card"><div class="stat-card-icon orange"><i class="fas fa-clock"></i></div><div class="stat-card-info"><h3>${late}</h3><p>Late Today</p></div></div>
-                    <div class="stat-card"><div class="stat-card-icon red"><i class="fas fa-times-circle"></i></div><div class="stat-card-info"><h3>${total-present-late}</h3><p>Absent Today</p></div></div>
+                    <div class="stat-card" onclick="navigateTo('students')"><div class="stat-card-icon blue"><i class="fas fa-users"></i></div><div class="stat-card-info"><h3>${t}</h3><p>Total Students</p></div></div>
+                    <div class="stat-card"><div class="stat-card-icon green"><i class="fas fa-check-circle"></i></div><div class="stat-card-info"><h3>${p}</h3><p>Present Today</p></div></div>
+                    <div class="stat-card"><div class="stat-card-icon orange"><i class="fas fa-clock"></i></div><div class="stat-card-info"><h3>${l}</h3><p>Late Today</p></div></div>
+                    <div class="stat-card"><div class="stat-card-icon red"><i class="fas fa-times-circle"></i></div><div class="stat-card-info"><h3>${a}</h3><p>Absent Today</p></div></div>
                 </div>
                 <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
                     <div class="card"><h3>Attendance Rate</h3><div style="text-align:center;padding:30px"><div style="font-size:3rem;font-weight:800;color:var(--primary)">${pct}%</div><div style="background:var(--bg3);height:10px;border-radius:5px;margin-top:16px"><div style="background:var(--success);height:100%;width:${pct}%;border-radius:5px"></div></div></div></div>
                     <div class="card"><h3>Quick Actions</h3><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
-                        <button class="btn btn-primary btn-lg" onclick="navigateTo('registration')"><i class="fas fa-user-plus"></i> Register Student</button>
-                        <button class="btn btn-success btn-lg" onclick="navigateTo('attendance')"><i class="fas fa-camera"></i> Start Attendance</button>
-                        <button class="btn btn-outline btn-lg" onclick="navigateTo('reports')"><i class="fas fa-chart-bar"></i> View Reports</button>
+                        <button class="btn btn-primary btn-lg" onclick="navigateTo('registration')"><i class="fas fa-user-plus"></i> Register</button>
+                        <button class="btn btn-success btn-lg" onclick="navigateTo('attendance')"><i class="fas fa-check"></i> Attendance</button>
                     </div></div>
                 </div>`;
         }
 
-        // REGISTRATION
-        function renderRegistration(c) {
+        function renderReg(c) {
             c.innerHTML = `
-                <div class="card" style="max-width:700px;margin:0 auto">
-                    <h2>Register New Student</h2>
+                <div class="card" style="max-width:700px;margin:0 auto"><h2>Register Student</h2>
                     <form id="regForm" onsubmit="submitReg(event)">
-                        <div class="form-row"><div class="form-group"><label class="form-label">Student Name *</label><input type="text" id="sName" required></div><div class="form-group"><label class="form-label">Admission Number</label><input type="text" id="sAdm"></div></div>
+                        <div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input type="text" id="sName" required></div><div class="form-group"><label class="form-label">Admission No</label><input type="text" id="sAdm"></div></div>
                         <div class="form-row-3"><div class="form-group"><label class="form-label">Class *</label><select id="sClass" required><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
                         <div class="form-group"><label class="form-label">Section</label><select id="sSection"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
-                        <div class="form-group"><label class="form-label">Roll Number</label><input type="text" id="sRoll"></div></div>
-                        <div class="form-row"><div class="form-group"><label class="form-label">Gender</label><select id="sGender"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="form-group"><label class="form-label">Date of Birth</label><input type="date" id="sDOB"></div></div>
-                        <div class="form-row"><div class="form-group"><label class="form-label">Father Name</label><input type="text" id="sFather"></div><div class="form-group"><label class="form-label">Mother Name</label><input type="text" id="sMother"></div></div>
-                        <div class="form-row"><div class="form-group"><label class="form-label">Guardian Phone</label><input type="text" id="sPhone"></div><div class="form-group"><label class="form-label">Address</label><input type="text" id="sAddr"></div></div>
-                        <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Register Student</button>
-                    </form>
-                </div>`;
+                        <div class="form-group"><label class="form-label">Roll</label><input type="text" id="sRoll"></div></div>
+                        <div class="form-row"><div class="form-group"><label class="form-label">Gender</label><select id="sGender"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="form-group"><label class="form-label">DOB</label><input type="date" id="sDOB"></div></div>
+                        <div class="form-row"><div class="form-group"><label class="form-label">Father</label><input type="text" id="sFather"></div><div class="form-group"><label class="form-label">Mother</label><input type="text" id="sMother"></div></div>
+                        <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Register</button>
+                    </form></div>`;
         }
 
         async function submitReg(e) {
             e.preventDefault();
-            const sid = 'SEBS' + Date.now().toString(36).toUpperCase();
-            const row = [[
-                sid,
-                document.getElementById('sAdm').value,
-                document.getElementById('sName').value,
-                document.getElementById('sGender').value,
-                document.getElementById('sClass').value,
-                document.getElementById('sSection').value,
-                document.getElementById('sRoll').value,
-                document.getElementById('sDOB').value,
-                document.getElementById('sFather').value,
-                document.getElementById('sMother').value,
-                document.getElementById('sPhone').value,
-                document.getElementById('sAddr').value,
-                '',
-                new Date().toISOString().split('T')[0],
-                'Active'
-            ]];
-            
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Students!A:O:append?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-            try {
-                await fetch(url, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:row})});
-                showNotification(`Student Registered! ID: ${sid}`, 'success');
-                document.getElementById('regForm').reset();
-                setTimeout(()=>navigateTo('students'), 1500);
-            } catch(err) {
-                showNotification('Registration failed', 'error');
-            }
+            const data = {
+                studentName: document.getElementById('sName').value,
+                admissionNumber: document.getElementById('sAdm').value,
+                class: document.getElementById('sClass').value,
+                section: document.getElementById('sSection').value,
+                rollNumber: document.getElementById('sRoll').value,
+                gender: document.getElementById('sGender').value,
+                dateOfBirth: document.getElementById('sDOB').value,
+                fatherName: document.getElementById('sFather').value,
+                motherName: document.getElementById('sMother').value
+            };
+            const result = await apiCall('registerStudent', data);
+            if(result && result.success) { notify('Registered! ID: '+result.studentId,'success'); document.getElementById('regForm').reset(); setTimeout(()=>navigateTo('students'),1500); }
+            else notify('Failed!','error');
         }
 
-        // ATTENDANCE
-        function renderAttendance(c) {
+        function renderAtt(c) {
             const now = new Date();
             const ct = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            let st = 'Closed', sc = 'var(--danger)';
-            if(ct>='08:30'&&ct<'10:00'){st='Open - Present';sc='var(--success)';}
-            else if(ct>='10:00'&&ct<='10:30'){st='Open - Late';sc='var(--warning)';}
             c.innerHTML = `
-                <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
-                    <div class="card"><h3>Mark Attendance</h3>
-                        <div class="form-row" style="margin-top:16px"><div class="form-group"><label class="form-label">Student Name *</label><input type="text" id="aName"></div><div class="form-group"><label class="form-label">Class</label><select id="aClass"><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></div>
-                        <div class="form-row"><div class="form-group"><label class="form-label">Section</label><select id="aSection"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="form-group"><label class="form-label">Roll Number</label><input type="text" id="aRoll"></div></div>
-                        <button class="btn btn-success btn-lg" onclick="markAtt()"><i class="fas fa-check"></i> Mark Present</button>
-                    </div>
-                    <div class="card"><h3>Attendance Window</h3><div style="text-align:center;padding:20px"><div style="width:16px;height:16px;border-radius:50%;background:${sc};margin:0 auto"></div><strong>${st}</strong><p style="font-size:0.85rem;color:var(--text2)">Time: ${ct}</p></div>
-                        <p style="font-size:0.8rem;color:var(--text2)">08:30-10:00 = Present | 10:00-10:30 = Late</p></div>
+                <div class="card" style="max-width:600px;margin:0 auto"><h2>Mark Attendance</h2>
+                    <div class="form-row" style="margin-top:16px"><div class="form-group"><label class="form-label">Student Name *</label><input type="text" id="aName"></div><div class="form-group"><label class="form-label">Class</label><select id="aClass"><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></div>
+                    <div class="form-row"><div class="form-group"><label class="form-label">Section</label><select id="aSection"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="form-group"><label class="form-label">Roll</label><input type="text" id="aRoll"></div></div>
+                    <p style="font-size:0.85rem;color:var(--text2);margin-bottom:16px">Time: ${ct} | ${ct>='10:00'?'Status: Late':'Status: Present'}</p>
+                    <button class="btn btn-success btn-lg" onclick="markAtt()"><i class="fas fa-check"></i> Mark Present</button>
                 </div>`;
         }
 
         async function markAtt() {
             const name = document.getElementById('aName').value;
-            if(!name) { showNotification('Enter student name','warning'); return; }
-            const now = new Date();
-            const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            const status = time>='10:00'?'Late':'Present';
-            const row = [[
-                now.toISOString().split('T')[0], time,
-                'MANUAL'+Date.now(), name,
-                document.getElementById('aClass').value,
-                document.getElementById('aSection').value,
-                document.getElementById('aRoll').value,
-                status, '1.0', ''
-            ]];
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Attendance!A:J:append?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-            try {
-                await fetch(url, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({values:row})});
-                showNotification(`${name} marked as ${status}!`,'success');
-                document.getElementById('aName').value = '';
-            } catch(err) { showNotification('Failed to mark attendance','error'); }
+            if(!name) { notify('Enter name','warning'); return; }
+            const result = await apiCall('markAttendance', {
+                studentName: name,
+                studentId: 'MANUAL'+Date.now(),
+                class: document.getElementById('aClass').value,
+                section: document.getElementById('aSection').value,
+                rollNumber: document.getElementById('aRoll').value,
+                confidence: '1.0'
+            });
+            if(result && result.success) { notify(name+' marked!','success'); document.getElementById('aName').value=''; }
+            else notify('Failed','error');
         }
 
-        // STUDENTS
         async function renderStudents(c) {
             c.innerHTML = '<div class="spinner"></div>';
-            const data = await callSheet('Students!A:O');
-            let html = '<div class="card"><h2>Student Directory</h2><div class="table-container" style="margin-top:16px"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Status</th></tr></thead><tbody>';
-            if(data && data.values) {
-                for(let i=1;i<data.values.length;i++) {
-                    const s = data.values[i];
-                    html += `<tr><td><small>${s[0]||'-'}</small></td><td><strong>${s[2]||'-'}</strong></td><td>${s[4]||'-'}</td><td>${s[5]||'-'}</td><td>${s[6]||'-'}</td><td>${s[3]||'-'}</td><td><span class="badge badge-success">${s[14]||'Active'}</span></td></tr>`;
-                }
-            }
+            const data = await apiCall('getStudents');
+            if(!data || !data.students) { c.innerHTML = '<p>No data</p>'; return; }
+            let html = '<div class="card"><h2>Students ('+data.students.length+')</h2><div class="table-container" style="margin-top:16px"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Status</th></tr></thead><tbody>';
+            data.students.forEach(s => {
+                html += `<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td><span class="badge badge-success">${s.Status||'Active'}</span></td></tr>`;
+            });
             html += '</tbody></table></div></div>';
             c.innerHTML = html;
         }
 
-        // REPORTS
-        async function renderReports(c) {
+        function renderReports(c) {
             const today = new Date().toISOString().split('T')[0];
             c.innerHTML = `
-                <div class="stats-row">
-                    <div class="card" style="text-align:center"><div style="font-size:3rem">📅</div><h3>Daily Report</h3><button class="btn btn-primary" style="margin-top:12px" onclick="showDailyReport()">Generate</button></div>
-                    <div class="card" style="text-align:center"><div style="font-size:3rem">📋</div><h3>Absent List</h3><button class="btn btn-warning" style="margin-top:12px" onclick="showAbsent()">Generate</button></div>
-                    <div class="card" style="text-align:center"><div style="font-size:3rem">📊</div><h3>Weekly</h3><p style="color:var(--text3)">Coming soon</p></div>
-                    <div class="card" style="text-align:center"><div style="font-size:3rem">📈</div><h3>Monthly</h3><p style="color:var(--text3)">Coming soon</p></div>
+                <div class="card"><h2>Reports</h2><p style="margin:16px 0">Date: <strong>${today}</strong></p>
+                    <button class="btn btn-primary" onclick="loadReport()"><i class="fas fa-download"></i> Load Today's Attendance</button>
                 </div>
-                <div class="card" style="margin-top:24px"><h3>Report: ${today}</h3><div id="reportView" style="margin-top:16px"><p style="color:var(--text3)">Click a report to generate</p></div></div>`;
+                <div id="reportView" style="margin-top:16px"></div>`;
         }
 
-        async function showDailyReport() {
-            const data = await callSheet('Attendance!A:J');
-            const today = new Date().toISOString().split('T')[0];
-            let html = '';
-            if(data && data.values) {
-                const todayRows = data.values.filter((r,i)=>i>0&&r[0]===today);
-                html = `<p><strong>Total:</strong> ${todayRows.length} students</p><table style="margin-top:12px"><thead><tr><th>Name</th><th>Class</th><th>Time</th><th>Status</th></tr></thead><tbody>`;
-                todayRows.forEach(r=>{html+=`<tr><td>${r[3]||'-'}</td><td>${r[4]||''} ${r[5]||''}</td><td>${r[1]||''}</td><td><span class="badge ${r[7]==='Present'?'badge-success':'badge-warning'}">${r[7]}</span></td></tr>`;});
-                html += '</tbody></table>';
-                if(todayRows.length===0) html = '<p>No attendance today</p>';
-            }
-            document.getElementById('reportView').innerHTML = html;
+        async function loadReport() {
+            const v = document.getElementById('reportView');
+            v.innerHTML = '<div class="spinner"></div>';
+            const data = await apiCall('getStudents');
+            if(!data) { v.innerHTML = '<p>Error</p>'; return; }
+            let html = '<div class="card"><h3>Student List</h3><table><thead><tr><th>Name</th><th>Class</th><th>Section</th></tr></thead><tbody>';
+            data.students.forEach(s => { html += `<tr><td>${s.StudentName}</td><td>${s.Class}</td><td>${s.Section}</td></tr>`; });
+            html += '</tbody></table></div>';
+            v.innerHTML = html;
         }
-
-        async function showAbsent() {
-            const sData = await callSheet('Students!A:O');
-            const aData = await callSheet('Attendance!A:J');
-            const today = new Date().toISOString().split('T')[0];
-            let presentIds = [];
-            if(aData && aData.values) {
-                aData.values.forEach((r,i)=>{if(i>0&&r[0]===today) presentIds.push(r[2]);});
-            }
-            let absent = [];
-            if(sData && sData.values) {
-                for(let i=1;i<sData.values.length;i++) {
-                    if(sData.values[i][14]==='Active' && !presentIds.includes(sData.values[i][0])) {
-                        absent.push(sData.values[i]);
-                    }
-                }
-            }
-            let html = `<p><strong>Absent:</strong> ${absent.length} students</p><table style="margin-top:12px"><thead><tr><th>Name</th><th>Class</th><th>Section</th><th>Roll</th></tr></thead><tbody>`;
-            absent.forEach(s=>{html+=`<tr><td>${s[2]||'-'}</td><td>${s[4]||'-'}</td><td>${s[5]||'-'}</td><td>${s[6]||'-'}</td></tr>`;});
-            html += '</tbody></table>';
-            document.getElementById('reportView').innerHTML = html;
-        }
-
-        function renderUnknown(c) { c.innerHTML = '<div class="card"><h2>Unknown Faces</h2><div class="empty-state"><div class="empty-state-icon">🤷</div><h3>No Unknown Faces</h3><p>Detected during live attendance</p></div></div>'; }
-        function renderSettings(c) { c.innerHTML = `<div class="card" style="max-width:600px"><h2>Settings</h2><div class="form-group"><label class="form-label">Attendance Start</label><input type="time" value="08:30"></div><div class="form-group"><label class="form-label">Late Threshold</label><input type="time" value="10:00"></div><div class="form-group"><label class="form-label">Attendance End</label><input type="time" value="10:30"></div><button class="btn btn-primary" onclick="showNotification('Settings saved!','success')"><i class="fas fa-save"></i> Save</button></div>`; }
 
         document.addEventListener('DOMContentLoaded', init);
     </script>
