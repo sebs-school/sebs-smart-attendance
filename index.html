@@ -137,7 +137,18 @@ function cmsb(){document.getElementById('sb').classList.remove('mo');document.ge
 function notify(m,t){const icons={success:'fa-check-circle',error:'fa-exclamation-circle',warning:'fa-exclamation-triangle'};const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div class="ni"><i class="fas ${icons[t]}"></i></div><div style="flex:1"><strong>${t}</strong><p style="font-size:.8rem">${m}</p></div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),300);},4000);}
 async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
 
-function getTimeStatus(){const n=new Date();const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');if(ct<'05:30')return{open:false,reason:'Not started. Starts at 5:30 AM'};if(ct>='05:30'&&ct<'10:30')return{open:true,status:'Present'};if(ct>='10:30'&&ct<='12:00')return{open:true,status:'Late'};return{open:false,reason:'Closed after 12 PM'};}
+function getTimeStatus(){
+    // TEMPORARY: Always open for testing
+    const n=new Date();
+    const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+    return{open:true,status:ct>='10:30'?'Late':'Present'};
+    /* ORIGINAL RULES:
+    if(ct<'05:30')return{open:false,reason:'Not started. Starts at 5:30 AM'};
+    if(ct>='05:30'&&ct<'10:30')return{open:true,status:'Present'};
+    if(ct>='10:30'&&ct<='12:00')return{open:true,status:'Late'};
+    return{open:false,reason:'Closed after 12 PM'};
+    */
+}
 
 function nav(p){
     document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
