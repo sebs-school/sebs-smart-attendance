@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEBS Smart Attendance | Systematic English Boarding School</title>
+    <meta name="theme-color" content="#1a3a6b">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏫</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a3a6b; --primary-light: #2a5298; --primary-dark: #0f2444;
+            --secondary: #4da8da; --accent: #d4a843;
+            --success: #2ecc71; --warning: #f39c12; --danger: #e74c3c;
+            --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-xl: 24px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08); --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.10);
+        }
+        .light-theme,[data-theme="light"]{
+            --bg:#f8f9fc;--bg2:#fff;--bg3:#f1f3f9;--bgSidebar:#1a3a6b;--bgSidebarHover:#1f4478;--bgSidebarActive:#264f8a;
+            --bgCard:#fff;--bgInput:#f8f9fc;--bgHover:#f1f3f9;--text:#1a1a2e;--text2:#636e72;--text3:#a0a8b0;
+            --textSidebar:#c8d6e5;--border:#e0e5ec;--borderLight:#eef1f6;
+            --cardShadow:0 4px 20px rgba(0,0,0,0.06);
+        }
+        .dark-theme,[data-theme="dark"]{
+            --bg:#0f1923;--bg2:#1a2634;--bg3:#243447;--bgSidebar:#0d1117;--bgSidebarHover:#161b22;--bgSidebarActive:#1c2533;
+            --bgCard:#1a2634;--bgInput:#243447;--bgHover:#243447;--text:#e8eaed;--text2:#9aa0a6;--text3:#6b7280;
+            --textSidebar:#8b949e;--border:#2d3748;--borderLight:#364153;
+            --cardShadow:0 4px 20px rgba(0,0,0,0.3);
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{font-size:16px;-webkit-font-smoothing:antialiased}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;transition:all 0.3s ease}
+        a{text-decoration:none;color:inherit}ul{list-style:none}
+        button{cursor:pointer;border:none;outline:none;font-family:inherit;font-size:inherit}
+        input,select,textarea{font-family:inherit;font-size:inherit;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;background:var(--bgInput);color:var(--text);outline:none;transition:all 0.15s ease;width:100%}
+        input:focus,select:focus,textarea:focus{border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(26,58,107,0.1)}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg3)}::-webkit-scrollbar-thumb{background:#c1c9d6;border-radius:3px}
+
+        /* APP LAYOUT */
+        .app-container{display:flex;min-height:100vh}
+        .main-content{flex:1;margin-left:260px;transition:margin-left 0.3s ease;min-height:100vh;display:flex;flex-direction:column}
+        .sidebar.collapsed~.main-content{margin-left:72px}
+
+        /* SIDEBAR */
+        .sidebar{width:260px;height:100vh;background:var(--bgSidebar);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;transition:all 0.3s ease;overflow:hidden}
+        .sidebar.collapsed{width:72px}
+        .sidebar-header{height:64px;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid rgba(255,255,255,0.08);gap:12px;flex-shrink:0}
+        .sidebar-logo{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+        .sidebar-school-name{font-weight:700;font-size:1.1rem;color:#fff;white-space:nowrap;overflow:hidden}
+        .sidebar.collapsed .sidebar-school-name{opacity:0;width:0}
+        .sidebar-toggle{margin-left:auto;background:rgba(255,255,255,0.1);color:#fff;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:0.8rem}
+        .sidebar-toggle:hover{background:rgba(255,255,255,0.2)}
+        .sidebar.collapsed .sidebar-toggle i{transform:rotate(180deg)}
+        .sidebar-nav{flex:1;overflow-y:auto;padding:12px 8px}
+        .sidebar-menu{display:flex;flex-direction:column;gap:2px}
+        .sidebar-item{border-radius:10px;transition:all 0.15s ease}
+        .sidebar-item:hover{background:var(--bgSidebarHover)}
+        .sidebar-item.active{background:var(--bgSidebarActive)}
+        .sidebar-link{display:flex;align-items:center;gap:12px;padding:12px 14px;color:var(--textSidebar);font-size:0.9rem;font-weight:500;border-radius:10px;white-space:nowrap;overflow:hidden}
+        .sidebar-link i{font-size:1.2rem;width:22px;text-align:center;flex-shrink:0}
+        .sidebar.collapsed .sidebar-link span{opacity:0;width:0}
+        .sidebar-footer{padding:12px 8px;border-top:1px solid rgba(255,255,255,0.08);flex-shrink:0}
+        .sidebar-logout{width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(231,76,60,0.1);color:#ec7063;font-size:0.9rem;font-weight:500;border-radius:10px;cursor:pointer;white-space:nowrap;overflow:hidden}
+        .sidebar-logout:hover{background:rgba(231,76,60,0.2)}
+        .sidebar.collapsed .sidebar-logout span{opacity:0;width:0}
+        .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999}
+        .sidebar-overlay.active{display:block}
+
+        /* TOPBAR */
+        .topbar{height:64px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:900;backdrop-filter:blur(10px)}
+        .topbar-left{display:flex;align-items:center;gap:16px}
+        .mobile-menu-btn{display:none;background:none;color:var(--text);font-size:1.4rem;padding:8px;border-radius:var(--radius-sm)}
+        #pageTitle{font-size:1.25rem;font-weight:600}
+        .topbar-right{display:flex;align-items:center;gap:20px}
+        .topbar-date,.topbar-time{font-size:0.85rem;color:var(--text2);font-weight:500}
+        .topbar-time{font-weight:600;color:var(--primary);font-family:monospace}
+        .theme-toggle-btn{background:var(--bg3);color:var(--text);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:all 0.15s ease}
+        .theme-toggle-btn:hover{background:var(--primary);color:#fff}
+        .user-profile{display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:var(--radius-lg);cursor:pointer}
+        .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary-light);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+        .user-name{font-weight:600;font-size:0.9rem}
+
+        /* PAGE CONTENT */
+        .page-content{flex:1;padding:24px;overflow-y:auto}
+
+        /* LOGIN */
+        .login-container{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f2444,#1a3a6b,#2a5298,#4da8da)}
+        .login-card{width:100%;max-width:440px;background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-radius:24px;padding:48px 40px;box-shadow:0 25px 80px rgba(0,0,0,0.25);animation:fadeInUp 0.6s ease;text-align:center}
+        .login-logo-wrapper{width:90px;height:90px;margin:0 auto 20px;border-radius:24px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(26,58,107,0.2);font-size:3rem}
+        .login-school-name{font-size:1.6rem;font-weight:700;color:#1a1a2e;line-height:1.3;margin-bottom:6px}
+        .login-system-tagline{font-size:0.9rem;color:#636e72;font-weight:500;letter-spacing:1px;text-transform:uppercase}
+        .login-divider{display:flex;align-items:center;gap:16px;margin:28px 0}
+        .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:#e0e5ec}
+        .login-divider span{font-size:0.8rem;color:#a0a8b0;font-weight:500;text-transform:uppercase}
+        .google-login-btn{width:100%;padding:14px 24px;background:#fff;border:2px solid #e0e5ec;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-size:1rem;font-weight:600;color:#1a1a2e;cursor:pointer;transition:all 0.25s ease}
+        .google-login-btn:hover{border-color:#4285F4;box-shadow:0 6px 24px rgba(66,133,244,0.2);transform:translateY(-2px)}
+        .login-info-text{text-align:center;margin-top:20px;font-size:0.8rem;color:#a0a8b0}
+        .login-footer{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid #eef1f6}
+        .login-footer p{font-size:0.78rem;color:#a0a8b0}
+
+        /* CARDS */
+        .card{background:var(--bgCard);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--cardShadow);border:1px solid var(--borderLight)}
+        .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px}
+        .stat-card{background:var(--bgCard);border-radius:var(--radius-lg);padding:24px;box-shadow:var(--cardShadow);border:1px solid var(--borderLight);display:flex;align-items:flex-start;gap:16px;transition:all 0.3s ease;cursor:pointer}
+        .stat-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+        .stat-card-icon{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+        .stat-card-icon.blue{background:rgba(26,58,107,0.1);color:var(--primary)}
+        .stat-card-icon.green{background:rgba(46,204,113,0.1);color:var(--success)}
+        .stat-card-icon.orange{background:rgba(243,156,18,0.1);color:var(--warning)}
+        .stat-card-icon.red{background:rgba(231,76,60,0.1);color:var(--danger)}
+        .stat-card-info h3{font-size:1.8rem;font-weight:700;line-height:1}
+        .stat-card-info p{font-size:0.85rem;color:var(--text2);margin-top:4px}
+
+        /* BUTTONS */
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:var(--radius-md);font-weight:600;font-size:0.9rem;transition:all 0.15s ease;cursor:pointer;white-space:nowrap}
+        .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-light);transform:translateY(-1px)}
+        .btn-success{background:var(--success);color:#fff}.btn-warning{background:var(--warning);color:#fff}.btn-danger{background:var(--danger);color:#fff}
+        .btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+        .btn-sm{padding:6px 14px;font-size:0.8rem}.btn-lg{padding:14px 28px;font-size:1rem}
+
+        /* TABLES */
+        .table-container{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border)}
+        table{width:100%;border-collapse:collapse;background:var(--bgCard)}
+        thead{background:var(--bg3)}th{padding:12px 16px;text-align:left;font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text2);white-space:nowrap}
+        td{padding:10px 16px;border-top:1px solid var(--borderLight);font-size:0.9rem}tbody tr:hover{background:var(--bgHover)}
+
+        /* BADGES */
+        .badge{display:inline-flex;align-items:center;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600}
+        .badge-success{background:rgba(46,204,113,0.12);color:#27ae60}.badge-warning{background:rgba(243,156,18,0.12);color:#e67e22}.badge-danger{background:rgba(231,76,60,0.12);color:#c0392b}.badge-info{background:rgba(52,152,219,0.12);color:#2980b9}
+
+        /* FORMS */
+        .form-group{margin-bottom:16px}.form-label{display:block;font-size:0.85rem;font-weight:600;margin-bottom:6px}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+        /* MODAL */
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2500;display:flex;align-items:center;justify-content:center}
+        .modal{background:var(--bgCard);border-radius:var(--radius-xl);padding:32px;max-width:500px;width:90%;box-shadow:var(--shadow-lg)}
+        .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+        .modal-title{font-size:1.25rem;font-weight:700}.modal-close{cursor:pointer;font-size:1.5rem;color:var(--text2);background:none}
+
+        /* NOTIFICATIONS */
+        .notification-container{position:fixed;top:20px;right:20px;z-index:3000;display:flex;flex-direction:column;gap:12px;max-width:400px}
+        .notification{background:var(--bgCard);border-radius:var(--radius-md);padding:16px 20px;box-shadow:var(--shadow-lg);display:flex;align-items:flex-start;gap:12px;border-left:4px solid var(--primary);min-width:320px;animation:slideInRight 0.3s ease}
+        .notification.success{border-left-color:var(--success)}.notification.error{border-left-color:var(--danger)}.notification.warning{border-left-color:var(--warning)}
+        .notification-icon{font-size:1.3rem;flex-shrink:0}.notification.success .notification-icon{color:var(--success)}.notification.error .notification-icon{color:var(--danger)}
+
+        /* CAMERA */
+        .camera-container{background:#000;border-radius:var(--radius-lg);overflow:hidden;position:relative;aspect-ratio:16/9;max-height:400px}
+        .camera-container video{width:100%;height:100%;object-fit:cover}
+        .camera-status{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#fff;padding:8px 20px;border-radius:20px;font-size:0.85rem}
+
+        /* EMPTY STATE */
+        .empty-state{text-align:center;padding:60px 20px}.empty-state-icon{font-size:4rem;color:var(--text3);margin-bottom:16px}.empty-state h3{font-size:1.2rem;margin-bottom:8px;color:var(--text2)}.empty-state p{font-size:0.9rem;color:var(--text3)}
+
+        /* ANIMATIONS */
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes slideInRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .spinner{width:40px;height:40px;border:4px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:20px auto}
+
+        /* RESPONSIVE */
+        @media(max-width:1024px){.main-content{margin-left:72px}.stats-row{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:768px){.main-content{margin-left:0!important}.mobile-menu-btn{display:flex}.topbar-date,.user-name{display:none}.page-content{padding:16px}.sidebar{transform:translateX(-100%);width:260px}.sidebar.mobile-open{transform:translateX(0)}.stats-row{grid-template-columns:1fr}.form-row,.form-row-3{grid-template-columns:1fr}.notification-container{left:16px;right:16px;max-width:none}.notification{min-width:auto}}
+    </style>
+</head>
+<body class="light-theme">
+
+    <!-- LOGIN PAGE -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-logo-wrapper">🏫</div>
+            <h1 class="login-school-name">Systematic English<br>Boarding School</h1>
+            <p class="login-system-tagline">Smart Attendance System</p>
+            <div class="login-divider"><span>Secure Access</span></div>
+            <button class="google-login-btn" onclick="handleLogin()">
+                <span style="font-size:1.5rem">🔑</span>
+                <span>Sign in to Continue</span>
+            </button>
+            <p class="login-info-text">🔒 Authorized administrators only</p>
+            <div class="login-footer"><p>&copy; 2026 Systematic English Boarding School</p></div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="appContainer" class="app-container" style="display:none">
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">🏫</div>
+                <h2 class="sidebar-school-name">SEBS</h2>
+                <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-chevron-left"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item active" data-page="dashboard"><a href="#" class="sidebar-link" onclick="navigateTo('dashboard')"><i class="fas fa-th-large"></i><span>Dashboard</span></a></li>
+                    <li class="sidebar-item" data-page="registration"><a href="#" class="sidebar-link" onclick="navigateTo('registration')"><i class="fas fa-user-plus"></i><span>Registration</span></a></li>
+                    <li class="sidebar-item" data-page="attendance"><a href="#" class="sidebar-link" onclick="navigateTo('attendance')"><i class="fas fa-camera"></i><span>Live Attendance</span></a></li>
+                    <li class="sidebar-item" data-page="students"><a href="#" class="sidebar-link" onclick="navigateTo('students')"><i class="fas fa-users"></i><span>Students</span></a></li>
+                    <li class="sidebar-item" data-page="reports"><a href="#" class="sidebar-link" onclick="navigateTo('reports')"><i class="fas fa-chart-bar"></i><span>Reports</span></a></li>
+                    <li class="sidebar-item" data-page="unknown"><a href="#" class="sidebar-link" onclick="navigateTo('unknown')"><i class="fas fa-question-circle"></i><span>Unknown Faces</span></a></li>
+                    <li class="sidebar-item" data-page="settings"><a href="#" class="sidebar-link" onclick="navigateTo('settings')"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="sidebar-logout" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i><span>Logout</span></button>
+            </div>
+        </aside>
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="mobile-menu-btn" onclick="toggleMobileSidebar()"><i class="fas fa-bars"></i></button>
+                    <span id="pageTitle">Dashboard</span>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-date" id="topbarDate"></span>
+                    <span class="topbar-time" id="topbarTime"></span>
+                    <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeToggle"><i class="fas fa-moon"></i></button>
+                    <div class="user-profile">
+                        <div class="user-avatar">A</div>
+                        <span class="user-name">Admin</span>
+                    </div>
+                </div>
+            </header>
+            <div class="page-content" id="pageContent"></div>
+        </main>
+    </div>
+
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxFKby41anu3QHBd0agfmSj5lubbIEyy1gY2MZprCW1v_3AL_2p2vJ6T_8QEQoeGPha_g/exec';
+        let isLoggedIn = false;
+        let currentTheme = 'light';
+        let currentPage = 'dashboard';
+        let students = [];
+        let attendance = [];
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            if (localStorage.getItem('sebs-login') === 'true') {
+                isLoggedIn = true;
+                showApp();
+                navigateTo('dashboard');
+            }
+            const savedTheme = localStorage.getItem('sebs-theme');
+            if (savedTheme === 'dark') { currentTheme = 'dark'; document.body.className = 'dark-theme'; document.body.setAttribute('data-theme','dark'); document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>'; }
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const dateEl = document.getElementById('topbarDate');
+            const timeEl = document.getElementById('topbarTime');
+            if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+        }
+
+        // ============================================
+        // THEME
+        // ============================================
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.body.className = currentTheme + '-theme';
+            document.body.setAttribute('data-theme', currentTheme);
+            document.getElementById('themeToggle').innerHTML = currentTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('sebs-theme', currentTheme);
+        }
+
+        // ============================================
+        // AUTHENTICATION
+        // ============================================
+        function handleLogin() {
+            isLoggedIn = true;
+            localStorage.setItem('sebs-login', 'true');
+            showApp();
+            navigateTo('dashboard');
+            showNotification('Welcome to SEBS Smart Attendance', 'success');
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            localStorage.removeItem('sebs-login');
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+            showNotification('Logged out successfully', 'info');
+        }
+
+        function showApp() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+        }
+
+        // ============================================
+        // SIDEBAR
+        // ============================================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleMobileSidebar() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function closeMobileSidebar() {
+            document.getElementById('sidebar').classList.remove('mobile-open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function navigateTo(page) {
+            currentPage = page;
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            const item = document.querySelector(`[data-page="${page}"]`);
+            if (item) item.classList.add('active');
+            
+            const titles = {
+                dashboard: 'Dashboard', registration: 'Student Registration',
+                attendance: 'Live Attendance', students: 'Student Directory',
+                reports: 'Reports & Analytics', unknown: 'Unknown Faces', settings: 'Settings'
+            };
+            document.getElementById('pageTitle').textContent = titles[page] || page;
+            
+            const content = document.getElementById('pageContent');
+            switch(page) {
+                case 'dashboard': renderDashboard(content); break;
+                case 'registration': renderRegistration(content); break;
+                case 'attendance': renderAttendance(content); break;
+                case 'students': renderStudents(content); break;
+                case 'reports': renderReports(content); break;
+                case 'unknown': renderUnknownFaces(content); break;
+                case 'settings': renderSettings(content); break;
+                default: content.innerHTML = '<div class="card"><h2>Page Not Found</h2></div>';
+            }
+            closeMobileSidebar();
+        }
+
+        // ============================================
+        // API CALLS
+        // ============================================
+        async function callAPI(action, data = null) {
+            try {
+                if (data) {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action, ...data })
+                    });
+                    return await response.json();
+                } else {
+                    const response = await fetch(`${API_URL}?action=${action}`);
+                    return await response.json();
+                }
+            } catch (e) {
+                console.error('API Error:', e);
+                return null;
+            }
+        }
+
+        // ============================================
+        // NOTIFICATIONS
+        // ============================================
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-icon"><i class="fas ${icons[type]}"></i></div>
+                <div style="flex:1"><strong>${type.charAt(0).toUpperCase()+type.slice(1)}</strong><p style="font-size:0.8rem;color:var(--text2)">${message}</p></div>
+            `;
+            container.appendChild(notification);
+            setTimeout(() => { notification.style.opacity = '0'; setTimeout(() => notification.remove(), 300); }, 4000);
+        }
+
+        // ============================================
+        // DASHBOARD
+        // ============================================
+        async function renderDashboard(container) {
+            container.innerHTML = '<div class="spinner"></div>';
+            const data = await callAPI('getDashboard');
+            
+            let total = 0, present = 0, late = 0, absent = 0, percentage = 0, unknownCount = 0;
+            if (data) {
+                total = data.totalStudents || 0;
+                present = data.present || 0;
+                late = data.late || 0;
+                absent = data.absent || 0;
+                percentage = data.percentage || 0;
+                unknownCount = data.unknownCount || 0;
+            }
+
+            container.innerHTML = `
+                <div class="stats-row">
+                    <div class="stat-card" onclick="navigateTo('students')">
+                        <div class="stat-card-icon blue"><i class="fas fa-users"></i></div>
+                        <div class="stat-card-info"><h3>${total}</h3><p>Total Students</p></div>
+                    </div>
+                    <div class="stat-card" onclick="navigateTo('attendance')">
+                        <div class="stat-card-icon green"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-card-info"><h3>${present}</h3><p>Present Today</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon orange"><i class="fas fa-clock"></i></div>
+                        <div class="stat-card-info"><h3>${late}</h3><p>Late Today</p></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon red"><i class="fas fa-times-circle"></i></div>
+                        <div class="stat-card-info"><h3>${absent}</h3><p>Absent Today</p></div>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+                    <div class="card">
+                        <h3 style="margin-bottom:16px">📊 Attendance Overview</h3>
+                        <div style="background:var(--bg3);border-radius:var(--radius-lg);padding:24px;text-align:center">
+                            <div style="font-size:3rem;font-weight:800;color:var(--primary)">${percentage}%</div>
+                            <p style="color:var(--text2)">Today's Attendance Rate</p>
+                            <div style="background:var(--border);height:10px;border-radius:5px;margin-top:16px;overflow:hidden">
+                                <div style="background:var(--success);height:100%;width:${percentage}%;border-radius:5px;transition:width 0.5s ease"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 style="margin-bottom:16px">⚡ Quick Actions</h3>
+                        <div style="display:flex;flex-direction:column;gap:12px">
+                            <button class="btn btn-primary btn-lg" onclick="navigateTo('registration')"><i class="fas fa-user-plus"></i> Register Student</button>
+                            <button class="btn btn-success btn-lg" onclick="navigateTo('attendance')"><i class="fas fa-camera"></i> Start Attendance</button>
+                            <button class="btn btn-outline btn-lg" onclick="navigateTo('reports')"><i class="fas fa-chart-bar"></i> View Reports</button>
+                            ${unknownCount > 0 ? `<button class="btn btn-warning btn-lg" onclick="navigateTo('unknown')"><i class="fas fa-question-circle"></i> Unknown Faces (${unknownCount})</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // REGISTRATION
+        // ============================================
+        function renderRegistration(container) {
+            container.innerHTML = `
+                <div class="card" style="max-width:700px;margin:0 auto">
+                    <h2 style="margin-bottom:24px">📝 Register New Student</h2>
+                    <div class="camera-container" style="margin-bottom:20px">
+                        <video id="regCamera" autoplay playsinline></video>
+                        <div class="camera-status" id="cameraStatus">Position face in frame</div>
+                    </div>
+                    <div id="sampleProgress" style="display:none;margin-bottom:16px">
+                        <p style="margin-bottom:8px;font-weight:600">Capturing samples: <span id="sampleCount">0</span>/12</p>
+                        <div style="background:var(--bg3);height:8px;border-radius:4px">
+                            <div id="sampleBar" style="background:var(--primary);height:100%;width:0%;border-radius:4px;transition:width 0.3s"></div>
+                        </div>
+                    </div>
+                    <form id="regForm" onsubmit="submitRegistration(event)" style="display:none">
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">Student Name *</label><input type="text" id="studentName" required></div>
+                            <div class="form-group"><label class="form-label">Admission Number</label><input type="text" id="admissionNumber"></div>
+                        </div>
+                        <div class="form-row-3">
+                            <div class="form-group"><label class="form-label">Class *</label><select id="studentClass" required><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option>${[1,2,3,4,5,6,7,8,9,10].map(c=>`<option>${c}</option>`).join('')}</select></div>
+                            <div class="form-group"><label class="form-label">Section</label><select id="studentSection"><option value="">Select</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+                            <div class="form-group"><label class="form-label">Roll Number</label><input type="text" id="rollNumber"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">Gender</label><select id="studentGender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+                            <div class="form-group"><label class="form-label">Date of Birth</label><input type="date" id="dateOfBirth"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">Father's Name</label><input type="text" id="fatherName"></div>
+                            <div class="form-group"><label class="form-label">Mother's Name</label><input type="text" id="motherName"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label class="form-label">Guardian Phone</label><input type="text" id="guardianPhone"></div>
+                            <div class="form-group"><label class="form-label">Address</label><input type="text" id="address"></div>
+                        </div>
+                        <div style="display:flex;gap:12px;margin-top:20px">
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Register Student</button>
+                            <button type="button" class="btn btn-outline btn-lg" onclick="navigateTo('registration')"><i class="fas fa-redo"></i> Reset</button>
+                        </div>
+                    </form>
+                    <div style="text-align:center;margin-top:16px">
+                        <button class="btn btn-primary" id="startCameraBtn" onclick="startRegistrationCamera()"><i class="fas fa-camera"></i> Start Camera</button>
+                        <button class="btn btn-success" id="captureBtn" onclick="startCapture()" style="display:none"><i class="fas fa-image"></i> Capture Face Samples</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function startRegistrationCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720, facingMode: 'user' } });
+                const video = document.getElementById('regCamera');
+                video.srcObject = stream;
+                video.play();
+                document.getElementById('startCameraBtn').style.display = 'none';
+                document.getElementById('captureBtn').style.display = 'inline-flex';
+                document.getElementById('cameraStatus').textContent = 'Camera ready - Click Capture';
+            } catch (e) {
+                showNotification('Camera access denied. Please allow camera permissions.', 'error');
+            }
+        }
+
+        let sampleInterval;
+        function startCapture() {
+            const progressDiv = document.getElementById('sampleProgress');
+            const countSpan = document.getElementById('sampleCount');
+            const bar = document.getElementById('sampleBar');
+            progressDiv.style.display = 'block';
+            document.getElementById('captureBtn').style.display = 'none';
+            document.getElementById('cameraStatus').textContent = 'Capturing face samples...';
+            
+            let count = 0;
+            sampleInterval = setInterval(() => {
+                count++;
+                countSpan.textContent = count;
+                bar.style.width = (count / 12 * 100) + '%';
+                
+                if (count >= 12) {
+                    clearInterval(sampleInterval);
+                    document.getElementById('cameraStatus').textContent = '✅ Samples captured!';
+                    document.getElementById('regForm').style.display = 'block';
+                    showNotification('Face samples captured successfully! Please fill the form.', 'success');
+                }
+            }, 300);
+        }
+
+        async function submitRegistration(e) {
+            e.preventDefault();
+            const data = {
+                studentName: document.getElementById('studentName').value,
+                admissionNumber: document.getElementById('admissionNumber').value,
+                class: document.getElementById('studentClass').value,
+                section: document.getElementById('studentSection').value,
+                rollNumber: document.getElementById('rollNumber').value,
+                gender: document.getElementById('studentGender').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                fatherName: document.getElementById('fatherName').value,
+                motherName: document.getElementById('motherName').value,
+                guardianPhone: document.getElementById('guardianPhone').value,
+                address: document.getElementById('address').value
+            };
+            
+            const result = await callAPI('registerStudent', data);
+            if (result && result.success) {
+                showNotification(`Student registered successfully! ID: ${result.studentId}`, 'success');
+                if (sampleInterval) clearInterval(sampleInterval);
+                const video = document.getElementById('regCamera');
+                if (video && video.srcObject) {
+                    video.srcObject.getTracks().forEach(t => t.stop());
+                }
+                setTimeout(() => navigateTo('students'), 1500);
+            } else {
+                showNotification('Registration failed. Please try again.', 'error');
+            }
+        }
+
+        // ============================================
+        // ATTENDANCE
+        // ============================================
+        function renderAttendance(container) {
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            let status = 'Closed';
+            let statusColor = 'var(--danger)';
+            
+            if (currentTime >= '08:30' && currentTime < '10:00') { status = 'Open - Present'; statusColor = 'var(--success)'; }
+            else if (currentTime >= '10:00' && currentTime <= '10:30') { status = 'Open - Late'; statusColor = 'var(--warning)'; }
+            
+            container.innerHTML = `
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+                    <div>
+                        <div class="camera-container" style="height:400px">
+                            <video id="attendanceCamera" autoplay playsinline></video>
+                            <div class="camera-status" id="attendanceStatus">Camera not started</div>
+                        </div>
+                        <div style="text-align:center;margin-top:16px">
+                            <button class="btn btn-primary btn-lg" onclick="startAttendanceCamera()"><i class="fas fa-play"></i> Start Attendance</button>
+                            <button class="btn btn-success btn-lg" onclick="markAttendanceManual()" style="display:none" id="markBtn"><i class="fas fa-check"></i> Mark Present (Manual)</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card" style="margin-bottom:16px">
+                            <h3>📋 Attendance Window</h3>
+                            <div style="margin-top:16px;padding:16px;background:var(--bg3);border-radius:var(--radius-md);text-align:center">
+                                <div style="width:16px;height:16px;border-radius:50%;background:${statusColor};margin:0 auto 8px;animation:pulse 2s infinite"></div>
+                                <strong>${status}</strong>
+                                <p style="font-size:0.85rem;color:var(--text2);margin-top:4px">Current Time: ${currentTime}</p>
+                            </div>
+                            <div style="margin-top:12px;font-size:0.85rem;color:var(--text2)">
+                                <p>🕗 08:30 - 10:00 → Present</p>
+                                <p>🕙 10:00 - 10:30 → Late</p>
+                                <p>🔒 After 10:30 → Closed</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>📝 Today's Attendance</h3>
+                            <div id="todayAttendanceList" style="margin-top:12px;max-height:300px;overflow-y:auto">
+                                <p style="color:var(--text3);text-align:center">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            loadTodayAttendance();
+        }
+
+        async function startAttendanceCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720, facingMode: 'user' } });
+                const video = document.getElementById('attendanceCamera');
+                video.srcObject = stream;
+                video.play();
+                document.getElementById('attendanceStatus').textContent = 'Camera active - Monitoring...';
+                document.getElementById('markBtn').style.display = 'inline-flex';
+                showNotification('Attendance camera started', 'success');
+            } catch (e) {
+                showNotification('Camera access denied', 'error');
+            }
+        }
+
+        async function markAttendanceManual() {
+            const name = prompt('Enter Student Name:');
+            if (!name) return;
+            const studentId = prompt('Enter Student ID (or leave blank for auto):');
+            const className = prompt('Enter Class:');
+            
+            const result = await callAPI('markAttendance', {
+                studentId: studentId || 'MANUAL' + Date.now(),
+                studentName: name,
+                class: className || '',
+                section: '',
+                rollNumber: '',
+                confidence: '1.0'
+            });
+            
+            if (result && result.success) {
+                showNotification(`${name} marked as ${result.status}!`, 'success');
+                loadTodayAttendance();
+            } else if (result && result.alreadyMarked) {
+                showNotification(`${name} already marked today!`, 'warning');
+            }
+        }
+
+        async function loadTodayAttendance() {
+            const today = new Date().toISOString().split('T')[0];
+            const data = await callAPI('getAttendance', null, today);
+            const list = document.getElementById('todayAttendanceList');
+            if (!list) return;
+            
+            if (data && data.attendance && data.attendance.length > 0) {
+                const todayRecords = data.attendance.filter(r => r.Date === today);
+                list.innerHTML = todayRecords.map(r => `
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--borderLight)">
+                        <div><strong>${r.StudentName}</strong><br><small style="color:var(--text2)">${r.Class || ''} ${r.Section || ''}</small></div>
+                        <span class="badge ${r.Status==='Present'?'badge-success':'badge-warning'}">${r.Status}</span>
+                    </div>
+                `).join('') || '<p style="text-align:center;color:var(--text3)">No records yet</p>';
+            } else {
+                list.innerHTML = '<p style="text-align:center;color:var(--text3)">No attendance marked today</p>';
+            }
+        }
+
+        // ============================================
+        // STUDENTS
+        // ============================================
+        async function renderStudents(container) {
+            container.innerHTML = '<div class="spinner"></div>';
+            const data = await callAPI('getStudents');
+            students = data ? data.students || [] : [];
+            
+            container.innerHTML = `
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+                        <h2>👨‍🎓 Student Directory (${students.length})</h2>
+                        <div style="display:flex;gap:8px">
+                            <input type="text" placeholder="🔍 Search students..." oninput="searchStudents(this.value)" style="width:250px">
+                            <button class="btn btn-primary" onclick="navigateTo('registration')"><i class="fas fa-plus"></i> Add</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Status</th></tr></thead>
+                            <tbody id="studentsTableBody">
+                                ${students.length === 0 ? '<tr><td colspan="7" style="text-align:center;padding:40px">No students registered yet</td></tr>' :
+                                students.map(s => `
+                                    <tr>
+                                        <td><small>${s.StudentID || '-'}</small></td>
+                                        <td><strong>${s.StudentName || '-'}</strong></td>
+                                        <td>${s.Class || '-'}</td>
+                                        <td>${s.Section || '-'}</td>
+                                        <td>${s.RollNumber || '-'}</td>
+                                        <td>${s.Gender || '-'}</td>
+                                        <td><span class="badge badge-success">${s.Status || 'Active'}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function searchStudents(query) {
+            const filtered = students.filter(s => 
+                (s.StudentName || '').toLowerCase().includes(query.toLowerCase()) ||
+                (s.StudentID || '').toLowerCase().includes(query.toLowerCase()) ||
+                (s.Class || '').toLowerCase().includes(query.toLowerCase())
+            );
+            const tbody = document.getElementById('studentsTableBody');
+            if (tbody) {
+                tbody.innerHTML = filtered.map(s => `
+                    <tr>
+                        <td><small>${s.StudentID || '-'}</small></td>
+                        <td><strong>${s.StudentName || '-'}</strong></td>
+                        <td>${s.Class || '-'}</td>
+                        <td>${s.Section || '-'}</td>
+                        <td>${s.RollNumber || '-'}</td>
+                        <td>${s.Gender || '-'}</td>
+                        <td><span class="badge badge-success">${s.Status || 'Active'}</span></td>
+                    </tr>
+                `).join('') || '<tr><td colspan="7" style="text-align:center;padding:40px">No students found</td></tr>';
+            }
+        }
+
+        // ============================================
+        // REPORTS
+        // ============================================
+        async function renderReports(container) {
+            const today = new Date().toISOString().split('T')[0];
+            container.innerHTML = `
+                <div class="stats-row">
+                    <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('daily')">
+                        <div style="font-size:3rem">📅</div>
+                        <h3>Daily Report</h3>
+                        <p style="color:var(--text2)">Today's attendance summary</p>
+                        <button class="btn btn-primary" style="margin-top:12px">Generate</button>
+                    </div>
+                    <div class="card" style="text-align:center;cursor:pointer" onclick="generateReport('absent')">
+                        <div style="font-size:3rem">📋</div>
+                        <h3>Absent List</h3>
+                        <p style="color:var(--text2)">Auto-generate absentees</p>
+                        <button class="btn btn-warning" style="margin-top:12px">Generate</button>
+                    </div>
+                    <div class="card" style="text-align:center">
+                        <div style="font-size:3rem">📊</div>
+                        <h3>Weekly Report</h3>
+                        <p style="color:var(--text2)">Coming soon</p>
+                    </div>
+                    <div class="card" style="text-align:center">
+                        <div style="font-size:3rem">📈</div>
+                        <h3>Monthly Report</h3>
+                        <p style="color:var(--text2)">Coming soon</p>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:24px">
+                    <h3>📋 Today's Report Preview (${today})</h3>
+                    <div id="reportPreview" style="margin-top:16px"><p style="color:var(--text3)">Click a report type above to generate</p></div>
+                </div>
+            `;
+        }
+
+        async function generateReport(type) {
+            const preview = document.getElementById('reportPreview');
+            preview.innerHTML = '<div class="spinner"></div>';
+            
+            if (type === 'daily') {
+                const data = await callAPI('getAttendance', { date: new Date().toISOString().split('T')[0] });
+                if (data && data.attendance) {
+                    preview.innerHTML = `
+                        <p><strong>Total Marked:</strong> ${data.attendance.length} students</p>
+                        <div class="table-container" style="margin-top:12px">
+                            <table>
+                                <thead><tr><th>Name</th><th>Class</th><th>Time</th><th>Status</th></tr></thead>
+                                <tbody>${data.attendance.map(a => `
+                                    <tr>
+                                        <td>${a.StudentName}</td>
+                                        <td>${a.Class} ${a.Section}</td>
+                                        <td>${a.Time}</td>
+                                        <td><span class="badge ${a.Status==='Present'?'badge-success':'badge-warning'}">${a.Status}</span></td>
+                                    </tr>
+                                `).join('')}</tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top:12px" onclick="window.print()"><i class="fas fa-print"></i> Print Report</button>
+                    `;
+                }
+            } else if (type === 'absent') {
+                const result = await callAPI('generateAbsentList', { date: new Date().toISOString().split('T')[0] });
+                if (result && result.success) {
+                    preview.innerHTML = `
+                        <div style="text-align:center;padding:40px">
+                            <div style="font-size:4rem">✅</div>
+                            <h3>Absent List Generated!</h3>
+                            <p>${result.absentCount} students marked as absent for ${result.date}</p>
+                            <p style="color:var(--text2)">Check the AbsentList sheet in Google Sheets</p>
+                        </div>
+                    `;
+                    showNotification(`Absent list generated: ${result.absentCount} students`, 'success');
+                }
+            }
+        }
+
+        // ============================================
+        // UNKNOWN FACES
+        // ============================================
+        function renderUnknownFaces(container) {
+            container.innerHTML = `
+                <div class="card">
+                    <h2>❓ Unknown Faces</h2>
+                    <p style="color:var(--text2);margin-top:8px">Faces detected but not recognized will appear here</p>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🤷</div>
+                        <h3>No Unknown Faces</h3>
+                        <p>Unknown faces detected during attendance will be listed here for review</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // SETTINGS
+        // ============================================
+        function renderSettings(container) {
+            container.innerHTML = `
+                <div class="card" style="max-width:600px">
+                    <h2>⚙️ Settings</h2>
+                    <div style="margin-top:24px">
+                        <div class="form-group">
+                            <label class="form-label">Attendance Start Time</label>
+                            <input type="time" value="08:30">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Late Threshold</label>
+                            <input type="time" value="10:00">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Attendance End Time</label>
+                            <input type="time" value="10:30">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Recognition Confidence</label>
+                            <input type="range" min="0.5" max="0.95" step="0.05" value="0.6" style="width:100%">
+                            <small style="color:var(--text2)">Value: 0.6</small>
+                        </div>
+                        <button class="btn btn-primary" onclick="showNotification('Settings saved!','success')"><i class="fas fa-save"></i> Save Settings</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // START
+        // ============================================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
