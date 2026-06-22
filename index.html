@@ -155,7 +155,7 @@ function nav(p){
     document.getElementById('pt').textContent=t[p]||p;
     if(p!=='att')stopAttendance();
     const c=document.getElementById('pc');
-    if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);else c.innerHTML='<div class="card"><h2>Settings</h2><p>Attendance: 8:30-10:00 Present | 10:00-10:30 Late</p></div>';
+    if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);else c.innerHTML='<div class="card"><h2>Settings</h2><p>Attendance: 05:30-10:30 = Present | 10:30-12:00 = Late | After 12:00 = Closed Present | 10:00-10:30 Late</p></div>';
     cmsb();
 }
 
