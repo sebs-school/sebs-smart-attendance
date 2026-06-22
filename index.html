@@ -297,14 +297,40 @@ async function detectFaces(){
     if(attendanceActive)requestAnimationFrame(detectFaces);
 }
 
-async function checkBlink(detection){
+let lastHeadX=null,lastHeadY=null,headMoved=false;
+
+async function checkLiveness(detection){
     if(!detection.landmarks)return false;
+    
+    // Blink detection
     const leftEye=detection.landmarks.getLeftEye();
     const rightEye=detection.landmarks.getRightEye();
-    if(!leftEye||!rightEye)return false;
-    const leftEAR=eyeAspectRatio(leftEye);
-    const rightEAR=eyeAspectRatio(rightEye);
-    return((leftEAR+rightEAR)/2)<0.25;
+    let blinked=false;
+    if(leftEye&&rightEye){
+        const leftEAR=eyeAspectRatio(leftEye);
+        const rightEAR=eyeAspectRatio(rightEye);
+        blinked=((leftEAR+rightEAR)/2)<0.25;
+    }
+    
+    // Head movement detection
+    const nose=detection.landmarks.getNose();
+    if(nose&&nose.length>0){
+        const nx=nose[3].x;
+        const ny=nose[3].y;
+        if(lastHeadX!==null&&lastHeadY!==null){
+            const dx=Math.abs(nx-lastHeadX);
+            const dy=Math.abs(ny-lastHeadY);
+            if(dx>15||dy>15)headMoved=true;
+        }
+        lastHeadX=nx;lastHeadY=ny;
+    }
+    
+    // Both blink AND head movement required
+    if(blinked&&headMoved){
+        headMoved=false;lastHeadX=null;lastHeadY=null;
+        return true;
+    }
+    return false;
 }
 
 function eyeAspectRatio(eye){
