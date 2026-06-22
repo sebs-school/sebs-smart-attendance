@@ -65,7 +65,7 @@ async function loadAllEmbeddings(){
     if(!d||!d.embeddings||d.embeddings.length===0){faceMatcher=null;return;}
     labeledDescriptors=[];
     for(let e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))labeledDescriptors.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}
-    if(labeledDescriptors.length>0)faceMatcher=new faceapi.FaceMatcher(labeledDescriptors,0.5);
+      if(labeledDescriptors.length>0)faceMatcher=new faceapi.FaceMatcher(labeledDescriptors,0.45);
 }
 
 function nav(p){
@@ -127,7 +127,7 @@ async function detectFaces(){
             
             // Check if known
             let bestMatch=null,isKnown=false;
-            if(faceMatcher&&det.descriptor){bestMatch=faceMatcher.findBestMatch(det.descriptor);isKnown=bestMatch.label!=='unknown'&&bestMatch.distance<0.55;}
+                        if(faceMatcher&&det.descriptor){bestMatch=faceMatcher.findBestMatch(det.descriptor);isKnown=bestMatch.label!=='unknown'&&bestMatch.distance<0.5;}
             
                        const color=isKnown?'#2ecc71':'#3498db';
             ctx.strokeStyle=color;ctx.lineWidth=3;ctx.strokeRect(box.x,box.y,box.width,box.height);
