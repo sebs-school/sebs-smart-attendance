@@ -277,8 +277,8 @@ async function detectFaces(){
             ctx.fillStyle='#fff';ctx.font='13px Inter';ctx.fillText(label,box.x+8,box.y-6);
             
             if(det.descriptor&&ts.open){
-                const blinked=await checkBlink(det);
-                if(blinked){
+                const live=await checkLiveness(det);
+                if(live){
                     const name=prompt('👤 Face Detected & Liveness Passed!\nEnter Student Name:','');
                     if(name&&name.trim()){
                         const nm=name.trim();
