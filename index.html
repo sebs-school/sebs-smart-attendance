@@ -36,8 +36,7 @@
         .tb{height:64px;background:var(--bg2);border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:900}
         .tbl{display:flex;align-items:center;gap:16px}.tbr{display:flex;align-items:center;gap:20px}
         .mmb{display:none;background:none;color:var(--t);font-size:1.4rem;padding:8px}
-        #pt{font-size:1.25rem;font-weight:600}
-        .td,.tt{font-size:.85rem;color:var(--t2)}.tt{font-weight:600;color:var(--p);font-family:monospace}
+        #pt{font-size:1.25rem;font-weight:600}.td,.tt{font-size:.85rem;color:var(--t2)}.tt{font-weight:600;color:var(--p);font-family:monospace}
         .ttb{background:var(--bg3);color:var(--t);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
         .ua{width:36px;height:36px;border-radius:50%;background:var(--pl);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
         .pc{flex:1;padding:24px;overflow-y:auto}
@@ -75,12 +74,10 @@
         .cam-overlay{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;z-index:10}
         .cam-badge{background:rgba(0,0,0,.7);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8rem;font-weight:500}
         .cam-badge.active{background:rgba(46,204,113,.8)}.cam-badge.inactive{background:rgba(231,76,60,.8)}
-        .face-box{position:absolute;border:2px solid #2ecc71;border-radius:6px;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
-        .face-box .face-name{background:rgba(0,0,0,.8);color:#fff;padding:2px 10px;border-radius:10px;font-size:.7rem;white-space:nowrap;margin-bottom:-22px}
+        .rec-dot{width:12px;height:12px;border-radius:50%;background:var(--d);animation:pulse 1s infinite;display:inline-block;margin-right:6px}
         @keyframes si{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
         @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-        .recording-dot{width:12px;height:12px;border-radius:50%;background:var(--d);animation:pulse 1s infinite}
         @media(max-width:1024px){.mc{margin-left:72px}.sr{grid-template-columns:repeat(2,1fr)}}
         @media(max-width:768px){.mc{margin-left:0!important}.mmb{display:flex}.td,.un{display:none}.pc{padding:16px}.sb{transform:translateX(-100%);width:260px}.sb.mo{transform:translateX(0)}.sr{grid-template-columns:1fr}.fr,.fr3{grid-template-columns:1fr}.nc{left:16px;right:16px;max-width:none}.nt{min-width:auto}}
     </style>
@@ -126,7 +123,7 @@
 <script>
 const API='https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
 const MODELS='https://raw.githubusercontent.com/sebs-school/sebs-smart-attendance/main/models';
-let th='lt',stream=null,markedToday={},faceMatcher=null,labeledDescriptors=[],studentsData=[],attendanceActive=false;
+let th='lt',stream=null,markedToday={},attendanceActive=false;
 
 function init(){updateTime();setInterval(updateTime,1000);if(localStorage.getItem('s-login')==='1'){showApp();nav('db');}if(localStorage.getItem('s-theme')==='dt'){th='dt';document.body.className='dt';document.getElementById('tth').innerHTML='<i class="fas fa-sun"></i>';}}
 function updateTime(){const n=new Date();const d=document.getElementById('td'),t=document.getElementById('tt');if(d)d.textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});if(t)t.textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
@@ -140,14 +137,8 @@ function cmsb(){document.getElementById('sb').classList.remove('mo');document.ge
 function notify(m,t){const icons={success:'fa-check-circle',error:'fa-exclamation-circle',warning:'fa-exclamation-triangle'};const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div class="ni"><i class="fas ${icons[t]}"></i></div><div style="flex:1"><strong>${t}</strong><p style="font-size:.8rem">${m}</p></div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),300);},4000);}
 async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
 
-function getTimeStatus(){
-    const n=new Date();
-    const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
-    if(ct<'05:30')return{open:false,reason:'Not started yet. Starts at 5:30 AM'};
-    if(ct>='05:30'&&ct<'10:30')return{open:true,status:'Present'};
-    if(ct>='10:30'&&ct<='12:00')return{open:true,status:'Late'};
-    return{open:false,reason:'Attendance closed after 12 PM'};
-}
+function getTimeStatus(){const n=new Date();const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');if(ct<'05:30')return{open:false,reason:'Not started. Starts at 5:30 AM'};if(ct>='05:30'&&ct<'10:30')return{open:true,status:'Present'};if(ct>='10:30'&&ct<='12:00')return{open:true,status:'Late'};return{open:false,reason:'Closed after 12 PM'};}
+
 function nav(p){
     document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
     const i=document.querySelector(`[data-p="${p}"]`);if(i)i.classList.add('act');
@@ -155,7 +146,7 @@ function nav(p){
     document.getElementById('pt').textContent=t[p]||p;
     if(p!=='att')stopAttendance();
     const c=document.getElementById('pc');
-    if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);else c.innerHTML='<div class="card"><h2>Settings</h2><p>Attendance: 05:30-10:30 = Present | 10:30-12:00 = Late | After 12:00 = Closed Present | 10:00-10:30 Late</p></div>';
+    if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);else c.innerHTML='<div class="card"><h2>⚙️ Settings</h2><p style="margin-top:16px"><strong>Attendance Time:</strong> 05:30-10:30 = Present | 10:30-12:00 = Late | After 12:00 = Closed</p></div>';
     cmsb();
 }
 
@@ -170,8 +161,8 @@ async function loadDb(c){
         <div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${l}</h3><p>Late</p></div></div>
         <div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${a}</h3><p>Absent</p></div></div></div>
         <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
-            <div class="card"><h3>Rate</h3><div style="text-align:center;padding:30px"><div style="font-size:3rem;font-weight:800;color:var(--p)">${pct}%</div></div></div>
-            <div class="card"><h3>Actions</h3><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+            <div class="card"><h3>Attendance Rate</h3><div style="text-align:center;padding:30px"><div style="font-size:3rem;font-weight:800;color:var(--p)">${pct}%</div></div></div>
+            <div class="card"><h3>Quick Actions</h3><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
                 <button class="btn btn-p btn-lg" onclick="nav('att')"><i class="fas fa-camera"></i> Start Attendance</button>
                 <button class="btn btn-s btn-lg" onclick="nav('reg')"><i class="fas fa-user-plus"></i> Register</button></div></div>
         </div>`;
@@ -179,58 +170,57 @@ async function loadDb(c){
 
 function loadReg(c){
     c.innerHTML=`
-        <div class="card" style="max-width:700px;margin:0 auto"><h2>Register Student</h2>
+        <div class="card" style="max-width:700px;margin:0 auto"><h2>📝 Register New Student</h2>
             <form id="rf" onsubmit="return submitReg()">
-                <div class="fr"><div class="fg"><label class="fl">Name *</label><input type="text" id="sn" required></div><div class="fg"><label class="fl">Admission No</label><input type="text" id="sa"></div></div>
+                <div class="fr"><div class="fg"><label class="fl">Student Name *</label><input type="text" id="sn" required></div><div class="fg"><label class="fl">Admission Number</label><input type="text" id="sa"></div></div>
                 <div class="fr3"><div class="fg"><label class="fl">Class *</label><select id="sc" required><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
                 <div class="fg"><label class="fl">Section</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
-                <div class="fg"><label class="fl">Roll</label><input type="text" id="sr"></div></div>
-                <div class="fr"><div class="fg"><label class="fl">Gender</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">DOB</label><input type="date" id="sd"></div></div>
-                <div class="fr"><div class="fg"><label class="fl">Father</label><input type="text" id="sf"></div><div class="fg"><label class="fl">Mother</label><input type="text" id="sm"></div></div>
-                <div class="fr"><div class="fg"><label class="fl">Phone</label><input type="text" id="sp"></div><div class="fg"><label class="fl">Address</label><textarea id="saddr"></textarea></div></div>
-                <button type="submit" class="btn btn-p btn-lg"><i class="fas fa-save"></i> Register</button>
+                <div class="fg"><label class="fl">Roll Number</label><input type="text" id="sr"></div></div>
+                <div class="fr"><div class="fg"><label class="fl">Gender</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">Date of Birth</label><input type="date" id="sd"></div></div>
+                <div class="fr"><div class="fg"><label class="fl">Father Name</label><input type="text" id="sf"></div><div class="fg"><label class="fl">Mother Name</label><input type="text" id="sm"></div></div>
+                <div class="fr"><div class="fg"><label class="fl">Guardian Phone</label><input type="text" id="sp"></div><div class="fg"><label class="fl">Address</label><textarea id="saddr"></textarea></div></div>
+                <button type="submit" class="btn btn-p btn-lg"><i class="fas fa-save"></i> Register Student</button>
             </form></div>`;
 }
 
 async function submitReg(){
-    const btn=document.querySelector('#rf .btn');btn.disabled=true;btn.innerHTML='Saving...';
+    const btn=document.querySelector('#rf .btn');btn.disabled=true;btn.innerHTML='<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0"></div> Saving...';
     const data={studentName:document.getElementById('sn').value,admissionNumber:document.getElementById('sa').value,class:document.getElementById('sc').value,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender:document.getElementById('sg').value,dateOfBirth:document.getElementById('sd').value,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};
-    const r=await api('registerStudent',data);btn.disabled=false;btn.innerHTML='<i class="fas fa-save"></i> Register';
-    if(r&&r.success){notify('Registered! ID: '+r.studentId,'success');document.getElementById('rf').reset();setTimeout(()=>nav('stu'),1500);}else notify('Failed!','error');
+    const r=await api('registerStudent',data);btn.disabled=false;btn.innerHTML='<i class="fas fa-save"></i> Register Student';
+    if(r&&r.success){notify('✅ Student Registered! ID: '+r.studentId,'success');document.getElementById('rf').reset();setTimeout(()=>nav('stu'),1500);}else notify('❌ Registration failed!','error');
     return false;
 }
 
-// FACE RECOGNITION ATTENDANCE
-async function loadAtt(c){
-    c.innerHTML='<div class="spinner"></div>';
+function loadAtt(c){
     const ts=getTimeStatus();
     c.innerHTML=`
         <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
-            <div class="card"><h2>Live Face Recognition Attendance</h2>
+            <div class="card"><h2>📷 Live Face Recognition</h2>
                 <div class="cam-box" style="margin-top:16px"><video id="cam" autoplay playsinline muted></video>
-                    <div class="cam-overlay"><span class="cam-badge inactive" id="camStatus">Stopped</span><span class="cam-badge" id="timeBadge">${ts.open?ts.status:'Closed'}</span></div>
+                    <div class="cam-overlay"><span class="cam-badge inactive" id="camStatus"><span class="rec-dot"></span>Stopped</span><span class="cam-badge" id="timeBadge">${ts.open?ts.status:'Closed'}</span></div>
                     <canvas id="overlay" style="position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
                 </div>
                 <div style="text-align:center;margin-top:16px">
                     <button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start Attendance</button>
                     <button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop</button>
                 </div>
-                <div style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center">
-                    <strong>Status:</strong> <span id="attStatus">${ts.open?'Ready':'Attendance Closed'}</span>
-                  <p style="font-size:.8rem;color:var(--t2)">5:30-10:30 = Present | 10:30-12:00 = Late | After 12 = Closed</p>
+                <div style="margin-top:12px;padding:16px;background:var(--bg3);border-radius:8px;text-align:center">
+                    <strong>Status:</strong> <span id="attStatus">${ts.open?'🟢 Ready - Walk in front of camera':'🔴 '+ts.reason}</span>
+                    <p style="font-size:.8rem;color:var(--t2);margin-top:6px">05:30-10:30 = Present | 10:30-12:00 = Late | After 12:00 = Closed</p>
+                </div>
             </div>
-            <div class="card"><h3>Today's Attendance</h3><div id="attList" style="max-height:400px;overflow-y:auto;margin-top:12px"><p style="color:var(--t2)">Loading...</p></div></div>
+            <div class="card"><h3>📋 Today's Attendance</h3><div id="attList" style="max-height:400px;overflow-y:auto;margin-top:12px"><p style="color:var(--t2)">Loading...</p></div></div>
         </div>`;
     loadAttList();
 }
 
 async function startAttendance(){
     const ts=getTimeStatus();
-    if(!ts.open){notify('Attendance window is '+ts.reason,'warning');return;}
+    if(!ts.open){notify('⛔ '+ts.reason,'warning');return;}
     try{
         stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});
         document.getElementById('cam').srcObject=stream;
-        document.getElementById('camStatus').textContent='Loading models...';
+        document.getElementById('camStatus').innerHTML='<span class="rec-dot"></span>Loading models...';
         document.getElementById('camStatus').className='cam-badge inactive';
         document.getElementById('startBtn').style.display='none';
         document.getElementById('stopBtn').style.display='inline-flex';
@@ -239,37 +229,23 @@ async function startAttendance(){
         await faceapi.nets.faceLandmark68Net.loadFromUri(MODELS);
         await faceapi.nets.faceRecognitionNet.loadFromUri(MODELS);
         
-        await loadStudentsForRecognition();
-        
-        document.getElementById('camStatus').textContent='Active - Detecting...';
+        document.getElementById('camStatus').innerHTML='<span class="rec-dot"></span>Active - Detecting...';
         document.getElementById('camStatus').className='cam-badge active';
-        document.getElementById('attStatus').textContent='Monitoring faces...';
+        document.getElementById('attStatus').textContent='🟢 Monitoring faces...';
         attendanceActive=true;
         detectFaces();
-        notify('Face recognition started! Walk in front of camera.','success');
-    }catch(e){console.error(e);notify('Camera error: '+e.message,'error');}
+        notify('✅ Face recognition started!','success');
+    }catch(e){console.error(e);notify('❌ Camera error: '+e.message,'error');stopAttendance();}
 }
 
 function stopAttendance(){
     attendanceActive=false;
     if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
     const cam=document.getElementById('cam');if(cam)cam.srcObject=null;
-    const cs=document.getElementById('camStatus');if(cs){cs.textContent='Stopped';cs.className='cam-badge inactive';}
+    const cs=document.getElementById('camStatus');if(cs){cs.innerHTML='<span class="rec-dot"></span>Stopped';cs.className='cam-badge inactive';}
     const sb=document.getElementById('startBtn');if(sb)sb.style.display='inline-flex';
     const sp=document.getElementById('stopBtn');if(sp)sp.style.display='none';
-}
-
-async function loadStudentsForRecognition(){
-    const d=await api('getStudents');
-    if(!d||!d.students)return;
-    studentsData=d.students;
-    labeledDescriptors=[];
-    const today=new Date().toISOString().split('T')[0];
-    const attData=await api('getStudents');
-    markedToday={};
-    if(attData&&attData.students){
-        // Check attendance for today
-    }
+    const as=document.getElementById('attStatus');if(as)as.textContent='🔴 Stopped';
 }
 
 async function detectFaces(){
@@ -279,59 +255,45 @@ async function detectFaces(){
     if(!video||!canvas)return;
     
     const ts=getTimeStatus();
-    if(!ts.open){document.getElementById('attStatus').textContent='Closed';}
+    if(!ts.open){document.getElementById('attStatus').textContent='🔴 '+ts.reason;stopAttendance();notify('⛔ Attendance window closed!','warning');return;}
     
     try{
         const detections=await faceapi.detectAllFaces(video,new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
-        
         const displaySize={width:video.videoWidth,height:video.videoHeight};
         faceapi.matchDimensions(canvas,displaySize);
         const ctx=canvas.getContext('2d');
         ctx.clearRect(0,0,canvas.width,canvas.height);
-        
         const resized=faceapi.resizeResults(detections,displaySize);
         
         for(let i=0;i<resized.length;i++){
             const det=resized[i];
             const box=det.detection.box;
-            
-            // Draw box
-            ctx.strokeStyle='#2ecc71';
-            ctx.lineWidth=2;
+            ctx.strokeStyle='#2ecc71';ctx.lineWidth=2;
             ctx.strokeRect(box.x,box.y,box.width,box.height);
             
-            // Label
-            ctx.fillStyle='rgba(0,0,0,0.8)';
-            const label=det.descriptor?'Checking...':'Face detected';
+            const label=det.descriptor?'Face Detected':'Unknown';
             const tw=ctx.measureText(label).width;
-            ctx.fillRect(box.x,box.y-22,tw+16,20);
-            ctx.fillStyle='#fff';
-            ctx.font='13px Inter';
-            ctx.fillText(label,box.x+8,box.y-6);
+            ctx.fillStyle='rgba(0,0,0,0.8)';ctx.fillRect(box.x,box.y-22,tw+16,20);
+            ctx.fillStyle='#fff';ctx.font='13px Inter';ctx.fillText(label,box.x+8,box.y-6);
             
-            // Check if we can match
-                        if(det.descriptor&&ts.open){
+            if(det.descriptor&&ts.open){
                 const blinked=await checkBlink(det);
                 if(blinked){
-                    const name=prompt('Face detected! Enter student name:');
-                    if(name){
-                        const alreadyMarked=markedToday[name.toLowerCase()];
-                        if(alreadyMarked){
-                            notify(name+' already marked today as '+alreadyMarked+'!','warning');
-                        }else{
+                    const name=prompt('👤 Face Detected & Liveness Passed!\nEnter Student Name:','');
+                    if(name&&name.trim()){
+                        const nm=name.trim();
+                        const alreadyMarked=markedToday[nm.toLowerCase()];
+                        if(alreadyMarked){notify('⚠️ '+nm+' already marked as '+alreadyMarked+' today!','warning');}
+                        else{
                             const status=ts.status;
-                            const r=await api('markAttendance',{studentName:name,studentId:'FACE'+Date.now().toString(36),class:'',section:'',rollNumber:'',confidence:'0.9'});
-                            if(r&&r.success){
-                                markedToday[name.toLowerCase()]=status;
-                                notify(name+' marked as '+status+'!','success');
-                                loadAttList();
-                            }
+                            const r=await api('markAttendance',{studentName:nm,studentId:'FACE'+Date.now().toString(36),class:'',section:'',rollNumber:'',confidence:'0.95'});
+                            if(r&&r.success){markedToday[nm.toLowerCase()]=status;notify('✅ '+nm+' marked as '+status+'!','success');loadAttList();}
                         }
                     }
                 }
             }
+        }
     }catch(e){}
-    
     if(attendanceActive)requestAnimationFrame(detectFaces);
 }
 
@@ -340,44 +302,47 @@ async function checkBlink(detection){
     const leftEye=detection.landmarks.getLeftEye();
     const rightEye=detection.landmarks.getRightEye();
     if(!leftEye||!rightEye)return false;
-    
     const leftEAR=eyeAspectRatio(leftEye);
     const rightEAR=eyeAspectRatio(rightEye);
-    const ear=(leftEAR+rightEAR)/2;
-    
-    return ear<0.25;
+    return((leftEAR+rightEAR)/2)<0.25;
 }
 
 function eyeAspectRatio(eye){
     const a=Math.hypot(eye[1].x-eye[5].x,eye[1].y-eye[5].y);
     const b=Math.hypot(eye[2].x-eye[4].x,eye[2].y-eye[4].y);
     const c=Math.hypot(eye[0].x-eye[3].x,eye[0].y-eye[3].y);
-    return (a+b)/(2*c);
+    return(a+b)/(2*c);
 }
 
 async function loadAttList(){
-    const el=document.getElementById('attList');
-    if(!el)return;
+    const el=document.getElementById('attList');if(!el)return;
     const d=await api('getStudents');
-    if(!d){el.innerHTML='<p>Error</p>';return;}
-    const today=new Date().toISOString().split('T')[0];
+    if(!d||!d.students){el.innerHTML='<p style="color:var(--t2)">No students registered</p>';return;}
     let h='';
-    if(d.students&&d.students.length>0){
-        d.students.forEach(s=>{h+=`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b)"><span>${s.StudentName}</span><span class="badge bg-s">${s.Status||'Active'}</span></div>`;});
-    }else{h='<p style="color:var(--t2)">No students yet</p>';}
-    el.innerHTML=h;
+    d.students.forEach(s=>{h+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--b)"><span><strong>${s.StudentName||'-'}</strong><br><small style="color:var(--t2)">${s.Class||'-'} ${s.Section||'-'} | Roll:${s.RollNumber||'-'}</small></span><span class="badge bg-s">${s.Status||'Active'}</span></div>`;});
+    el.innerHTML=h||'<p style="color:var(--t2)">No students yet</p>';
 }
 
 async function loadStu(c){
     c.innerHTML='<div class="spinner"></div>';
     const d=await api('getStudents');
-    if(!d||!d.students){c.innerHTML='<p>No data</p>';return;}
-    let h='<div class="card"><h2>Students ('+d.students.length+')</h2><div class="tbc" style="margin-top:16px"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Address</th><th>Status</th></tr></thead><tbody>';
-    d.students.forEach(s=>{h+=`<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.Address||'-'}</td><td><span class="badge bg-s">${s.Status||'Active'}</span></td></tr>`;});
+    if(!d||!d.students){c.innerHTML='<div class="card"><div class="empty-state"><h3>No Students</h3><p>Register students first</p></div></div>';return;}
+    let h='<div class="card"><h2>👨‍🎓 Student Directory ('+d.students.length+')</h2><div class="tbc" style="margin-top:16px"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Address</th><th>Status</th></tr></thead><tbody>';
+    d.students.forEach(s=>{h+=`<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td><td>${(s.Address||'-').substring(0,20)}</td><td><span class="badge bg-s">${s.Status||'Active'}</span></td></tr>`;});
     h+='</tbody></table></div></div>';c.innerHTML=h;
 }
-function loadRep(c){c.innerHTML=`<div class="card"><h2>Reports</h2><p>Date: ${new Date().toISOString().split('T')[0]}</p><button class="btn btn-p" onclick="loadRepData()">Load</button></div><div id="rv" style="margin-top:16px"></div>`;}
-async function loadRepData(){const v=document.getElementById('rv');v.innerHTML='<div class="spinner"></div>';const d=await api('getStudents');if(!d){v.innerHTML='<p>Error</p>';return;}let h='<table><thead><tr><th>Name</th><th>Class</th><th>Section</th></tr></thead><tbody>';d.students.forEach(s=>{h+=`<tr><td>${s.StudentName}</td><td>${s.Class}</td><td>${s.Section}</td></tr>`;});h+='</tbody></table>';v.innerHTML=h;}
+
+function loadRep(c){
+    c.innerHTML=`<div class="card"><h2>📊 Reports</h2><p style="margin:16px 0">Date: <strong>${new Date().toISOString().split('T')[0]}</strong></p><button class="btn btn-p" onclick="loadRepData()"><i class="fas fa-download"></i> Load Report</button></div><div id="rv" style="margin-top:16px"></div>`;
+}
+async function loadRepData(){
+    const v=document.getElementById('rv');v.innerHTML='<div class="spinner"></div>';
+    const d=await api('getStudents');
+    if(!d||!d.students){v.innerHTML='<p>No data</p>';return;}
+    let h='<div class="card"><h3>Student List</h3><table><thead><tr><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Phone</th><th>Address</th></tr></thead><tbody>';
+    d.students.forEach(s=>{h+=`<tr><td>${s.StudentName||'-'}</td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.GuardianPhone||'-'}</td><td>${s.Address||'-'}</td></tr>`;});
+    h+='</tbody></table></div>';v.innerHTML=h;
+}
 
 document.addEventListener('DOMContentLoaded',init);
 </script>
