@@ -43,7 +43,7 @@ const API='https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5AN
 let th='lt',attendanceActive=false,faceMesh=null,cam=null;
 let challenge=null,chPass=false,lastProcess=0,blinks=0,lastEAR=1,headDone=false,modelsReady=false;
 
-async function preloadModels(){if(modelsReady)return;faceMesh=new FaceMesh({locateFile:(f)=>'https://raw.githubusercontent.com/sebs-school/sebs-smart-attendance/main/models/'+f});faceMesh.setOptions({maxNumFaces:1,refineLandmarks:true,minDetectionConfidence:0.4,minTrackingConfidence:0.4});modelsReady=true;}
+async function preloadModels(){if(modelsReady)return;faceMesh=new FaceMesh({locateFile:(f)=>'https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4/'+f});faceMesh.setOptions({maxNumFaces:1,refineLandmarks:true,minDetectionConfidence:0.4,minTrackingConfidence:0.4});modelsReady=true;}
 
 function init(){updateTime();setInterval(updateTime,1000);preloadModels();if(localStorage.getItem('s-login')==='1'){showApp();nav('db');}if(localStorage.getItem('s-theme')==='dt'){th='dt';document.body.className='dt';document.getElementById('tth').innerHTML='<i class="fas fa-sun"></i>';}}
 function updateTime(){const n=new Date();document.getElementById('td').textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('tt').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
