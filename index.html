@@ -140,8 +140,14 @@ function cmsb(){document.getElementById('sb').classList.remove('mo');document.ge
 function notify(m,t){const icons={success:'fa-check-circle',error:'fa-exclamation-circle',warning:'fa-exclamation-triangle'};const n=document.createElement('div');n.className=`nt ${t}`;n.innerHTML=`<div class="ni"><i class="fas ${icons[t]}"></i></div><div style="flex:1"><strong>${t}</strong><p style="font-size:.8rem">${m}</p></div>`;document.getElementById('nc').appendChild(n);setTimeout(()=>{n.style.opacity='0';setTimeout(()=>n.remove(),300);},4000);}
 async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
 
-function getTimeStatus(){const n=new Date();const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');if(ct<'08:30')return{open:false,reason:'Not started'};if(ct>='08:30'&&ct<'10:00')return{open:true,status:'Present'};if(ct>='10:00'&&ct<='10:30')return{open:true,status:'Late'};return{open:false,reason:'Closed'};}
-
+function getTimeStatus(){
+    const n=new Date();
+    const ct=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+    if(ct<'05:30')return{open:false,reason:'Not started yet. Starts at 5:30 AM'};
+    if(ct>='05:30'&&ct<'10:30')return{open:true,status:'Present'};
+    if(ct>='10:30'&&ct<='12:00')return{open:true,status:'Late'};
+    return{open:false,reason:'Attendance closed after 12 PM'};
+}
 function nav(p){
     document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
     const i=document.querySelector(`[data-p="${p}"]`);if(i)i.classList.add('act');
@@ -211,8 +217,7 @@ async function loadAtt(c){
                 </div>
                 <div style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:8px;text-align:center">
                     <strong>Status:</strong> <span id="attStatus">${ts.open?'Ready':'Attendance Closed'}</span>
-                    <p style="font-size:.8rem;color:var(--t2)">8:30-10:00 = Present | 10:00-10:30 = Late</p>
-                </div>
+                  <p style="font-size:.8rem;color:var(--t2)">5:30-10:30 = Present | 10:30-12:00 = Late | After 12 = Closed</p>
             </div>
             <div class="card"><h3>Today's Attendance</h3><div id="attList" style="max-height:400px;overflow-y:auto;margin-top:12px"><p style="color:var(--t2)">Loading...</p></div></div>
         </div>`;
@@ -305,20 +310,26 @@ async function detectFaces(){
             ctx.fillText(label,box.x+8,box.y-6);
             
             // Check if we can match
-            if(det.descriptor&&ts.open){
-                // For now, mark based on face detection + liveness
+                        if(det.descriptor&&ts.open){
                 const blinked=await checkBlink(det);
                 if(blinked){
-                    const name=prompt('Face detected! Enter student name (or ID):');
+                    const name=prompt('Face detected! Enter student name:');
                     if(name){
-                        const status=ts.status;
-                        const r=await api('markAttendance',{studentName:name,studentId:'FACE'+Date.now().toString(36),class:'',section:'',rollNumber:'',confidence:'0.9'});
-                        if(r&&r.success){notify(name+' marked as '+status+'!','success');loadAttList();}
-                        else if(r&&r.alreadyMarked){notify(name+' already marked today!','warning');}
+                        const alreadyMarked=markedToday[name.toLowerCase()];
+                        if(alreadyMarked){
+                            notify(name+' already marked today as '+alreadyMarked+'!','warning');
+                        }else{
+                            const status=ts.status;
+                            const r=await api('markAttendance',{studentName:name,studentId:'FACE'+Date.now().toString(36),class:'',section:'',rollNumber:'',confidence:'0.9'});
+                            if(r&&r.success){
+                                markedToday[name.toLowerCase()]=status;
+                                notify(name+' marked as '+status+'!','success');
+                                loadAttList();
+                            }
+                        }
                     }
                 }
             }
-        }
     }catch(e){}
     
     if(attendanceActive)requestAnimationFrame(detectFaces);
