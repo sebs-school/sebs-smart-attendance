@@ -3,25 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEBS Airport-Grade Attendance</title>
+    <title>SEBS Smart Attendance</title>
     <link rel="icon" href="logo.png">
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/face_detection.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root{--p:#1a3a6b;--s:#00c853;--w:#ff9800;--d:#e74c3c;--blue:#2196f3}
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Inter',sans-serif;background:linear-gradient(175deg,#e3ecfa,#f0f4fa,#f8f9fc);color:#1a1a2e;min-height:100vh}
-        a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}
-        input,select,textarea{font-family:inherit;font-size:.9rem;border:2px solid #dde4f0;border-radius:12px;padding:12px 16px;background:#fff;color:#1a1a2e;width:100%}input:focus,select:focus,textarea:focus{border-color:var(--p);outline:none}textarea{resize:vertical;min-height:55px}
-        .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:250px;display:flex;flex-direction:column}
-        .sb{width:250px;height:100vh;background:linear-gradient(180deg,#0a1628,#1a3a6b);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column}
-        .sh{padding:22px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06)}.slogo{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.slogo img{width:32px;height:32px;object-fit:contain}.sn{font-weight:700;font-size:1rem;color:#fff}
-        .snv{flex:1;overflow-y:auto;padding:16px 10px}.sm{display:flex;flex-direction:column;gap:3px}.si{border-radius:10px}.si:hover{background:rgba(255,255,255,.05)}.si.act{background:rgba(255,255,255,.12)}.sl{display:flex;align-items:center;gap:12px;padding:11px 16px;color:#b8c9e0;font-size:.85rem;font-weight:500;border-radius:10px}.sl i{font-size:1.1rem;width:22px}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.06)}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 16px;background:rgba(231,76,60,.06);color:#f4877a;font-size:.85rem;font-weight:500;border-radius:10px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}.so.act{display:block}
+        *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:linear-gradient(175deg,#e3ecfa,#f0f4fa,#f8f9fc);color:#1a1a2e;min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}input,select,textarea{font-family:inherit;font-size:.9rem;border:2px solid #dde4f0;border-radius:12px;padding:12px 16px;background:#fff;color:#1a1a2e;width:100%}textarea{resize:vertical;min-height:55px}
+        .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:250px;display:flex;flex-direction:column}.sb{width:250px;height:100vh;background:linear-gradient(180deg,#0a1628,#1a3a6b);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column}.sh{padding:22px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06)}.slogo{width:40px;height:40px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.slogo img{width:32px;height:32px;object-fit:contain}.sn{font-weight:700;font-size:1rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:16px 10px}.sm{display:flex;flex-direction:column;gap:3px}.si{border-radius:10px}.si:hover{background:rgba(255,255,255,.05)}.si.act{background:rgba(255,255,255,.12)}.sl{display:flex;align-items:center;gap:12px;padding:11px 16px;color:#b8c9e0;font-size:.85rem;font-weight:500;border-radius:10px}.sl i{font-size:1.1rem;width:22px}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.06)}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 16px;background:rgba(231,76,60,.06);color:#f4877a;font-size:.85rem;font-weight:500;border-radius:10px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}.so.act{display:block}
         .tb{height:70px;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:900}#pt{font-size:1.2rem;font-weight:700}.td{font-size:.78rem;color:#64748b}.tt{font-size:.82rem;font-weight:700;color:var(--p);font-family:monospace}.ttb{background:#edf2f9;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}.pc{flex:1;padding:28px;overflow-y:auto}
-        .lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#060d1f,#1a3a6b,#2a5298)}.lcd{width:100%;max-width:420px;background:#fff;border-radius:28px;padding:52px 40px;box-shadow:0 35px 100px rgba(0,0,0,.3);text-align:center;animation:fadeUp .6s}.llw{width:80px;height:80px;margin:0 auto 18px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.llw img{width:62px;height:62px;object-fit:contain}.lsn{font-size:1.5rem;font-weight:800;color:#1a1a2e}.lst{font-size:.72rem;color:#64748b;text-transform:uppercase;letter-spacing:2px}.ld{display:flex;align-items:center;gap:14px;margin:28px 0}.ld::before,.ld::after{content:'';flex:1;height:1px;background:#e2e8f0}.glb{width:100%;padding:15px 24px;background:linear-gradient(135deg,var(--p),#2a5298);color:#fff;border-radius:14px;font-size:.92rem;font-weight:600;cursor:pointer}
+        .lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#060d1f,#1a3a6b,#2a5298)}.lcd{width:100%;max-width:420px;background:#fff;border-radius:28px;padding:52px 40px;box-shadow:0 35px 100px rgba(0,0,0,.3);text-align:center}.llw{width:80px;height:80px;margin:0 auto 18px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.llw img{width:62px;height:62px;object-fit:contain}.lsn{font-size:1.5rem;font-weight:800;color:#1a1a2e}.ld{display:flex;align-items:center;gap:14px;margin:28px 0}.ld::before,.ld::after{content:'';flex:1;height:1px;background:#e2e8f0}.glb{width:100%;padding:15px 24px;background:linear-gradient(135deg,var(--p),#2a5298);color:#fff;border-radius:14px;font-size:.92rem;font-weight:600;cursor:pointer}
         .card{background:#fff;border-radius:16px;padding:22px 26px;box-shadow:0 2px 12px rgba(0,0,0,.03);border:1px solid #eef2f8;margin-bottom:18px}.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.stc{background:#fff;border-radius:16px;padding:20px 22px;box-shadow:0 2px 12px rgba(0,0,0,.03);border:1px solid #eef2f8;display:flex;align-items:center;gap:16px;cursor:pointer}.sci{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sci.b{background:rgba(26,58,107,.08);color:var(--p)}.sci.g{background:rgba(0,200,83,.08);color:var(--s)}.sti h3{font-size:1.6rem;font-weight:800}.sti p{font-size:.7rem;color:#64748b;text-transform:uppercase}
         .btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.84rem;cursor:pointer}.btn-p{background:linear-gradient(135deg,var(--p),#2a5298);color:#fff}.btn-s{background:linear-gradient(135deg,#00c853,#00e676);color:#fff}.btn-d{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}.btn-lg{padding:15px 28px;font-size:.92rem;border-radius:12px}
         .tbc{overflow-x:auto;border-radius:14px;border:1px solid #eef2f8}table{width:100%;border-collapse:collapse}thead{background:#f8fafd}th{padding:13px 18px;text-align:left;font-weight:600;font-size:.7rem;text-transform:uppercase;color:#64748b}td{padding:11px 18px;border-top:1px solid #f4f7fb;font-size:.82rem}
@@ -30,15 +22,14 @@
         .spinner{width:36px;height:36px;border:3px solid #eef2f8;border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:18px auto}
         .cam-box{position:relative;background:linear-gradient(170deg,#080f1a,#162540);border-radius:20px;overflow:hidden;width:100%;max-width:700px;margin:0 auto;aspect-ratio:4/3;box-shadow:0 24px 64px rgba(0,0,0,.3)}.cam-box video{width:100%;height:100%;object-fit:cover}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%}
         .cam-hud{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;z-index:5}.hud-badge{background:rgba(0,0,0,.5);color:#fff;padding:8px 16px;border-radius:22px;font-size:.72rem;display:flex;align-items:center;gap:8px}.hud-dot{width:10px;height:10px;border-radius:50%}.hud-dot.on{background:#00e676;animation:pulse 1.2s infinite}.hud-dot.off{background:#e74c3c}
+        .success-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;z-index:20}.success-card{background:#fff;border-radius:22px;padding:32px;text-align:center;animation:scaleIn .3s}.success-icon{font-size:3.5rem}
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2500;display:flex;align-items:center;justify-content:center}.modal{background:#fff;border-radius:22px;padding:30px;max-width:560px;width:95%;max-height:82vh;overflow-y:auto}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}@keyframes slideIn{from{opacity:0;transform:translateX(35px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        @keyframes slideIn{from{opacity:0;transform:translateX(35px)}to{opacity:1;transform:translateX(0)}}@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}@keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
         @media(max-width:1024px){.mc{margin-left:0}.sr{grid-template-columns:repeat(2,1fr)}.sb{transform:translateX(-100%)}.sb.mo{transform:translateX(0)}}@media(max-width:768px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.cam-box{aspect-ratio:1/1}}
     </style>
 </head>
 <body>
-
-<div id="lp" class="lc"><div class="lcd"><div class="llw"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h1 class="lsn">Systematic English<br>Boarding School</h1><p class="lst">Airport-Grade Attendance</p><div class="ld"><span>Secure Access</span></div><button class="glb" onclick="login()">🔑 Sign in</button></div></div>
-
+<div id="lp" class="lc"><div class="lcd"><div class="llw"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h1 class="lsn">Systematic English<br>Boarding School</h1><p class="lst">Smart Attendance</p><div class="ld"><span>Secure Access</span></div><button class="glb" onclick="login()">🔑 Sign in</button></div></div>
 <div id="app" class="ac" style="display:none">
     <aside id="sb" class="sb"><div class="sh"><div class="slogo"><img src="logo.png" alt="SEBS" onerror="this.innerHTML='🏫'"></div><h2 class="sn">SEBS</h2></div><nav class="snv"><ul class="sm">
         <li class="si act" data-p="db"><a href="#" class="sl" onclick="nav('db')"><i class="fas fa-th-large"></i><span>Dashboard</span></a></li>
@@ -54,23 +45,16 @@
 <div id="modalContainer"></div>
 
 <script>
-// ============================================
-// CONFIGURATION
-// ============================================
 const API='https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
-const CONFIDENCE_THRESHOLD=0.93;
-const COOLDOWN_MS=30000;
-let th='lt',stream=null,attendanceActive=false,faceDetection=null,camInstance=null;
-let embeddingCache={},markedToday={},cooldowns={},tfReady=false,recognitionReady=false;
-let pendingDescriptor=null,detectedFaces=[];
+const MODELS='https://raw.githubusercontent.com/sebs-school/sebs-smart-attendance/main/models';
+let th='lt',stream=null,attendanceActive=false,modelsLoaded=false;
+let faceMatcher=null,markedToday={},cooldowns={},pendingDescriptor=null;
+let lastMark=0,scanning=true,prevEAR=1,motionFrames=0,detectCount=0;
 
-// ============================================
-// INITIALIZATION
-// ============================================
 function init(){updateTime();setInterval(updateTime,1000);if(localStorage.getItem('s-login')==='1'){showApp();nav('db');}}
 function updateTime(){const n=new Date();document.getElementById('td').textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});document.getElementById('tt').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
 function tth(){th=th==='lt'?'dt':'lt';document.body.style.background=th==='dt'?'linear-gradient(180deg,#0d1b2a,#1b2838)':'';document.getElementById('tth').innerHTML=th==='dt'?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';localStorage.setItem('s-theme',th);}
-function login(){localStorage.setItem('s-login','1');showApp();nav('db');notify('✅ System Ready | प्रणाली तयार','success');}
+function login(){localStorage.setItem('s-login','1');showApp();nav('db');notify('✅ System Ready','success');}
 function logout(){stopAttendance();localStorage.removeItem('s-login');document.getElementById('lp').style.display='flex';document.getElementById('app').style.display='none';}
 function showApp(){document.getElementById('lp').style.display='none';document.getElementById('app').style.display='flex';}
 function tmsb(){document.getElementById('sb').classList.toggle('mo');document.getElementById('so').classList.toggle('act');}
@@ -79,128 +63,65 @@ function notify(m,t){const n=document.createElement('div');n.className=`nt ${t}`
 async function api(action,data=null){try{if(data){const r=await fetch(API,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(API+'?action='+action);return await r.json();}}catch(e){return null;}}
 function showModal(html){document.getElementById('modalContainer').innerHTML=`<div class="modal-overlay" onclick="this.remove()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`;}
 
-// ============================================
-// TENSORFLOW + EMBEDDING CACHE
-// ============================================
-async function initTF(){if(tfReady)return;await tf.setBackend('webgl');await tf.ready();tfReady=true;console.log('TF.js WebGL Ready');}
-async function loadEmbeddingCache(){
-    notify('⏳ Loading face database...','warning');
-    const d=await api('getAllEmbeddings');
-    embeddingCache={};
-    if(d&&d.embeddings){for(let e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))embeddingCache[e.studentId]=new Float32Array(e.embedding);}}
-    recognitionReady=true;
-    notify('✅ '+Object.keys(embeddingCache).length+' faces loaded | '+Object.keys(embeddingCache).length+' अनुहार लोड','success');
-}
+async function preloadModels(){if(modelsLoaded)return;notify('⏳ Loading SSD MobileNet...','warning');await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)]);modelsLoaded=true;await loadEmbeddings();notify('✅ Models Ready!','success');}
+async function loadEmbeddings(){const d=await api('getAllEmbeddings');if(!d||!d.embeddings){faceMatcher=null;return;}let lb=[];for(let e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.45):null;}
 
-// ============================================
-// NAVIGATION
-// ============================================
 function nav(p){
     document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));const i=document.querySelector(`[data-p="${p}"]`);if(i)i.classList.add('act');
     document.getElementById('pt').textContent={db:'Dashboard',att:'Live Attendance',reg:'Registration',stu:'Students',rep:'Reports'}[p]||p;
-    if(p!=='att')stopAttendance();const c=document.getElementById('pc');
+    if(p==='att')preloadModels();else stopAttendance();const c=document.getElementById('pc');
     if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);cmsb();
 }
-
 async function loadDb(c){c.innerHTML='<div class="spinner"></div>';const d=await api('getDashboard');if(!d)return;c.innerHTML=`<div class="sr"><div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${d.totalStudents||0}</h3><p>Total</p></div></div><div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${d.present||0}</h3><p>Present</p></div></div><div class="stc"><div class="sci" style="background:rgba(255,152,0,.08);color:var(--w)"><i class="fas fa-clock"></i></div><div class="sti"><h3>${d.late||0}</h3><p>Late</p></div></div><div class="stc"><div class="sci" style="background:rgba(231,76,60,.08);color:var(--d)"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${d.absent||0}</h3><p>Absent</p></div></div></div><button class="btn btn-p btn-lg" style="width:100%" onclick="nav('att')"><i class="fas fa-camera"></i> Start Attendance</button>`;}
+function loadReg(c){c.innerHTML=`<div class="card" style="max-width:700px;margin:0 auto"><h2>📝 Registration</h2><form id="rf" onsubmit="return submitReg()"><div class="fr"><div class="fg"><label class="fl">Name *</label><input id="sn" required></div><div class="fg"><label class="fl">Admission No</label><input id="sa"></div></div><div class="fr"><div class="fg"><label class="fl">Class *</label><select id="sc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">Section</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Roll</label><input id="sr"></div><div class="fg"><label class="fl">Gender</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Father</label><input id="sf"></div><div class="fg"><label class="fl">Mother</label><input id="sm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone</label><input id="sp"></div><div class="fg"><label class="fl">Address</label><textarea id="saddr"></textarea></div></div><button class="btn btn-p btn-lg" style="width:100%"><i class="fas fa-save"></i> Register</button></form></div>`;}
+async function submitReg(){const b=document.querySelector('#rf .btn');b.disabled=true;b.innerHTML='Saving...';const d={studentName:document.getElementById('sn').value,admissionNumber:document.getElementById('sa').value,class:document.getElementById('sc').value,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender:document.getElementById('sg').value,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};if(pendingDescriptor)d.embedding=Array.from(pendingDescriptor);const r=await api('registerStudent',d);b.disabled=false;b.innerHTML='<i class="fas fa-save"></i> Register';if(r&&r.success){notify('✅ '+d.studentName+' Registered!','success');document.getElementById('rf').reset();loadEmbeddings();}else notify('❌ Failed','error');return false;}
 
-function loadReg(c){c.innerHTML=`<div class="card" style="max-width:700px;margin:0 auto"><h2>📝 Student Registration | विद्यार्थी दर्ता</h2><form id="rf" onsubmit="return submitReg()"><div class="fr"><div class="fg"><label class="fl">Name * | नाम</label><input id="sn" required></div><div class="fg"><label class="fl">Admission No | भर्ना नं.</label><input id="sa"></div></div><div class="fr"><div class="fg"><label class="fl">Class * | कक्षा</label><select id="sc" required><option value="">Select</option><option>Nursery</option><option>LKG</option><option>UKG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label class="fl">Section | सेक्सन</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Roll | रोल</label><input id="sr"></div><div class="fg"><label class="fl">Gender | लिङ्ग</label><select id="sg"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Father | बुबा</label><input id="sf"></div><div class="fg"><label class="fl">Mother | आमा</label><input id="sm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone | फोन</label><input id="sp"></div><div class="fg"><label class="fl">DOB | जन्म मिति</label><input type="date" id="sd"></div></div><div class="fg"><label class="fl">Address | ठेगाना</label><textarea id="saddr"></textarea></div><button class="btn btn-p btn-lg" style="width:100%"><i class="fas fa-save"></i> Register | दर्ता गर्नुहोस्</button></form></div>`;}
-async function submitReg(){const b=document.querySelector('#rf .btn');b.disabled=true;b.innerHTML='Saving...';const d={studentName:document.getElementById('sn').value,admissionNumber:document.getElementById('sa').value,class:document.getElementById('sc').value,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender:document.getElementById('sg').value,dateOfBirth:document.getElementById('sd').value,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};if(pendingDescriptor)d.embedding=Array.from(pendingDescriptor);const r=await api('registerStudent',d);b.disabled=false;b.innerHTML='<i class="fas fa-save"></i> Register';if(r&&r.success){notify('✅ '+d.studentName+' Registered! | दर्ता भयो!','success');document.getElementById('rf').reset();loadEmbeddingCache();}else notify('❌ Failed! | असफल!','error');return false;}
+function loadAtt(c){c.innerHTML=`<div><div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Stopped</span></span><span class="hud-badge" id="matchBadge" style="display:none"></span></div><div id="successOverlay" style="display:none"></div></div><div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start Scan</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop</button></div></div>`;}
 
-function loadAtt(c){c.innerHTML=`<div><div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Stopped | रोकिएको</span></span><span class="hud-badge" id="matchBadge" style="display:none"></span></div></div><div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center"><button class="btn btn-p btn-lg" id="startBtn" onclick="startAttendance()"><i class="fas fa-play"></i> Start Continuous Scan | सुरु गर्नुहोस्</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopAttendance()" style="display:none"><i class="fas fa-stop"></i> Stop | रोक्नुहोस्</button></div></div>`;}
-
-// ============================================
-// ATTENDANCE ENGINE
-// ============================================
 async function startAttendance(){
-    await initTF();await loadEmbeddingCache();
+    if(!modelsLoaded){await preloadModels();}
+    try{stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});document.getElementById('cam').srcObject=stream;document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';document.getElementById('hudText').textContent='Active';document.getElementById('hudDot').className='hud-dot on';attendanceActive=true;scanning=true;detectFaces();notify('✅ Scanning... Show face','success');}catch(e){notify('❌ Camera error','error');stopAttendance();}
+}
+function stopAttendance(){attendanceActive=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}document.getElementById('hudText').textContent='Stopped';document.getElementById('hudDot').className='hud-dot off';document.getElementById('startBtn').style.display='inline-flex';document.getElementById('stopBtn').style.display='none';}
+
+async function detectFaces(){
+    if(!attendanceActive||!scanning)return;
+    const video=document.getElementById('cam'),canvas=document.getElementById('overlay');if(!video||!canvas)return;
     try{
-        stream=await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}});
-        document.getElementById('cam').srcObject=stream;
-        document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';
-        document.getElementById('hudText').textContent='Scanning | स्क्यानिङ';document.getElementById('hudDot').className='hud-dot on';
-        faceDetection=new FaceDetection({locateFile:(f)=>`https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/${f}`});
-        faceDetection.setOptions({model:'short',minDetectionConfidence:0.35});
-        faceDetection.onResults(processFaces);
-        camInstance=new Camera(document.getElementById('cam'),{onFrame:async()=>{if(attendanceActive)await faceDetection.send({image:document.getElementById('cam')});},width:640,height:480});
-        await camInstance.start();attendanceActive=true;
-        notify('✅ Airport Mode Active | Continuous Scanning','success');
-    }catch(e){notify('❌ Camera Error: '+e.message,'error');stopAttendance();}
-}
-
-function stopAttendance(){
-    attendanceActive=false;if(camInstance){camInstance.stop();camInstance=null;}
-    if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
-    document.getElementById('hudText').textContent='Stopped | रोकिएको';document.getElementById('hudDot').className='hud-dot off';
-    document.getElementById('startBtn').style.display='inline-flex';document.getElementById('stopBtn').style.display='none';
-}
-
-async function processFaces(results){
-    if(!attendanceActive)return;
-    const canvas=document.getElementById('overlay'),video=document.getElementById('cam');if(!canvas||!video)return;
-    canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
-    detectedFaces=[];
-    if(!results.detections||results.detections.length===0){document.getElementById('matchBadge').style.display='none';return;}
-    
-    for(let d of results.detections){
-        const box=d.boundingBox;const cx=box.xCenter*canvas.width/640,cy=box.yCenter*canvas.height/480,rad=Math.max(box.width*canvas.width/640,box.height*canvas.height/480)/1.3;
-        detectedFaces.push({box,cx,cy,rad});
-        
-        // Quality filter
-        if(box.width<0.06||box.height<0.06)continue;
-        
-        // Draw circular ring
-        ctx.strokeStyle='#00c853';ctx.lineWidth=3;ctx.shadowColor='#00c853';ctx.shadowBlur=16;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();ctx.shadowBlur=0;
-        
-        // Extract face
-        const fc=document.createElement('canvas');fc.width=112;fc.height=112;const fcx=fc.getContext('2d');
-        const sx=(box.xCenter-box.width/2)*video.videoWidth/640,sy=(box.yCenter-box.height/2)*video.videoHeight/480,sw=box.width*video.videoWidth/640,sh=box.height*video.videoHeight/480;
-        fcx.drawImage(video,sx,sy,sw,sh,0,0,112,112);
-        
-        const emb=await generateEmbedding(fc);if(!emb)continue;
-        
-        // Match
-        let bestMatch=null,bestDist=1;
-        for(let[id,vec]of Object.entries(embeddingCache)){const dist=cosineDist(emb,vec);if(dist<bestDist){bestDist=dist;bestMatch=id;}}
-        const conf=1-bestDist;
-        
-        if(bestMatch&&conf>=CONFIDENCE_THRESHOLD){
-            ctx.fillStyle='rgba(0,200,83,.9)';ctx.font='bold 13px Inter';ctx.fillText('✅ '+bestMatch,cx-40,cy-rad-12);
-            const now=Date.now();
-            if(!cooldowns[bestMatch]||now-cooldowns[bestMatch]>COOLDOWN_MS){
-                cooldowns[bestMatch]=now;
-                if(!markedToday[bestMatch]){markedToday[bestMatch]=true;api('markAttendance',{studentName:bestMatch,studentId:bestMatch,confidence:conf.toFixed(3)});notify('✅ '+bestMatch+' Marked! ('+(conf*100).toFixed(0)+'%) | हाजिर भयो!','success');}
+        const faces=await faceapi.detectAllFaces(video,new faceapi.SsdMobilenetv1Options({minConfidence:0.35})).withFaceLandmarks().withFaceDescriptors();
+        canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+        const rs=faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});detectCount++;
+        if(rs.length>0){
+            const d=rs[0],box=d.detection.box;let bm=null,ik=false;
+            if(faceMatcher&&d.descriptor){bm=faceMatcher.findBestMatch(d.descriptor);ik=bm.label!=='unknown'&&bm.distance<0.5;}
+            const color=ik?'#00c853':'#2196f3',cx=box.x+box.width/2,cy=box.y+box.height/2,rad=Math.max(box.width,box.height)/1.35;
+            ctx.strokeStyle=color;ctx.lineWidth=3;ctx.shadowColor=color;ctx.shadowBlur=16;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();ctx.shadowBlur=0;
+            const lb=ik?'✅ '+bm.label.substring(0,12):'🆕 New Face';ctx.font='bold 11px Inter';const tw=ctx.measureText(lb).width;ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(cx-tw/2-8,cy+rad+12,tw+16,18);ctx.fillStyle='#fff';ctx.fillText(lb,cx-tw/2,cy+rad+24);
+            document.getElementById('matchBadge').style.display='flex';document.getElementById('matchBadge').textContent=ik?'✅ Recognized':'🆕 New';
+            
+            if(d.descriptor&&Date.now()-lastMark>2000){
+                const live=checkLive(d);
+                if(live){lastMark=Date.now();scanning=false;
+                    if(ik){const sid=bm.label;const now=Date.now();if(!cooldowns[sid]||now-cooldowns[sid]>30000){cooldowns[sid]=now;if(!markedToday[sid]){const r=await api('markAttendance',{studentName:sid,studentId:sid,confidence:(1-bm.distance).toFixed(2)});if(r&&r.success){markedToday[sid]=true;showSuccess(sid);}}else{notify('⚠️ '+sid+' already marked today','warning');scanning=true;}}else{scanning=true;}}
+                    else{pendingDescriptor=Array.from(d.descriptor);showRegModal();}
+                }
             }
-        }else if(conf>0.5&&conf<CONFIDENCE_THRESHOLD){
-            ctx.fillStyle='rgba(33,150,243,.9)';ctx.font='bold 13px Inter';ctx.fillText('🆕 New Face',cx-30,cy-rad-12);
-            if(Date.now()-(window._lastNewFace||0)>5000){window._lastNewFace=Date.now();pendingDescriptor=Array.from(emb);showRegModal();}
-        }
-    }
-    document.getElementById('matchBadge').style.display='flex';document.getElementById('matchBadge').textContent='🟢 '+detectedFaces.length+' face(s) | '+detectedFaces.length+' अनुहार';
+        }else{document.getElementById('matchBadge').style.display='none';if(detectCount%15===0)notify('📷 Searching face...','warning');}
+    }catch(e){}
+    if(attendanceActive&&scanning)requestAnimationFrame(detectFaces);
 }
 
-// ============================================
-// EMBEDDING GENERATION
-// ============================================
-async function generateEmbedding(faceCanvas){
-    const img=tf.browser.fromPixels(faceCanvas).toFloat().div(255);
-    const emb=tf.tidy(()=>{let x=img.expandDims(0);x=tf.layers.conv2d({filters:32,kernelSize:3,strides:2,padding:'same',activation:'relu'}).apply(x);x=tf.layers.conv2d({filters:64,kernelSize:3,strides:2,padding:'same',activation:'relu'}).apply(x);x=tf.layers.conv2d({filters:128,kernelSize:3,strides:2,padding:'same',activation:'relu'}).apply(x);x=tf.layers.globalAveragePooling2d({}).apply(x);return tf.l2Normalize(x,1);});
-    const data=await emb.data();emb.dispose();img.dispose();return new Float32Array(data);
-}
-function cosineDist(a,b){let d=0,na=0,nb=0;for(let i=0;i<a.length;i++){d+=a[i]*b[i];na+=a[i]*a[i];nb+=b[i]*b[i];}return 1-(d/(Math.sqrt(na)*Math.sqrt(nb)+1e-8));}
+function checkLive(detection){if(!detection.landmarks)return true;const lm=detection.landmarks,le=eyeAR(lm.positions,38,40,36,39),re=eyeAR(lm.positions,44,46,42,45),ear=(le+re)/2;let blinked=(ear<0.2&&prevEAR>0.2);prevEAR=ear;if(blinked){motionFrames=0;notify('✅ Blink detected!','success');return true;}motionFrames++;if(motionFrames>8){motionFrames=0;notify('✅ Motion detected!','success');return true;}return false;}
+function eyeAR(lm,t,b,lt,rt){const tp=lm[t],bp=lm[b],lp=lm[lt],rp=lm[rt],v=Math.abs(tp.y-bp.y),h=Math.abs(lp.x-rp.x);return h<.001?1:v/h;}
 
-function showRegModal(){showModal(`<h3 style="color:#2196f3">🆕 New Face Detected | नयाँ अनुहार</h3><p style="color:#00c853;font-weight:600">✅ Register Below | तल दर्ता गर्नुहोस्</p><form onsubmit="return quickReg(event)"><div class="fr"><div class="fg"><label class="fl">Name * | नाम</label><input id="qn" required></div><div class="fg"><label class="fl">Class * | कक्षा</label><select id="qc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Section | सेक्सन</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="fg"><label class="fl">Roll | रोल</label><input id="qr"></div></div><div class="fr"><div class="fg"><label class="fl">Gender | लिङ्ग</label><select id="qg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">Phone | फोन</label><input id="qp"></div></div><button class="btn btn-p btn-lg" style="width:100%;margin-top:10px"><i class="fas fa-save"></i> Register & Mark | दर्ता गरी हाजिर गर्नुहोस्</button></form>`);}
+function showSuccess(name){const ov=document.getElementById('successOverlay');ov.style.display='flex';ov.innerHTML=`<div class="success-card"><div class="success-icon">✅</div><h3 style="color:#00c853">Marked!</h3><p style="font-weight:700;font-size:1.1rem">${name}</p></div>`;setTimeout(()=>{ov.style.display='none';scanning=true;detectFaces();},1500);}
 
-async function quickReg(e){e.preventDefault();const d={studentName:document.getElementById('qn').value,class:document.getElementById('qc').value,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,gender:document.getElementById('qg').value,guardianPhone:document.getElementById('qp').value};if(pendingDescriptor)d.embedding=Array.from(pendingDescriptor);const r=await api('registerStudent',d);if(r&&r.success){await api('markAttendance',{studentName:d.studentName,studentId:r.studentId,confidence:'0.99'});notify('✅ '+d.studentName+' Registered & Marked! | दर्ता भई हाजिर भयो!','success');document.getElementById('modalContainer').innerHTML='';loadEmbeddingCache();}else notify('❌ Failed | असफल','error');return false;}
+function showRegModal(){showModal(`<h3 style="color:#2196f3">🆕 New Face Detected</h3><p style="color:#00c853">✅ Liveness Passed</p><form onsubmit="return quickReg(event)"><div class="fr"><div class="fg"><label class="fl">Name *</label><input id="qn" required></div><div class="fg"><label class="fl">Class *</label><select id="qc" required><option value="">Select</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Section</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="fg"><label class="fl">Roll</label><input id="qr"></div></div><div class="fr"><div class="fg"><label class="fl">Gender</label><select id="qg"><option value="">Select</option><option>Male</option><option>Female</option></select></div><div class="fg"><label class="fl">Phone</label><input id="qp"></div></div><button class="btn btn-p btn-lg" style="width:100%;margin-top:10px"><i class="fas fa-save"></i> Register & Mark</button></form>`);}
+async function quickReg(e){e.preventDefault();const d={studentName:document.getElementById('qn').value,class:document.getElementById('qc').value,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,gender:document.getElementById('qg').value,guardianPhone:document.getElementById('qp').value};if(pendingDescriptor)d.embedding=Array.from(pendingDescriptor);const r=await api('registerStudent',d);if(r&&r.success){await api('markAttendance',{studentName:d.studentName,studentId:r.studentId,confidence:'0.99'});notify('✅ '+d.studentName+' Registered & Marked!','success');document.getElementById('modalContainer').innerHTML='';loadEmbeddings();showSuccess(d.studentName);}else{notify('❌ Failed','error');scanning=true;detectFaces();}return false;}
 
-async function loadStu(c){c.innerHTML='<div class="spinner"></div>';const d=await api('getStudents');if(!d||!d.students){c.innerHTML='<div class="card"><p>No students | विद्यार्थी छैनन्</p></div>';return;}let h='<div class="card"><h2>Students | विद्यार्थी ('+d.students.length+')</h2><div class="tbc"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th></tr></thead><tbody>';d.students.forEach(s=>{h+=`<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td></tr>`;});h+='</tbody></table></div></div>';c.innerHTML=h;}
-
-function loadRep(c){c.innerHTML=`<div class="card"><h2>📊 Reports | रिपोर्ट</h2><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn btn-p" onclick="printReport('daily')"><i class="fas fa-print"></i> Daily Register</button><button class="btn btn-p" onclick="printReport('monthly')"><i class="fas fa-print"></i> Monthly Register</button><button class="btn btn-p" onclick="printReport('class')"><i class="fas fa-print"></i> Class-wise</button></div></div>`;}
-function printReport(type){
-    const w=window.open('','_blank','width=800,height=600');
-    w.document.write(`<html><head><title>SEBS Report</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:8px}@media print{@page{size:A4 landscape}}</style></head><body><div style="text-align:center"><img src="logo.png" width="60"><h2>Systematic English Boarding School</h2><h3>${type.toUpperCase()} Attendance Report</h3><p>Generated: ${new Date().toLocaleString()}</p></div><p>Print-ready report</p></body></html>`);
-    w.document.close();setTimeout(()=>w.print(),500);
-}
+async function loadStu(c){c.innerHTML='<div class="spinner"></div>';const d=await api('getStudents');if(!d||!d.students){c.innerHTML='<div class="card"><p>No students</p></div>';return;}let h='<div class="card"><h2>Students ('+d.students.length+')</h2><div class="tbc"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th></tr></thead><tbody>';d.students.forEach(s=>{h+=`<tr><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td></tr>`;});h+='</tbody></table></div></div>';c.innerHTML=h;}
+function loadRep(c){c.innerHTML=`<div class="card"><h2>📊 Reports</h2><button class="btn btn-p" onclick="printReport()"><i class="fas fa-print"></i> Print Report</button></div>`;}
+function printReport(){window.print();}
 
 document.addEventListener('DOMContentLoaded',init);
 </script>
