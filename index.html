@@ -954,27 +954,46 @@ async function startAttendance() {
   }
 
   try {
-    // Try to get camera — prefer environment-facing for external webcam
-    const constraints = [
-      { video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } },
+    // FIXED: Try ALL camera options until one works
+    const constraintsList = [
       { video: { width: { ideal: 640 }, height: { ideal: 480 } } },
+      { video: { width: 640, height: 480 } },
+      { video: { width: 320, height: 240 } },
       { video: true }
     ];
 
     let gotStream = false;
-    for (const c of constraints) {
+    let lastError = '';
+
+    for (const c of constraintsList) {
       try {
         stream = await navigator.mediaDevices.getUserMedia(c);
-        gotStream = true;
-        break;
-      } catch {}
+        if (stream && stream.active) {
+          gotStream = true;
+          break;
+        }
+      } catch (err) {
+        lastError = err.message || 'Unknown error';
+      }
     }
-    if (!gotStream) throw new Error('No camera');
+
+    if (!gotStream) {
+      throw new Error(lastError || 'No camera available. Check connection and permissions.');
+    }
 
     const video = document.getElementById('cam');
+    if (!video) throw new Error('Video element not found');
+
     video.srcObject = stream;
-    await new Promise(resolve => { video.onloadedmetadata = resolve; });
-    video.play();
+    
+    // Wait for video to be ready
+    await new Promise((resolve, reject) => {
+      video.onloadedmetadata = () => {
+        video.play().then(resolve).catch(reject);
+      };
+      // Timeout after 5 seconds
+      setTimeout(() => reject(new Error('Camera stream timeout. Check your webcam connection.')), 5000);
+    });
 
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('stopBtn').style.display = 'inline-flex';
@@ -985,12 +1004,14 @@ async function startAttendance() {
     resetLiveness();
     updateModelBadge();
     setStatus('👁️ Scanning for faces...');
+    notify('✅ Camera connected! Show your face. | क्यामेरा जडान भयो!', 'success');
     detectLoop();
   } catch (e) {
-    notify('❌ Camera error: ' + (e.message || 'Permission denied'), 'error');
+    console.error('Camera error:', e);
+    notify('❌ Camera error: ' + (e.message || 'Permission denied. Check webcam connection.'), 'error');
+    setStatus('⚠️ Camera failed. Check your webcam and refresh.');
   }
 }
-
 function stopAttendance() {
   attendanceActive = false;
   scanning = false;
