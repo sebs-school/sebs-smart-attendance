@@ -821,17 +821,19 @@ async function doMarkAttendance(studentId, dist, statusLabel) {
     status: statusLabel
   });
 
-  if (r && r.success) {
-    markedToday[markedKey] = true;
-    const name = r.studentName || displayName;
-    showSuccessPopup(name, statusLabel);
-    addMarkedChip(name);
-  } else {
-    notify('❌ Attendance failed / हाजिर असफल', 'error');
-    resumeScanning(1500);
-  }
-}
-
+  // Fire API in background and show result immediately
+  apiCall('markAttendance', {
+    studentId: studentId,
+    studentName: displayName,
+    confidence: (1 - dist).toFixed(3),
+    status: statusLabel
+  });
+  
+  markedToday[markedKey] = true;
+  showSuccessPopup(displayName, statusLabel);
+  addMarkedChip(displayName);
+  resumeScanning(500);
+  return;
 function resumeScanning(delay = 1800) {
   setTimeout(() => { scanEnabled = true; processing = false; resetLiveness(); }, delay);
 }
