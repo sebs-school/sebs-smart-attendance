@@ -127,7 +127,11 @@ async function loadEmbeddings(){
   faceMatcherReady=true;
 }
 
-async function preloadModels(){if(modelsLoaded||modelsLoading)return;modelsLoading=true;notify('⏳ Loading AI models... / मोडेल लोड हुँदैछ...');try{await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);modelsLoaded=true;modelsLoading=false;await loadEmbeddings();notify('✅ Ready! / तयार!','success');}catch(e){modelsLoading=false;notify('❌ Model load failed / मोडेल लोड असफल','error');}}
+async function preloadModels(){
+  if(modelsLoaded||modelsLoading)return;
+  // Fix WebGL warning
+  if(typeof tf!=='undefined'&&tf.ENV)tf.ENV.set('WEBGL_DELETE_TEXTURE_THRESHOLD',0);
+  modelsLoading=true;notify('⏳ Loading AI models... / मोडेल लोड हुँदैछ...');try{await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);modelsLoaded=true;modelsLoading=false;await loadEmbeddings();notify('✅ Ready! / तयार!','success');}catch(e){modelsLoading=false;notify('❌ Model load failed / मोडेल लोड असफल','error');}}
 async function fetchStudents(){const d=await apiCall('getStudents');if(d&&d.students)studentsCache=d.students;return studentsCache;}
 
 async function loadDashboard(c){
