@@ -733,12 +733,11 @@ async function detectionLoop() {
         : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 No registered faces');
 
       // ── LIVENESS + ACTION ────────────────────────────────────────
-           if (scanEnabled && !processing && Date.now() - lastActionTime > 1500) {
+               if (scanEnabled && !processing) {
         if (el('ltip')) el('ltip').style.display = 'block';
         const alive = checkLiveness(det);
 
         if (alive) {
-          lastActionTime = Date.now();
           scanEnabled = false;
           if (el('ltip')) el('ltip').style.display = 'none';
           processing = true;
