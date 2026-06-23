@@ -12,7 +12,7 @@
 :root{--p:#1a3a6b;--s:#00c853;--w:#ff9800;--d:#e74c3c;--blue:#2196f3;--bg:#f0f4fb;--card:#fff;--border:#e2eaf6;--text:#1a1a2e;--sub:#64748b}
 body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba4c8}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}input,select,textarea{font-family:inherit;font-size:.88rem;border:2px solid var(--border);border-radius:12px;padding:11px 15px;background:var(--card);color:var(--text);width:100%}textarea{resize:vertical;min-height:52px}
-@keyframes spin{to{transform:rotate(360deg)}}@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
 .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:260px;display:flex;flex-direction:column}.pc{flex:1;padding:28px 32px;overflow-y:auto}
 .sb{width:260px;height:100vh;background:linear-gradient(180deg,#07111f,#0f2044,#1a3a6b);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;box-shadow:4px 0 24px rgba(0,0,0,.18)}.sh{padding:22px 20px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.07)}.slogo{width:44px;height:44px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.25)}.slogo img{width:34px;height:34px;object-fit:contain}.sn{font-weight:800;font-size:1.08rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:14px 10px}.sm{display:flex;flex-direction:column;gap:3px}.sg{margin-bottom:6px}.sg-label{font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.28);padding:8px 16px 4px;text-transform:uppercase}.si{border-radius:11px}.si:hover .sl{background:rgba(255,255,255,.07);color:#c8daf4}.si.act .sl{background:rgba(255,255,255,.14);color:#fff}.sl{display:flex;align-items:center;gap:12px;padding:11px 17px;color:rgba(255,255,255,.55);font-size:.83rem;font-weight:500;border-radius:11px}.sl i{font-size:1rem;width:20px;text-align:center;color:rgba(255,255,255,.35)}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07);margin-top:auto}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 17px;background:rgba(231,76,60,.08);color:#f4877a;font-size:.83rem;font-weight:500;border-radius:11px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;backdrop-filter:blur(2px)}.so.act{display:block}
 .tb{height:68px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:900;backdrop-filter:blur(12px)}#pt{font-size:1.15rem;font-weight:800}.td{font-size:.72rem;color:var(--sub)}.tt{font-size:.8rem;font-weight:700;color:var(--p);font-family:monospace;background:rgba(26,58,107,.07);padding:5px 10px;border-radius:8px}.ttb{background:var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:.9rem}.ttb:hover{background:var(--p);color:#fff}
@@ -26,8 +26,6 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.modal{background:var(--card);border-radius:22px;padding:30px 34px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;animation:scaleIn .25s;box-shadow:0 30px 80px rgba(0,0,0,.3);border:1px solid var(--border)}.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.modal-title{font-size:1.1rem;font-weight:800}.modal-close{width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--sub)}.modal-close:hover{background:var(--d);color:#fff}
 .nc{position:fixed;top:18px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:8px;pointer-events:none}.nt{background:var(--card);border-radius:12px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.15);display:flex;align-items:flex-start;gap:10px;border-left:4px solid var(--p);min-width:260px;max-width:340px;animation:slideIn .25s;font-size:.82rem;pointer-events:auto;border:1px solid var(--border);border-left-width:4px}.nt.success{border-left-color:var(--s)}.nt.error{border-left-color:var(--d)}.nt.warning{border-left-color:var(--w)}.nt-icon{font-size:1.1rem}.nt-body{flex:1}.nt-msg{color:var(--sub);font-size:.78rem}
 .db-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}.rate-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px}.rate-num{font-size:4rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--p),#2a5298);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.rate-label{font-size:.72rem;color:var(--sub);text-transform:uppercase;margin-top:6px}
-/* Confidence meter */
-.conf-bar{height:4px;border-radius:4px;background:var(--border);margin-top:6px;overflow:hidden}.conf-fill{height:100%;border-radius:4px;transition:width .3s}
 @media(max-width:1100px){.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}}@media(max-width:860px){.mc{margin-left:0}.sb{transform:translateX(-100%)}.sb.mo{transform:translateX(0)}.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}}@media(max-width:600px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.pc{padding:14px}.tb{padding:0 14px}.cam-box{max-height:320px}.modal{padding:20px 16px}.stc{padding:16px 18px}.sti h3{font-size:1.5rem}}
 </style>
 </head>
@@ -76,990 +74,184 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 <div id="modalContainer"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════════════════════════════
-const API_URL = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
-const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
+const API_URL='https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
+const MODEL_URL='https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
+const DIST_THRESHOLD=0.42;
+const FACE_CACHE_KEY='sebs-faces-v9';
 
-// FIX #1 — Single source-of-truth threshold, tightened to 0.42 for accuracy
-const DIST_THRESHOLD = 0.38;
+let darkMode=false,camStream=null,cameraActive=false,modelsLoaded=false,modelsLoading=false;
+let faceMatcher=null,faceMatcherReady=false;
+let markedToday={},cooldowns={},pendingDescriptor=null;
+let scanEnabled=true,processing=false;
+let studentsCache=[];
+let livenessState={prevEar:1,blinkFrames:0,lastNose:null,headFrames:0};
+let rafHandle=null;
 
-// FIX #2 — Minimum consecutive liveness frames before triggering action
-const LIVENESS_FRAMES_REQUIRED = 2;
+function getTimeSession(){const n=new Date();const m=n.getHours()*60+n.getMinutes();if(m<330)return{open:false,status:'Closed / बन्द',label:'Opens at 5:30 AM'};if(m<630)return{open:true,status:'Present / उपस्थित',label:'Present'};if(m<=720)return{open:true,status:'Late / ढिलो',label:'Late'};return{open:false,status:'Closed / बन्द',label:'Closed after 12 PM'};}
+function init(){updateClock();setInterval(updateClock,1000);if(localStorage.getItem('sebsLoggedIn')==='1'){showApp();nav('db');}if(localStorage.getItem('sebsTheme')==='dark')setDark(true);}
+function updateClock(){const n=new Date();const d=document.getElementById('td'),t=document.getElementById('tt');if(d)d.textContent=n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});if(t)t.textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+function setDark(on){darkMode=on;document.body.classList.toggle('dark',on);const b=document.getElementById('tthBtn');if(b)b.innerHTML=on?'<i class="fas fa-sun"></i>':'<i class="fas fa-moon"></i>';localStorage.setItem('sebsTheme',on?'dark':'light');}
+function tth(){setDark(!darkMode);}
+function doLogin(){localStorage.setItem('sebsLoggedIn','1');showApp();nav('db');notify('Welcome! / स्वागत!','success');}
+function logout(){stopCamera();localStorage.removeItem('sebsLoggedIn');document.getElementById('lp').style.display='flex';document.getElementById('app').style.display='none';}
+function showApp(){document.getElementById('lp').style.display='none';document.getElementById('app').style.display='flex';}
+function tmsb(){document.getElementById('sb').classList.toggle('mo');document.getElementById('so').classList.toggle('act');}
+function cmsb(){document.getElementById('sb').classList.remove('mo');document.getElementById('so').classList.remove('act');}
+function notify(msg,type='info'){const nc=document.getElementById('nc');const icons={success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'};const n=document.createElement('div');n.className=`nt ${type}`;n.innerHTML=`<span class="nt-icon">${icons[type]||'ℹ️'}</span><div class="nt-body"><div class="nt-msg">${msg}</div></div>`;nc.appendChild(n);setTimeout(()=>{n.style.opacity='0';n.style.transform='translateX(40px)';n.style.transition='all .3s';setTimeout(()=>n.remove(),300);},5000);}
+async function apiCall(action,data=null){try{if(data){const r=await fetch(API_URL,{method:'POST',body:JSON.stringify({action,...data})});return await r.json();}else{const r=await fetch(`${API_URL}?action=${action}`);return await r.json();}}catch(e){return null;}}
+function showModal(html){document.getElementById('modalContainer').innerHTML=`<div class="mo" onclick="if(event.target===this)closeModal()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`;}
+function closeModal(){document.getElementById('modalContainer').innerHTML='';}
 
-// Cache key — bump this to invalidate old caches
-const FACE_CACHE_KEY = 'sebs-faces-v8';
-
-// ══════════════════════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════════════════════
-let darkMode = false;
-let camStream = null;
-let cameraActive = false;
-let modelsLoaded = false;
-let modelsLoading = false;
-
-// FIX #3 — faceMatcher state machine
-//   null         = not loaded yet (never show "new face")
-//   'loading'    = fetch in progress
-//   FaceMatcher  = ready
-let faceMatcher = null;
-let faceMatcherReady = false;   // true only when FM is loaded AND usable
-
-let markedToday = {};           // key: `${studentId}__${dateStr}` → true
-let cooldowns = {};             // key: studentId → timestamp
-let pendingDescriptor = null;   // Float32Array captured at liveness for quick-register
-let lastActionTime = 0;         // global cooldown
-let scanEnabled = true;
-let processing = false;
-let studentsCache = [];
-let livenessState = { prevEar: 1, blinkFrames: 0, lastNose: null, headFrames: 0, consecutiveLive: 0 };
-let rafHandle = null;
-
-// ══════════════════════════════════════════════════════════════════
-// TIME / SESSION
-// ══════════════════════════════════════════════════════════════════
-function getTimeSession() {
-  const n = new Date();
-  const mins = n.getHours() * 60 + n.getMinutes();
-  if (mins < 330) return { open: false, status: 'Closed / बन्द', label: 'Opens at 5:30 AM' };
-  if (mins < 630) return { open: true,  status: 'Present / उपस्थित', label: 'Present' };
-  if (mins <= 720) return { open: true,  status: 'Late / ढिलो',    label: 'Late' };
-  return { open: false, status: 'Closed / बन्द', label: 'Closed after 12 PM' };
-}
-
-// ══════════════════════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════════════════════
-function init() {
-  updateClock();
-  setInterval(updateClock, 1000);
-  if (localStorage.getItem('sebsLoggedIn') === '1') { showApp(); nav('db'); }
-  if (localStorage.getItem('sebsTheme') === 'dark') setDark(true);
-}
-
-function updateClock() {
-  const n = new Date();
-  const d = document.getElementById('td'), t = document.getElementById('tt');
-  if (d) d.textContent = n.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  if (t) t.textContent = n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-}
-
-function setDark(on) {
-  darkMode = on;
-  document.body.classList.toggle('dark', on);
-  const b = document.getElementById('tthBtn');
-  if (b) b.innerHTML = on ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-  localStorage.setItem('sebsTheme', on ? 'dark' : 'light');
-}
-function tth() { setDark(!darkMode); }
-
-function doLogin() {
-  localStorage.setItem('sebsLoggedIn', '1');
-  showApp();
-  nav('db');
-  notify('Welcome! / स्वागत!', 'success');
-}
-function logout() {
-  stopCamera();
-  localStorage.removeItem('sebsLoggedIn');
-  document.getElementById('lp').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-}
-function showApp() {
-  document.getElementById('lp').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-}
-function tmsb() { document.getElementById('sb').classList.toggle('mo'); document.getElementById('so').classList.toggle('act'); }
-function cmsb() { document.getElementById('sb').classList.remove('mo'); document.getElementById('so').classList.remove('act'); }
-
-// ══════════════════════════════════════════════════════════════════
-// NOTIFICATIONS
-// ══════════════════════════════════════════════════════════════════
-function notify(msg, type = 'info') {
-  const nc = document.getElementById('nc');
-  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
-  const n = document.createElement('div');
-  n.className = `nt ${type}`;
-  n.innerHTML = `<span class="nt-icon">${icons[type] || 'ℹ️'}</span><div class="nt-body"><div class="nt-msg">${msg}</div></div>`;
-  nc.appendChild(n);
-  setTimeout(() => { n.style.opacity = '0'; n.style.transform = 'translateX(40px)'; n.style.transition = 'all .3s'; setTimeout(() => n.remove(), 300); }, 5000);
-}
-
-// ══════════════════════════════════════════════════════════════════
-// API
-// ══════════════════════════════════════════════════════════════════
-async function apiCall(action, data = null) {
-  try {
-    if (data) {
-      const r = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action, ...data }) });
-      return await r.json();
-    } else {
-      const r = await fetch(`${API_URL}?action=${action}`);
-      return await r.json();
-    }
-  } catch (e) {
-    console.error('API error:', action, e);
-    return null;
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// MODAL
-// ══════════════════════════════════════════════════════════════════
-function showModal(html) { document.getElementById('modalContainer').innerHTML = `<div class="mo" onclick="if(event.target===this)closeModal()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`; }
-function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
-
-// ══════════════════════════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════════════════════════
-function nav(page) {
-  document.querySelectorAll('.si').forEach(e => e.classList.remove('act'));
-  const item = document.querySelector(`[data-p="${page}"]`);
-  if (item) item.classList.add('act');
-  const titles = {
-    db: 'Dashboard / ड्यासबोर्ड',
-    att: 'Live Attendance / लाइभ हाजिरी',
-    reg: 'Register / दर्ता',
-    stu: 'Students / विद्यार्थी',
-    rep: 'Reports / रिपोर्ट'
-  };
-  document.getElementById('pt').textContent = titles[page] || page;
-  if (page !== 'att') stopCamera();
-  if (page === 'att') preloadModels();
-  const c = document.getElementById('pc');
-  if (page === 'db') loadDashboard(c);
-  else if (page === 'att') loadAttendance(c);
-  else if (page === 'reg') loadRegister(c);
-  else if (page === 'stu') loadStudents(c);
-  else if (page === 'rep') loadReports(c);
+function nav(page){
+  document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
+  const item=document.querySelector(`[data-p="${page}"]`);if(item)item.classList.add('act');
+  const titles={db:'Dashboard / ड्यासबोर्ड',att:'Live Attendance / लाइभ हाजिरी',reg:'Register / दर्ता',stu:'Students / विद्यार्थी',rep:'Reports / रिपोर्ट'};
+  document.getElementById('pt').textContent=titles[page]||page;
+  if(page!=='att')stopCamera();if(page==='att')preloadModels();
+  const c=document.getElementById('pc');
+  if(page==='db')loadDashboard(c);else if(page==='att')loadAttendance(c);else if(page==='reg')loadRegister(c);else if(page==='stu')loadStudents(c);else if(page==='rep')loadReports(c);
   cmsb();
 }
 
-// ══════════════════════════════════════════════════════════════════
-// FACE EMBEDDINGS LOADER
-// FIX #4 — properly gates faceMatcherReady; clears stale caches;
-//           never sets ready=true until FM is actually built
-// ══════════════════════════════════════════════════════════════════
-async function loadEmbeddings() {
-  // Clear ALL old cache keys
-  ['sebs-faces-old','sebs-faces-v6','sebs-faces-v7'].forEach(k => localStorage.removeItem(k));
-
-  faceMatcher = null;
-  faceMatcherReady = false;
-
-  let embeddings = null;
-
-  // Try cache first
-  const cached = localStorage.getItem(FACE_CACHE_KEY);
-  if (cached) {
-    try {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        embeddings = parsed;
-        console.log('Using cached embeddings:', embeddings.length);
-      }
-    } catch (e) { localStorage.removeItem(FACE_CACHE_KEY); }
-  }
-
-  // Fetch from API if no cache
-  if (!embeddings) {
-    const d = await apiCall('getAllEmbeddings');
-    if (d && Array.isArray(d.embeddings) && d.embeddings.length > 0) {
-      embeddings = d.embeddings;
-      localStorage.setItem(FACE_CACHE_KEY, JSON.stringify(embeddings));
-      console.log('Loaded embeddings from API:', embeddings.length);
-    }
-  }
-
-  if (!embeddings || embeddings.length === 0) {
-    console.log('No embeddings available — new-face-only mode');
-    faceMatcherReady = true; // ready but empty: all faces will be "new"
-    return;
-  }
-
-  // Build FaceMatcher
-  const labeled = [];
-  for (const e of embeddings) {
-    if (e.studentId && Array.isArray(e.embedding) && e.embedding.length === 128) {
-      labeled.push(new faceapi.LabeledFaceDescriptors(
-        String(e.studentId),
-        [new Float32Array(e.embedding)]
-      ));
-    }
-  }
-
-  if (labeled.length > 0) {
-    faceMatcher = new faceapi.FaceMatcher(labeled, DIST_THRESHOLD);
-    console.log('FaceMatcher built:', labeled.length, 'students, threshold:', DIST_THRESHOLD);
-  } else {
-    console.warn('Embeddings found but none valid — running without matcher');
-  }
-  faceMatcherReady = true;
+async function loadEmbeddings(){
+  ['sebs-faces-old','sebs-faces-v6','sebs-faces-v7','sebs-faces-v8'].forEach(k=>localStorage.removeItem(k));
+  faceMatcher=null;faceMatcherReady=false;
+  let embeddings=null;
+  const cached=localStorage.getItem(FACE_CACHE_KEY);
+  if(cached){try{const parsed=JSON.parse(cached);if(Array.isArray(parsed)&&parsed.length>0){embeddings=parsed;}}catch(e){localStorage.removeItem(FACE_CACHE_KEY);}}
+  if(!embeddings){const d=await apiCall('getAllEmbeddings');if(d&&Array.isArray(d.embeddings)&&d.embeddings.length>0){embeddings=d.embeddings;localStorage.setItem(FACE_CACHE_KEY,JSON.stringify(embeddings));}}
+  if(!embeddings||embeddings.length===0){faceMatcherReady=true;return;}
+  const labeled=[];
+  for(const e of embeddings){if(e.studentId&&Array.isArray(e.embedding)&&e.embedding.length===128){labeled.push(new faceapi.LabeledFaceDescriptors(String(e.studentId),[new Float32Array(e.embedding)]));}}
+  if(labeled.length>0){faceMatcher=new faceapi.FaceMatcher(labeled,DIST_THRESHOLD);}
+  faceMatcherReady=true;
 }
 
-// ══════════════════════════════════════════════════════════════════
-// MODEL LOADING
-// ══════════════════════════════════════════════════════════════════
-async function preloadModels() {
-  if (modelsLoaded || modelsLoading) return;
-  modelsLoading = true;
-  notify('⏳ Loading AI models... / मोडेल लोड हुँदैछ...');
-  try {
-    await Promise.all([
-      faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
-      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
-    ]);
-    modelsLoaded = true;
-    modelsLoading = false;
-    notify('⏳ Loading face data... / अनुहार डेटा लोड हुँदैछ...');
-    await loadEmbeddings();
-    notify('✅ Ready! / तयार!', 'success');
-  } catch (e) {
-    modelsLoading = false;
-    notify('❌ Model load failed / मोडेल लोड असफल', 'error');
-    console.error('Model error:', e);
-  }
+async function preloadModels(){if(modelsLoaded||modelsLoading)return;modelsLoading=true;notify('⏳ Loading AI models... / मोडेल लोड हुँदैछ...');try{await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);modelsLoaded=true;modelsLoading=false;await loadEmbeddings();notify('✅ Ready! / तयार!','success');}catch(e){modelsLoading=false;notify('❌ Model load failed / मोडेल लोड असफल','error');}}
+async function fetchStudents(){const d=await apiCall('getStudents');if(d&&d.students)studentsCache=d.students;return studentsCache;}
+
+async function loadDashboard(c){
+  c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+  const d=await apiCall('getDashboard');
+  if(!d){c.innerHTML='<div class="card" style="text-align:center;padding:48px"><h3>API failed / एपीआई असफल</h3><button class="btn btn-p" onclick="loadDashboard(document.getElementById(\'pc\'))">Retry / पुन: प्रयास</button></div>';return;}
+  const pct=typeof d.percentage==='number'?d.percentage:0;
+  c.innerHTML=`<div class="sr"><div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${d.totalStudents||0}</h3><p>Total / कुल</p></div></div><div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${d.present||0}</h3><p>Present / उपस्थित</p></div></div><div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${d.late||0}</h3><p>Late / ढिलो</p></div></div><div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${d.absent||0}</h3><p>Absent / अनुपस्थित</p></div></div></div><div class="db-grid"><div class="card" style="text-align:center"><div class="rate-ring"><div class="rate-num">${pct}%</div><div class="rate-label">Attendance Rate / उपस्थिति दर</div></div></div><div class="card"><h3>⚡ Quick Actions / द्रुत</h3><button class="btn btn-p btn-lg btn-block" style="margin-bottom:10px" onclick="nav('att')"><i class="fas fa-camera"></i> Start Attendance / हाजिरी सुरु</button><button class="btn btn-s btn-lg btn-block" onclick="nav('reg')"><i class="fas fa-user-plus"></i> Register / दर्ता</button></div></div>`;
 }
 
-async function fetchStudents() {
-  const d = await apiCall('getStudents');
-  if (d && d.students) studentsCache = d.students;
-  return studentsCache;
-}
+function loadRegister(c){c.innerHTML=`<div class="card" style="max-width:720px;margin:0 auto"><h2>📝 Register Student / विद्यार्थी दर्ता</h2><span class="st">Personal / व्यक्तिगत</span><div class="fr" style="margin-top:12px"><div class="fg"><label class="fl">Full Name / नाम *</label><input id="sn" required></div><div class="fg"><label class="fl">Admission No. / भर्ना</label><input id="sa"></div></div><div class="fr"><div class="fg"><label class="fl">Date of Birth / ज.मि.</label><input type="date" id="sdob"></div><div class="fg"><label class="fl">Gender / लिङ्ग *</label><select id="sg" required><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><span class="st">Academic / शैक्षिक</span><div class="fr" style="margin-top:12px"><div class="fg"><label class="fl">Class / कक्षा *</label><select id="sc" required><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section / सेक्सन</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div><div class="fg"><label class="fl">Roll No. / रोल</label><input id="sr"></div></div><span class="st">Guardian / अभिभावक</span><div class="fr" style="margin-top:12px"><div class="fg"><label class="fl">Father / बुबा</label><input id="sf"></div><div class="fg"><label class="fl">Mother / आमा</label><input id="sm"></div></div><div class="fr"><div class="fg"><label class="fl">Phone / फोन</label><input id="sp"></div><div class="fg"><label class="fl">Address / ठेगाना</label><textarea id="saddr"></textarea></div></div><button class="btn btn-p btn-lg btn-block" onclick="submitRegister()"><i class="fas fa-save"></i> Register & Mark Present</button></div>`;}
+async function submitRegister(){const name=document.getElementById('sn').value.trim(),cls=document.getElementById('sc').value,gender=document.getElementById('sg').value;if(!name||!cls||!gender){notify('Fill required fields / सबै भर्नुहोस्','warning');return;}const btn=document.querySelector('#pc .btn-p');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';const payload={studentName:name,admissionNumber:document.getElementById('sa').value,dateOfBirth:document.getElementById('sdob').value,class:cls,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,gender,fatherName:document.getElementById('sf').value,motherName:document.getElementById('sm').value,guardianPhone:document.getElementById('sp').value,address:document.getElementById('saddr').value};if(pendingDescriptor)payload.embedding=Array.from(pendingDescriptor);const r=await apiCall('registerStudent',payload);btn.disabled=false;btn.innerHTML='<i class="fas fa-save"></i> Register & Mark Present';if(r&&r.success){const sid=r.studentId;await apiCall('markAttendance',{studentId:sid,studentName:name,class:cls,section:document.getElementById('ss').value,rollNumber:document.getElementById('sr').value,confidence:'0.99',status:'Present'});notify(`✅ ${name} registered and marked present! / दर्ता र हाजिर!`,'success');pendingDescriptor=null;loadRegister(document.getElementById('pc'));localStorage.removeItem(FACE_CACHE_KEY);faceMatcherReady=false;await loadEmbeddings();studentsCache=[];}else{notify('❌ Registration failed / दर्ता असफल','error');}}
 
-// ══════════════════════════════════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════════════════════════════════
-async function loadDashboard(c) {
-  c.innerHTML = '<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
-  const d = await apiCall('getDashboard');
-  if (!d) {
-    c.innerHTML = '<div class="card" style="text-align:center;padding:48px"><h3>API failed / एपीआई असफल</h3><button class="btn btn-p" onclick="loadDashboard(document.getElementById(\'pc\'))">Retry / पुन: प्रयास</button></div>';
-    return;
-  }
-  const pct = typeof d.percentage === 'number' ? d.percentage : 0;
-  c.innerHTML = `
-    <div class="sr">
-      <div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${d.totalStudents||0}</h3><p>Total / कुल</p></div></div>
-      <div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${d.present||0}</h3><p>Present / उपस्थित</p></div></div>
-      <div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${d.late||0}</h3><p>Late / ढिलो</p></div></div>
-      <div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${d.absent||0}</h3><p>Absent / अनुपस्थित</p></div></div>
-    </div>
-    <div class="db-grid">
-      <div class="card" style="text-align:center"><div class="rate-ring"><div class="rate-num">${pct}%</div><div class="rate-label">Attendance Rate / उपस्थिति दर</div></div></div>
-      <div class="card">
-        <h3 style="margin-bottom:14px">⚡ Quick Actions / द्रुत</h3>
-        <button class="btn btn-p btn-lg btn-block" style="margin-bottom:10px" onclick="nav('att')"><i class="fas fa-camera"></i> Start Attendance / हाजिरी सुरु</button>
-        <button class="btn btn-s btn-lg btn-block" onclick="nav('reg')"><i class="fas fa-user-plus"></i> Register / दर्ता</button>
-      </div>
-    </div>`;
-}
+function loadAttendance(c){const t=getTimeSession();const bc=t.open?(t.label==='Late'?'rgba(255,152,0,.75)':'rgba(0,200,83,.75)'):'rgba(231,76,60,.75)';c.innerHTML=`<div class="cw"><div style="text-align:center;margin-bottom:12px"><span class="time-badge" style="background:${bc}">${t.open?'🟢':'🔴'} ${t.status} | ${t.label}</span></div><div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Inactive / बन्द</span></span><span class="hud-badge" id="matchBadge" style="display:none"><span id="matchText"></span></span></div><div class="ltip" id="ltip" style="display:none">👀 Blink or nod / झिम्काउनुहोस् वा टाउको हल्लाउनुहोस्</div></div><div class="cam-footer"><button class="btn btn-p btn-lg" id="startBtn" onclick="startCamera()"><i class="fas fa-play"></i> Start / सुरु</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopCamera()" style="display:none"><i class="fas fa-stop"></i> Stop / रोक</button><button class="btn btn-ghost btn-lg" onclick="refreshFaces()"><i class="fas fa-sync-alt"></i> Refresh / ताजा</button></div><div class="cam-status" id="camStatus">Press Start / सुरु थिच्नुहोस्</div><div class="card" style="margin-top:18px"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="font-weight:700">✅ Marked Today / आज</span><span id="markedCount">0</span></div><div class="marked-strip" id="markedStrip"><span style="font-size:.78rem;color:var(--sub)">None yet / कोही छैन</span></div></div></div>`;}
+async function startCamera(){if(!modelsLoaded){notify('⏳ Models not ready / मोडेल अझै लोड भएन...','warning');await preloadModels();if(!modelsLoaded)return;}if(!faceMatcherReady){await loadEmbeddings();}try{const cons=[{video:{width:{ideal:640},height:{ideal:480}}},{video:{width:640,height:480}},{video:true}];let gs=false;for(const c of cons){try{camStream=await navigator.mediaDevices.getUserMedia(c);if(camStream&&camStream.active){gs=true;break;}}catch(err){}}if(!gs)throw new Error('No camera');const v=document.getElementById('cam');v.srcObject=camStream;await new Promise((res,rej)=>{v.onloadedmetadata=()=>v.play().then(res).catch(rej);setTimeout(()=>rej(new Error('Camera timeout')),6000);});document.getElementById('startBtn').style.display='none';document.getElementById('stopBtn').style.display='inline-flex';document.getElementById('hudDot').className='hud-dot on';document.getElementById('hudText').textContent='Scanning / स्क्यान';cameraActive=true;scanEnabled=true;resetLiveness();detectionLoop();const t=getTimeSession();setStatus(t.open?`👁️ Scanning... (${t.status})`:`🔴 ${t.label}`);notify('✅ Camera ready / क्यामेरा तयार!','success');}catch(e){notify('❌ Camera error: '+e.message,'error');}}
+function stopCamera(){cameraActive=false;scanEnabled=false;processing=false;if(rafHandle){cancelAnimationFrame(rafHandle);rafHandle=null;}if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}const g=id=>document.getElementById(id);if(g('hudDot'))g('hudDot').className='hud-dot off';if(g('hudText'))g('hudText').textContent='Inactive / बन्द';if(g('startBtn'))g('startBtn').style.display='inline-flex';if(g('stopBtn'))g('stopBtn').style.display='none';if(g('matchBadge'))g('matchBadge').style.display='none';if(g('ltip'))g('ltip').style.display='none';setStatus('Stopped / रोकियो');}
+async function refreshFaces(){notify('🔄 Refreshing face data / ताजा गर्दै...');localStorage.removeItem(FACE_CACHE_KEY);faceMatcher=null;faceMatcherReady=false;await loadEmbeddings();notify('✅ Refreshed! / ताजा भयो!','success');}
+function setStatus(msg){const el=document.getElementById('camStatus');if(el)el.textContent=msg;}
+function resetLiveness(){livenessState={prevEar:1,blinkFrames:0,lastNose:null,headFrames:0};}
 
-// ══════════════════════════════════════════════════════════════════
-// REGISTRATION FORM
-// ══════════════════════════════════════════════════════════════════
-function loadRegister(c) {
-  c.innerHTML = `<div class="card" style="max-width:720px;margin:0 auto">
-    <h2>📝 Register Student / विद्यार्थी दर्ता</h2>
-    <span class="st">Personal / व्यक्तिगत</span>
-    <div class="fr" style="margin-top:12px">
-      <div class="fg"><label class="fl">Full Name / नाम *</label><input id="sn" placeholder="Student Name" required></div>
-      <div class="fg"><label class="fl">Admission No. / भर्ना</label><input id="sa" placeholder="Admission Number"></div>
-    </div>
-    <div class="fr">
-      <div class="fg"><label class="fl">Date of Birth / ज.मि.</label><input type="date" id="sdob"></div>
-      <div class="fg"><label class="fl">Gender / लिङ्ग *</label><select id="sg" required><option value="">Select / छान्नुहोस्</option><option>Male</option><option>Female</option></select></div>
-    </div>
-    <span class="st">Academic / शैक्षिक</span>
-    <div class="fr" style="margin-top:12px">
-      <div class="fg"><label class="fl">Class / कक्षा *</label><select id="sc" required><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div>
-      <div class="fg"><label class="fl">Section / सेक्सन</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
-      <div class="fg"><label class="fl">Roll No. / रोल</label><input id="sr" placeholder="Roll Number"></div>
-    </div>
-    <span class="st">Guardian / अभिभावक</span>
-    <div class="fr" style="margin-top:12px">
-      <div class="fg"><label class="fl">Father / बुबा</label><input id="sf" placeholder="Father's Name"></div>
-      <div class="fg"><label class="fl">Mother / आमा</label><input id="sm" placeholder="Mother's Name"></div>
-    </div>
-    <div class="fr">
-      <div class="fg"><label class="fl">Phone / फोन</label><input id="sp" placeholder="Guardian Phone"></div>
-      <div class="fg"><label class="fl">Address / ठेगाना</label><textarea id="saddr" placeholder="Address"></textarea></div>
-    </div>
-    <button class="btn btn-p btn-lg btn-block" onclick="submitRegister()"><i class="fas fa-save"></i> Register & Mark Present / दर्ता र हाजिर</button>
-  </div>`;
-}
+function calcEAR(lm,t,b,lt,rt){const p=lm.positions;const tp=p[t],bp=p[b],lp=p[lt],rp=p[rt];const v=Math.hypot(tp.x-bp.x,tp.y-bp.y),h=Math.hypot(lp.x-rp.x,lp.y-rp.y);return h<0.5?1:v/h;}
+function checkLiveness(det){if(!det.landmarks)return false;const p=det.landmarks.positions;const le=calcEAR(det.landmarks,37,41,36,39),re=calcEAR(det.landmarks,43,47,42,45),ear=(le+re)/2;if(ear<0.20&&livenessState.prevEar>0.24){livenessState.blinkFrames++;if(livenessState.blinkFrames>=2){livenessState.prevEar=ear;setStatus('👁️ Blink detected! / झिम्काइ!');return true;}}if(ear>0.26)livenessState.blinkFrames=0;livenessState.prevEar=ear;const nose={x:p[30].x,y:p[30].y};if(livenessState.lastNose){const dx=Math.abs(nose.x-livenessState.lastNose.x),dy=Math.abs(nose.y-livenessState.lastNose.y);if(dx>9||dy>9)livenessState.headFrames++;else livenessState.headFrames=Math.max(0,livenessState.headFrames-1);if(livenessState.headFrames>=4){livenessState.headFrames=0;setStatus('🤙 Head movement! / हल्लाइ!');return true;}}livenessState.lastNose=nose;return false;}
 
-async function submitRegister() {
-  const name = document.getElementById('sn').value.trim();
-  const cls = document.getElementById('sc').value;
-  const gender = document.getElementById('sg').value;
-  if (!name || !cls || !gender) { notify('Please fill required fields / सबै भर्नुहोस्', 'warning'); return; }
-
-  const btn = document.querySelector('#pc .btn-p');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-  const payload = {
-    studentName: name,
-    admissionNumber: document.getElementById('sa').value,
-    dateOfBirth: document.getElementById('sdob').value,
-    class: cls,
-    section: document.getElementById('ss').value,
-    rollNumber: document.getElementById('sr').value,
-    gender,
-    fatherName: document.getElementById('sf').value,
-    motherName: document.getElementById('sm').value,
-    guardianPhone: document.getElementById('sp').value,
-    address: document.getElementById('saddr').value
-  };
-  if (pendingDescriptor) payload.embedding = Array.from(pendingDescriptor);
-
-  const r = await apiCall('registerStudent', payload);
-  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Register & Mark Present / दर्ता र हाजिर';
-
-  if (r && r.success) {
-    // FIX #5 — use the returned studentId (not name) for attendance marking
-    const sid = r.studentId;
-    const t = getTimeSession();
-    const attResult = await apiCall('markAttendance', {
-      studentId: sid,
-      studentName: name,
-      class: cls,
-      section: document.getElementById('ss').value,
-      rollNumber: document.getElementById('sr').value,
-      confidence: '0.99',
-      status: t.open ? t.label : 'Present'
-    });
-
-    if (attResult && attResult.success) {
-      notify(`✅ ${name} registered and marked present! / दर्ता र हाजिर!`, 'success');
-    } else {
-      notify(`✅ ${name} registered! Attendance may need manual mark. / दर्ता भयो!`, 'warning');
-    }
-
-    pendingDescriptor = null;
-    loadRegister(document.getElementById('pc'));
-
-    // FIX #6 — always clear cache and reload after new registration
-    localStorage.removeItem(FACE_CACHE_KEY);
-    faceMatcherReady = false;
-    await loadEmbeddings();
-    studentsCache = [];
-  } else {
-    notify('❌ Registration failed / दर्ता असफल', 'error');
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// ATTENDANCE PAGE
-// ══════════════════════════════════════════════════════════════════
-function loadAttendance(c) {
-  const t = getTimeSession();
-  const badgeColor = t.open
-    ? (t.label === 'Late' ? 'rgba(255,152,0,.75)' : 'rgba(0,200,83,.75)')
-    : 'rgba(231,76,60,.75)';
-  c.innerHTML = `<div class="cw">
-    <div style="text-align:center;margin-bottom:12px">
-      <span class="time-badge" style="background:${badgeColor}">
-        ${t.open ? '🟢' : '🔴'} ${t.status} | ${t.label}
-      </span>
-    </div>
-    <div class="cam-box">
-      <video id="cam" autoplay playsinline muted></video>
-      <canvas id="overlay"></canvas>
-      <div class="cam-hud">
-        <span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Inactive / बन्द</span></span>
-        <span class="hud-badge" id="matchBadge" style="display:none"><span id="matchText"></span></span>
-      </div>
-      <div class="ltip" id="ltip" style="display:none">👀 Blink or nod / झिम्काउनुहोस् वा टाउको हल्लाउनुहोस्</div>
-    </div>
-    <div class="cam-footer">
-      <button class="btn btn-p btn-lg" id="startBtn" onclick="startCamera()"><i class="fas fa-play"></i> Start / सुरु</button>
-      <button class="btn btn-d btn-lg" id="stopBtn" onclick="stopCamera()" style="display:none"><i class="fas fa-stop"></i> Stop / रोक</button>
-      <button class="btn btn-ghost btn-lg" onclick="refreshFaces()"><i class="fas fa-sync-alt"></i> Refresh / ताजा</button>
-    </div>
-    <div class="cam-status" id="camStatus">Press "Start" to begin / "सुरु" थिच्नुहोस्</div>
-    <div class="card" style="margin-top:18px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-        <span style="font-weight:700">✅ Marked Today / आज</span>
-        <span id="markedCount">0 students</span>
-      </div>
-      <div class="marked-strip" id="markedStrip"><span style="font-size:.78rem;color:var(--sub)">None yet / कोही छैन</span></div>
-    </div>
-  </div>`;
-}
-
-// ══════════════════════════════════════════════════════════════════
-// CAMERA START / STOP
-// ══════════════════════════════════════════════════════════════════
-async function startCamera() {
-  if (!modelsLoaded) {
-    notify('⏳ Models not ready yet / मोडेल अझै लोड भएन...', 'warning');
-    await preloadModels();
-    if (!modelsLoaded) return;
-  }
-  // FIX #7 — wait for embeddings to be ready before starting scan
-  if (!faceMatcherReady) {
-    notify('⏳ Loading face data / अनुहार डेटा लोड हुँदैछ...', 'warning');
-    await loadEmbeddings();
-  }
-
-  try {
-    const constraints = [
-      { video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' } },
-      { video: { width: 640, height: 480 } },
-      { video: true }
-    ];
-    let gotStream = false;
-    for (const c of constraints) {
-      try { camStream = await navigator.mediaDevices.getUserMedia(c); if (camStream && camStream.active) { gotStream = true; break; } } catch (err) {}
-    }
-    if (!gotStream) throw new Error('No camera available');
-
-    const v = document.getElementById('cam');
-    v.srcObject = camStream;
-    await new Promise((res, rej) => {
-      v.onloadedmetadata = () => v.play().then(res).catch(rej);
-      setTimeout(() => rej(new Error('Camera timeout')), 6000);
-    });
-
-    document.getElementById('startBtn').style.display = 'none';
-    document.getElementById('stopBtn').style.display = 'inline-flex';
-    document.getElementById('hudDot').className = 'hud-dot on';
-    document.getElementById('hudText').textContent = 'Scanning / स्क्यान';
-    cameraActive = true;
-    scanEnabled = true;
-    resetLiveness();
-    detectionLoop();
-
-    const t = getTimeSession();
-    setStatus(t.open ? `👁️ Scanning... (${t.status})` : `🔴 ${t.label}`);
-    notify('✅ Camera ready / क्यामेरा तयार!', 'success');
-
-    if (!faceMatcher) {
-      notify('ℹ️ No registered faces yet — all will show as new / कुनै दर्ता अनुहार छैन', 'info');
-    }
-  } catch (e) {
-    notify('❌ Camera error: ' + e.message + ' / क्यामेरा त्रुटि', 'error');
-    console.error('Camera error', e);
-  }
-}
-
-function stopCamera() {
-  cameraActive = false;
-  scanEnabled = false;
-  processing = false;
-  if (rafHandle) { cancelAnimationFrame(rafHandle); rafHandle = null; }
-  if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
-  const g = id => document.getElementById(id);
-  if (g('hudDot')) g('hudDot').className = 'hud-dot off';
-  if (g('hudText')) g('hudText').textContent = 'Inactive / बन्द';
-  if (g('startBtn')) g('startBtn').style.display = 'inline-flex';
-  if (g('stopBtn')) g('stopBtn').style.display = 'none';
-  if (g('matchBadge')) g('matchBadge').style.display = 'none';
-  if (g('ltip')) g('ltip').style.display = 'none';
-  setStatus('Stopped / रोकियो');
-}
-
-async function refreshFaces() {
-  notify('🔄 Refreshing face data / ताजा गर्दै...');
-  localStorage.removeItem(FACE_CACHE_KEY);
-  faceMatcher = null;
-  faceMatcherReady = false;
-  await loadEmbeddings();
-  const count = faceMatcher ? faceMatcher.labeledDescriptors.length : 0;
-  notify(`✅ Refreshed! ${count} face(s) loaded / ${count} अनुहार लोड`, 'success');
-}
-
-function setStatus(msg) { const el = document.getElementById('camStatus'); if (el) el.textContent = msg; }
-const el = id => document.getElementById(id);
-function resetLiveness() { livenessState = { prevEar: 1, blinkFrames: 0, lastNose: null, headFrames: 0, consecutiveLive: 0 }; }
-
-// ══════════════════════════════════════════════════════════════════
-// EAR LIVENESS CHECK
-// FIX #8 — requires multiple consecutive frames to prevent false triggers
-// ══════════════════════════════════════════════════════════════════
-function calcEAR(landmarks, topIdx, bottomIdx, leftIdx, rightIdx) {
-  const p = landmarks.positions;
-  const top = p[topIdx], bot = p[bottomIdx], left = p[leftIdx], right = p[rightIdx];
-  const vert = Math.hypot(top.x - bot.x, top.y - bot.y);
-  const horiz = Math.hypot(left.x - right.x, left.y - right.y);
-  return horiz < 0.5 ? 1 : vert / horiz;
-}
-
-function checkLiveness(det) {
-  if (!det.landmarks) return false;
-  const p = det.landmarks.positions;
-  const leftEAR = calcEAR(det.landmarks, 37, 41, 36, 39);
-  const rightEAR = calcEAR(det.landmarks, 43, 47, 42, 45);
-  const ear = (leftEAR + rightEAR) / 2;
-
-  // Blink: EAR drops below 0.20 (closed) then rises above 0.26 (open)
-  if (ear < 0.20 && livenessState.prevEar > 0.24) {
-    livenessState.blinkFrames++;
-    if (livenessState.blinkFrames >= LIVENESS_FRAMES_REQUIRED) {
-      livenessState.prevEar = ear;
-      setStatus('👁️ Blink detected! / झिम्काइ!');
-      return true;
-    }
-  }
-  if (ear > 0.26) livenessState.blinkFrames = 0;
-  livenessState.prevEar = ear;
-
-  // Head movement: nose tip horizontal/vertical shift
-  const nose = { x: p[30].x, y: p[30].y };
-  if (livenessState.lastNose) {
-    const dx = Math.abs(nose.x - livenessState.lastNose.x);
-    const dy = Math.abs(nose.y - livenessState.lastNose.y);
-    if (dx > 9 || dy > 9) livenessState.headFrames++;
-    else livenessState.headFrames = Math.max(0, livenessState.headFrames - 1);
-    if (livenessState.headFrames >= 4) {
-      livenessState.headFrames = 0;
-      setStatus('🤙 Head movement! / हल्लाइ!');
-      return true;
-    }
-  }
-  livenessState.lastNose = nose;
-  return false;
-}
-
-// ══════════════════════════════════════════════════════════════════
-// MAIN DETECTION LOOP
-// FIX #9 — completely rewritten matching + colour logic
-// ══════════════════════════════════════════════════════════════════
-async function detectionLoop() {
-  if (!cameraActive) return;
-  const video = document.getElementById('cam');
-  const canvas = document.getElementById('overlay');
-  if (!video || !canvas || video.readyState < 2) {
-    rafHandle = requestAnimationFrame(detectionLoop);
-    return;
-  }
-
-  try {
-    const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.35 });
-    const faces = await faceapi.detectAllFaces(video, opts).withFaceLandmarks().withFaceDescriptors();
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (!faceMatcherReady) {
-      // Still loading — show spinner in status, don't process faces
-      el('matchBadge').style.display = 'none';
-      setStatus('⏳ Loading face data... / अनुहार डेटा लोड हुँदैछ...');
-      if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
-      return;
-    }
-
-    const sized = faceapi.resizeResults(faces, { width: video.videoWidth, height: video.videoHeight });
-
-    if (sized.length === 0) {
-      el('matchBadge').style.display = 'none';
-      if (el('ltip')) el('ltip').style.display = 'none';
-           setStatus('✅ Face detected... / अनुहार भेटियो...');
-      if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
-      return;
-    }
-
-    for (const det of sized) {
-      if (det.detection.box.width < 35 || det.detection.box.height < 35) continue;
-
-      const box = det.detection.box;
-      const cx = box.x + box.width / 2;
-      const cy = box.y + box.height / 2;
-      const rad = Math.max(box.width, box.height) / 1.4;
-
-      // ── MATCHING ─────────────────────────────────────────────────
-      // FIX #10 — faceMatcher=null means "no registered students", NOT "unknown"
-      //   isKnown = false when faceMatcher is null (no students registered yet)
-      //   isKnown = false when faceMatcher exists but distance ≥ threshold
-      //   isKnown = true  when faceMatcher exists AND distance < threshold
-      let isKnown = false;
-      let matchLabel = '';
-      let matchStudentId = '';
-      let matchDist = 1.0;
-
-      if (faceMatcher && det.descriptor) {
-        const best = faceMatcher.findBestMatch(det.descriptor);
-        matchDist = best.distance;
-        matchLabel = best.label; // this is the studentId string we stored
-
-        // FIX #11 — enforce our own threshold (double-guard against FaceMatcher internals)
-        isKnown = (matchLabel !== 'unknown' && matchDist < DIST_THRESHOLD);
-        matchStudentId = isKnown ? matchLabel : '';
-
-        console.log(`Face: label=${matchLabel} dist=${matchDist.toFixed(3)} known=${isKnown}`);
-      }
-
-      // ── CIRCLE COLOUR ────────────────────────────────────────────
-      // 🟢 GREEN  = recognised registered student
-      // 🔵 BLUE   = face detected but no match (new person)
-      // (orange for loading is handled above, never reaches here)
-      const circleColor = isKnown ? '#00c853' : '#2196f3';
-      const confidence = isKnown ? Math.round((1 - matchDist) * 100) : null;
-
-      ctx.save();
-      ctx.shadowColor = circleColor;
-      ctx.shadowBlur = 20;
-      ctx.strokeStyle = circleColor;
-      ctx.lineWidth = 3.5;
-      ctx.beginPath();
-      ctx.arc(cx, cy, rad, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.restore();
-
-      // ── LABEL ────────────────────────────────────────────────────
-      const labelText = isKnown
-        ? `✅ ${matchStudentId.substring(0, 16)}${confidence ? ` (${confidence}%)` : ''}`
-        : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 Register First / दर्ता गर्नुहोस्');
-
-      ctx.font = 'bold 13px Inter';
-      const tw = ctx.measureText(labelText).width;
-      const lx = cx - tw / 2 - 10;
-      const ly = cy + rad + 12;
-      ctx.fillStyle = 'rgba(0,0,0,.78)';
-      roundRect(ctx, lx, ly, tw + 20, 24, 6);
-      ctx.fill();
-      ctx.fillStyle = '#fff';
-      ctx.fillText(labelText, cx - tw / 2, ly + 16);
-
-      // ── HUD BADGE ────────────────────────────────────────────────
-      el('matchBadge').style.display = 'flex';
-      el('matchText').textContent = isKnown
-        ? `✅ Recognised: ${matchStudentId}`
-        : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 No registered faces');
-
-      // ── LIVENESS + ACTION ────────────────────────────────────────
-               if (scanEnabled && !processing) {
-        if (el('ltip')) el('ltip').style.display = 'block';
-        const alive = checkLiveness(det);
-
-        if (alive) {
-          scanEnabled = false;
-          if (el('ltip')) el('ltip').style.display = 'none';
-          processing = true;
-
-          const todayKey = new Date().toDateString();
-          const markedKey = `${matchStudentId || 'unknown'}__${todayKey}`;
-
-          if (isKnown) {
-            if (markedToday[markedKey]) {
-              // Already marked today
-              showAlreadyMarked(matchStudentId);
-            } else {
-              // FIX #12 — pass studentId not name to markAttendance
-              const t = getTimeSession();
-              if (!t.open) {
-                notify('⛔ ' + t.label, 'warning');
-                resumeScanning(2000);
-              } else {
-                await doMarkAttendance(matchStudentId, matchDist, t.label);
-              }
-            }
-          } else {
-            // Unknown face → capture descriptor and open quick-register
-            // FIX #13 — only open modal if NOT already open
-            if (!document.querySelector('#modalContainer .modal')) {
-              pendingDescriptor = det.descriptor ? new Float32Array(det.descriptor) : null;
-              showQuickRegister();
-            } else {
-              resumeScanning(1000);
-            }
-          }
-          break; // process only the first valid face per frame
+async function detectionLoop(){
+  if(!cameraActive)return;
+  const video=document.getElementById('cam'),canvas=document.getElementById('overlay');if(!video||!canvas||video.readyState<2){rafHandle=requestAnimationFrame(detectionLoop);return;}
+  try{
+    const opts=new faceapi.SsdMobilenetv1Options({minConfidence:0.35});
+    const faces=await faceapi.detectAllFaces(video,opts).withFaceLandmarks().withFaceDescriptors();
+    canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+    const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(!faceMatcherReady){el('matchBadge').style.display='none';setStatus('⏳ Loading face data...');if(cameraActive)rafHandle=requestAnimationFrame(detectionLoop);return;}
+    const sized=faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});
+    if(sized.length===0){el('matchBadge').style.display='none';if(el('ltip'))el('ltip').style.display='none';setStatus('✅ Face detected... / अनुहार भेटियो...');if(cameraActive)rafHandle=requestAnimationFrame(detectionLoop);return;}
+    for(const det of sized){
+      if(det.detection.box.width<35||det.detection.box.height<35)continue;
+      const box=det.detection.box,cx=box.x+box.width/2,cy=box.y+box.height/2,rad=Math.max(box.width,box.height)/1.4;
+      let isKnown=false,matchLabel='',matchStudentId='',matchDist=1;
+      if(faceMatcher&&det.descriptor){const bm=faceMatcher.findBestMatch(det.descriptor);matchDist=bm.distance;matchLabel=bm.label;isKnown=(matchLabel!=='unknown'&&matchDist<DIST_THRESHOLD);matchStudentId=isKnown?matchLabel:'';}
+      const circleColor=isKnown?'#00c853':'#2196f3';
+      ctx.save();ctx.shadowColor=circleColor;ctx.shadowBlur=20;ctx.strokeStyle=circleColor;ctx.lineWidth=3.5;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();ctx.restore();
+      const labelText=isKnown?`✅ ${matchStudentId.substring(0,16)}`:'🆕 New Face / नयाँ अनुहार';
+      ctx.font='bold 13px Inter';const tw=ctx.measureText(labelText).width,lx=cx-tw/2-10,ly=cy+rad+12;
+      ctx.fillStyle='rgba(0,0,0,.78)';roundRect(ctx,lx,ly,tw+20,24,6);ctx.fill();ctx.fillStyle='#fff';ctx.fillText(labelText,cx-tw/2,ly+16);
+      el('matchBadge').style.display='flex';el('matchText').textContent=isKnown?`✅ Recognised: ${matchStudentId}`:'🆕 New Face / नयाँ';
+      if(scanEnabled&&!processing){if(el('ltip'))el('ltip').style.display='block';const alive=checkLiveness(det);
+        if(alive){scanEnabled=false;if(el('ltip'))el('ltip').style.display='none';processing=true;
+          const todayKey=new Date().toDateString(),markedKey=`${matchStudentId||'unknown'}__${todayKey}`;
+          if(isKnown){
+            if(markedToday[markedKey]){showAlreadyMarked(matchStudentId);}
+            else{const t=getTimeSession();if(!t.open){notify('⛔ '+t.label,'warning');resumeScanning(2000);}else{await doMarkAttendance(matchStudentId,matchDist,t.label);}}
+          }else{if(!document.querySelector('#modalContainer .modal')){pendingDescriptor=det.descriptor?new Float32Array(det.descriptor):null;showQuickRegister();}else{resumeScanning(1000);}}
+          break;
         }
       }
     }
-  } catch (e) {
-    console.error('Detection loop error:', e);
-  }
-
-  if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
+  }catch(e){console.error('Detection error:',e);}
+  if(cameraActive)rafHandle=requestAnimationFrame(detectionLoop);
 }
 
-// ── Rounded rect helper ─────────────────────────────────────────
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
 
-async function doMarkAttendance(studentId, dist, statusLabel) {
-  const now = Date.now();
-  const todayKey = new Date().toDateString();
-  const markedKey = `${studentId}__${todayKey}`;
-
-  // Per-student cooldown (30s)
-  if (cooldowns[studentId] && now - cooldowns[studentId] < 30000) {
-    resumeScanning(500);
-    return;
-  }
-  cooldowns[studentId] = now;
-  markedToday[markedKey] = true;
-
-  // Look up actual student name from cache for display
+async function doMarkAttendance(studentId,dist,statusLabel){
+  const now=Date.now(),todayKey=new Date().toDateString(),markedKey=`${studentId}__${todayKey}`;
+  if(cooldowns[studentId]&&now-cooldowns[studentId]<30000){resumeScanning(500);return;}
+  cooldowns[studentId]=now;markedToday[markedKey]=true;
   await fetchStudents();
-  const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
-  const displayName = stu ? stu.StudentName : studentId;
-
-  // Show popup IMMEDIATELY - don't wait for API
-  showSuccessPopup(displayName, statusLabel);
+  const stu=studentsCache.find(s=>String(s.StudentID)===String(studentId));
+  const displayName=stu?stu.StudentName:studentId;
+  showSuccessPopup(displayName,statusLabel);
   addMarkedChip(displayName);
-
-  // Fire API in background
-  apiCall('markAttendance', {
-    studentId: studentId,
-    studentName: displayName,
-    confidence: (1 - dist).toFixed(3),
-    status: statusLabel
-  });
-
+  apiCall('markAttendance',{studentId:studentId,studentName:displayName,confidence:(1-dist).toFixed(3),status:statusLabel});
   resumeScanning(500);
 }
 
-function resumeScanning(delay = 1800) {
-  setTimeout(() => { scanEnabled = true; processing = false; resetLiveness(); }, delay);
-}
-// ── Success popup ───────────────────────────────────────────────
-function showSuccessPopup(name, status) {
-  const ov = document.createElement('div');
-  ov.className = 'mo'; ov.style.zIndex = '2000';
-  ov.innerHTML = `<div class="modal" style="text-align:center;max-width:340px;padding:32px 28px">
-    <h1 style="font-size:3rem">✅</h1>
-    <h3 style="color:#00c853">${status}</h3>
-    <p style="font-weight:700;font-size:1.1rem">${name}</p>
-    <p style="color:var(--sub);margin-top:4px">Attendance marked! / हाजिर भयो!</p>
-    <p style="font-size:.7rem;color:var(--sub);margin-top:12px">Closes in 5 seconds / ५ सेकेण्डमा बन्द</p>
-  </div>`;
+function resumeScanning(delay=1800){setTimeout(()=>{scanEnabled=true;processing=false;resetLiveness();},delay);}
+
+function showSuccessPopup(name,status){
+  const ov=document.createElement('div');ov.className='mo';ov.style.zIndex='2000';
+  ov.innerHTML=`<div class="modal" style="text-align:center;max-width:340px;padding:32px 28px"><h1 style="font-size:3rem">✅</h1><h3 style="color:#00c853">${status}</h3><p style="font-weight:700;font-size:1.1rem">${name}</p><p style="color:var(--sub);margin-top:4px">Attendance marked! / हाजिर भयो!</p><p style="font-size:.7rem;color:var(--sub);margin-top:12px">Closes in 5 seconds / ५ सेकेण्डमा बन्द</p></div>`;
   document.body.appendChild(ov);
-  setTimeout(() => {
-    ov.style.opacity = '0'; ov.style.transition = 'opacity .3s';
-    setTimeout(() => { ov.remove(); resumeScanning(0); }, 300);
-  }, 5000);
+  setTimeout(()=>{ov.style.opacity='0';ov.style.transition='opacity .3s';setTimeout(()=>{ov.remove();resumeScanning(0);},300);},5000);
 }
 
-// ── Already marked popup ────────────────────────────────────────
-function showAlreadyMarked(studentId) {
-  fetchStudents().then(() => {
-    const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
-    const name = stu ? stu.StudentName : studentId;
-    const ov = document.createElement('div');
-    ov.className = 'mo'; ov.style.zIndex = '2000';
-    ov.innerHTML = `<div class="modal" style="text-align:center;max-width:340px;padding:32px 28px">
-      <h1 style="font-size:3rem">⚠️</h1>
-      <h3 style="color:#ff9800">Already Marked / पहिल्यै हाजिर</h3>
-      <p style="font-weight:700;font-size:1.1rem">${name}</p>
-      <p style="color:var(--sub);margin-top:4px">Already marked today! / आज हाजिर भइसकेको छ!</p>
-      <p style="font-size:.7rem;color:var(--sub);margin-top:12px">Closes in 5 seconds</p>
-    </div>`;
+function showAlreadyMarked(studentId){
+  fetchStudents().then(()=>{
+    const stu=studentsCache.find(s=>String(s.StudentID)===String(studentId));
+    const name=stu?stu.StudentName:studentId;
+    const ov=document.createElement('div');ov.className='mo';ov.style.zIndex='2000';
+    ov.innerHTML=`<div class="modal" style="text-align:center;max-width:340px;padding:32px 28px"><h1 style="font-size:3rem">⚠️</h1><h3 style="color:#ff9800">Already Marked / पहिल्यै हाजिर</h3><p style="font-weight:700;font-size:1.1rem">${name}</p><p style="color:var(--sub);margin-top:4px">Already marked today! / आज हाजिर भइसकेको छ!</p><p style="font-size:.7rem;color:var(--sub);margin-top:12px">Closes in 5 seconds</p></div>`;
     document.body.appendChild(ov);
-    setTimeout(() => {
-      ov.style.opacity = '0'; ov.style.transition = 'opacity .3s';
-      setTimeout(() => { ov.remove(); resumeScanning(0); }, 300);
-    }, 5000);
+    setTimeout(()=>{ov.style.opacity='0';ov.style.transition='opacity .3s';setTimeout(()=>{ov.remove();resumeScanning(0);},300);},5000);
   });
 }
 
-function addMarkedChip(name) {
-  const strip = document.getElementById('markedStrip');
-  const cnt = document.getElementById('markedCount');
-  if (!strip) return;
-  const ph = strip.querySelector('span:not(.marked-chip)'); if (ph) ph.remove();
-  const chip = document.createElement('div');
-  chip.className = 'marked-chip';
-  chip.innerHTML = `<i class="fas fa-check"></i>${name}`;
-  strip.appendChild(chip);
-  if (cnt) cnt.textContent = `${strip.querySelectorAll('.marked-chip').length} students / विद्यार्थी`;
+function addMarkedChip(name){const strip=document.getElementById('markedStrip'),cnt=document.getElementById('markedCount');if(!strip)return;const ph=strip.querySelector('span:not(.marked-chip)');if(ph)ph.remove();const chip=document.createElement('div');chip.className='marked-chip';chip.innerHTML=`<i class="fas fa-check"></i>${name}`;strip.appendChild(chip);if(cnt)cnt.textContent=`${strip.querySelectorAll('.marked-chip').length} students / विद्यार्थी`;}
+const el=id=>document.getElementById(id);
+
+function showQuickRegister(){
+  showModal(`<div class="modal-header"><div class="modal-title">🆕 New Student / नयाँ विद्यार्थी</div><div class="modal-close" onclick="closeModal();resumeScanning()"><i class="fas fa-times"></i></div></div><div style="background:rgba(0,200,83,.07);border:1px solid rgba(0,200,83,.2);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.82rem;color:var(--s);font-weight:600">✅ Liveness confirmed / जीवन्तता पुष्टि भयो</div><div class="fr"><div class="fg"><label class="fl">Full Name / नाम *</label><input id="qn" required></div><div class="fg"><label class="fl">Admission No. / भर्ना</label><input id="qa"></div></div><div class="fr"><div class="fg"><label class="fl">Class / कक्षा *</label><select id="qc" required><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section / सेक्सन</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Roll No. / रोल</label><input id="qr"></div><div class="fg"><label class="fl">Gender / लिङ्ग *</label><select id="qg" required><option value="">Select</option><option>Male</option><option>Female</option></select></div></div><div class="fr"><div class="fg"><label class="fl">Father / बुबा</label><input id="qf"></div><div class="fg"><label class="fl">Phone / फोन</label><input id="qp"></div></div><div class="fg"><label class="fl">Address / ठेगाना</label><textarea id="qad"></textarea></div><div style="display:flex;gap:10px;margin-top:6px"><button class="btn btn-p btn-lg" style="flex:1" onclick="submitQuickRegister()"><i class="fas fa-save"></i> Register & Mark Present</button><button class="btn btn-ghost" onclick="closeModal();resumeScanning()">Skip / छोड्नुहोस्</button></div>`);
 }
 
-// ══════════════════════════════════════════════════════════════════
-// QUICK REGISTER MODAL (new face detected via camera)
-// FIX #15 — closeModal now properly resumes scanning
-// ══════════════════════════════════════════════════════════════════
-function showQuickRegister() {
-  showModal(`
-    <div class="modal-header">
-      <div class="modal-title">🆕 New Student / नयाँ विद्यार्थी</div>
-      <div class="modal-close" onclick="closeModal();resumeScanning()"><i class="fas fa-times"></i></div>
-    </div>
-    <div style="background:rgba(0,200,83,.07);border:1px solid rgba(0,200,83,.2);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.82rem;color:var(--s);font-weight:600">
-      ✅ Liveness confirmed / जीवन्तता पुष्टि भयो
-    </div>
-    <div class="fr">
-      <div class="fg"><label class="fl">Full Name / नाम *</label><input id="qn" placeholder="Student Name" required></div>
-      <div class="fg"><label class="fl">Admission No. / भर्ना</label><input id="qa" placeholder="Admission No."></div>
-    </div>
-    <div class="fr">
-      <div class="fg"><label class="fl">Class / कक्षा *</label><select id="qc" required><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div>
-      <div class="fg"><label class="fl">Section / सेक्सन</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
-    </div>
-    <div class="fr">
-      <div class="fg"><label class="fl">Roll No. / रोल</label><input id="qr" placeholder="Roll No."></div>
-      <div class="fg"><label class="fl">Gender / लिङ्ग *</label><select id="qg" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
-    </div>
-    <div class="fr">
-      <div class="fg"><label class="fl">Father / बुबा</label><input id="qf" placeholder="Father's Name"></div>
-      <div class="fg"><label class="fl">Phone / फोन</label><input id="qp" placeholder="Guardian Phone"></div>
-    </div>
-    <div class="fg"><label class="fl">Address / ठेगाना</label><textarea id="qad" placeholder="Address"></textarea></div>
-    <div style="display:flex;gap:10px;margin-top:6px">
-      <button class="btn btn-p btn-lg" style="flex:1" onclick="submitQuickRegister()"><i class="fas fa-save"></i> Register & Mark Present</button>
-      <button class="btn btn-ghost" onclick="closeModal();resumeScanning()">Skip / छोड्नुहोस्</button>
-    </div>`);
+async function submitQuickRegister(){
+  const name=document.getElementById('qn').value.trim(),cls=document.getElementById('qc').value,gender=document.getElementById('qg').value;
+  if(!name||!cls||!gender){notify('Fill required fields / सबै भर्नुहोस्','warning');return;}
+  const btn=document.querySelector('#modalContainer .btn-p');btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';
+  const payload={studentName:name,admissionNumber:document.getElementById('qa').value,dateOfBirth:'',class:cls,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,gender,fatherName:document.getElementById('qf').value,motherName:'',guardianPhone:document.getElementById('qp').value,address:document.getElementById('qad').value};
+  if(pendingDescriptor)payload.embedding=Array.from(pendingDescriptor);
+  const r=await apiCall('registerStudent',payload);
+  if(r&&r.success){const sid=r.studentId;const t=getTimeSession();await apiCall('markAttendance',{studentId:sid,studentName:name,class:cls,section:document.getElementById('qs').value,rollNumber:document.getElementById('qr').value,confidence:'0.99',status:t.open?t.label:'Present'});closeModal();showSuccessPopup(name,t.open?t.label:'Present');addMarkedChip(name);localStorage.removeItem(FACE_CACHE_KEY);faceMatcher=null;faceMatcherReady=false;pendingDescriptor=null;studentsCache=[];await loadEmbeddings();}else{notify('❌ Registration failed / दर्ता असफल','error');btn.disabled=false;btn.innerHTML='<i class="fas fa-save"></i> Register & Mark Present';}
 }
 
-async function submitQuickRegister() {
-  const name = document.getElementById('qn').value.trim();
-  const cls = document.getElementById('qc').value;
-  const gender = document.getElementById('qg').value;
-  if (!name || !cls || !gender) { notify('Fill required fields / सबै भर्नुहोस्', 'warning'); return; }
-
-  const btn = document.querySelector('#modalContainer .btn-p');
-  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-  const payload = {
-    studentName: name,
-    admissionNumber: document.getElementById('qa').value,
-    dateOfBirth: '',
-    class: cls,
-    section: document.getElementById('qs').value,
-    rollNumber: document.getElementById('qr').value,
-    gender,
-    fatherName: document.getElementById('qf').value,
-    motherName: '',
-    guardianPhone: document.getElementById('qp').value,
-    address: document.getElementById('qad').value
-  };
-  if (pendingDescriptor) payload.embedding = Array.from(pendingDescriptor);
-
-  const r = await apiCall('registerStudent', payload);
-
-  if (r && r.success) {
-    const sid = r.studentId; // FIX #16 — use returned ID, not name
-    const t = getTimeSession();
-    const attResult = await apiCall('markAttendance', {
-      studentId: sid,
-      studentName: name,
-      class: cls,
-      section: document.getElementById('qs').value,
-      rollNumber: document.getElementById('qr').value,
-      confidence: '0.99',
-      status: t.open ? t.label : 'Present'
-    });
-
-    closeModal();
-
-    if (attResult && attResult.success) {
-      showSuccessPopup(name, t.open ? t.label : 'Present');
-      addMarkedChip(name);
-    } else {
-      notify(`✅ ${name} registered! / दर्ता भयो!`, 'success');
-      resumeScanning(0);
-    }
-
-    // FIX #17 — refresh face matcher immediately so new student is recognised next time
-    localStorage.removeItem(FACE_CACHE_KEY);
-    faceMatcher = null;
-    faceMatcherReady = false;
-    pendingDescriptor = null;
-    studentsCache = [];
-    await loadEmbeddings();
-  } else {
-    notify('❌ Registration failed / दर्ता असफल', 'error');
-    btn.disabled = false;
-    btn.innerHTML = '<i class="fas fa-save"></i> Register & Mark Present';
-  }
-}
-
-// ══════════════════════════════════════════════════════════════════
-// STUDENTS LIST
-// ══════════════════════════════════════════════════════════════════
-async function loadStudents(c) {
-  c.innerHTML = '<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+async function loadStudents(c){
+  c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
   await fetchStudents();
-  if (!studentsCache.length) {
-    c.innerHTML = '<div class="card" style="text-align:center;padding:60px"><h3>No students / विद्यार्थी छैनन्</h3><button class="btn btn-p" onclick="nav(\'reg\')">Register / दर्ता</button></div>';
-    return;
-  }
-  c.innerHTML = `<div class="card">
-    <h2 style="margin-bottom:16px">Students / विद्यार्थी (${studentsCache.length})</h2>
-    <div class="tbc"><table>
-      <thead><tr><th>#</th><th>ID</th><th>Name / नाम</th><th>Class / कक्षा</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone / फोन</th><th>Address / ठेगाना</th></tr></thead>
-      <tbody>${studentsCache.map((s, i) => `<tr>
-        <td>${i + 1}</td>
-        <td><small>${s.StudentID || '-'}</small></td>
-        <td><strong>${s.StudentName || '-'}</strong></td>
-        <td>${s.Class || '-'}</td>
-        <td>${s.Section || '-'}</td>
-        <td>${s.RollNumber || '-'}</td>
-        <td>${s.Gender || '-'}</td>
-        <td>${s.GuardianPhone || '-'}</td>
-        <td>${(s.Address || '-').substring(0, 25)}</td>
-      </tr>`).join('')}</tbody>
-    </table></div>
-  </div>`;
+  if(!studentsCache.length){c.innerHTML='<div class="card" style="text-align:center;padding:60px"><h3>No students / विद्यार्थी छैनन्</h3><button class="btn btn-p" onclick="nav(\'reg\')">Register / दर्ता</button></div>';return;}
+  c.innerHTML=`<div class="card"><h2>Students / विद्यार्थी (${studentsCache.length})</h2><div class="tbc"><table><thead><tr><th>#</th><th>ID</th><th>Name / नाम</th><th>Class / कक्षा</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone / फोन</th><th>Address / ठेगाना</th></tr></thead><tbody>${studentsCache.map((s,i)=>`<tr><td>${i+1}</td><td><small>${s.StudentID||'-'}</small></td><td><strong>${s.StudentName||'-'}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td><td>${(s.Address||'-').substring(0,25)}</td></tr>`).join('')}</tbody></table></div></div>`;
 }
 
-// ══════════════════════════════════════════════════════════════════
-// REPORTS
-// ══════════════════════════════════════════════════════════════════
-function loadReports(c) {
-  c.innerHTML = `<div class="card">
-    <h2>📊 Reports / रिपोर्ट</h2>
-    <p style="color:var(--sub);margin:8px 0 16px">Date / मिति: <strong>${new Date().toISOString().split('T')[0]}</strong></p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-p btn-lg" onclick="printReport()"><i class="fas fa-print"></i> Print / प्रिन्ट</button>
-      <button class="btn btn-s btn-lg" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
-    </div>
-  </div>`;
-}
+function loadReports(c){c.innerHTML=`<div class="card"><h2>📊 Reports / रिपोर्ट</h2><p style="color:var(--sub);margin:8px 0 16px">Date / मिति: <strong>${new Date().toISOString().split('T')[0]}</strong></p><div style="display:flex;gap:10px"><button class="btn btn-p btn-lg" onclick="printReport()"><i class="fas fa-print"></i> Print / प्रिन्ट</button><button class="btn btn-s btn-lg" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button></div></div>`;}
+function printReport(){const w=window.open('','_blank','width=900,height=700');w.document.write(`<!DOCTYPE html><html><head><title>SEBS Report</title><style>@page{size:A4 landscape}body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:8px}</style></head><body><div style="text-align:center"><img src="logo.png" width="60"><h2>Systematic English Boarding School</h2><p>${new Date().toLocaleString()}</p></div><div id="dt"></div><script>fetch('${API_URL}?action=getStudents').then(r=>r.json()).then(d=>{let h='<table><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th></tr>';if(d&&d.students)d.students.forEach((s,i)=>{h+='<tr><td>'+(i+1)+'</td><td>'+(s.StudentID||'-')+'</td><td>'+(s.StudentName||'-')+'</td><td>'+(s.Class||'-')+'</td><td>'+(s.Section||'-')+'</td><td>'+(s.RollNumber||'-')+'</td><td>'+(s.Gender||'-')+'</td></tr>';});h+='</table>';document.getElementById('dt').innerHTML=h;setTimeout(()=>print(),800);});<\/script></body></html>`);w.document.close();}
+async function exportCSV(){const d=await apiCall('getStudents');if(!d||!d.students){notify('No data / डेटा छैन','warning');return;}let csv='#,ID,Name,Class,Section,Roll,Gender,Phone\n';d.students.forEach((s,i)=>{csv+=`${i+1},"${s.StudentID||''}","${s.StudentName||''}","${s.Class||''}","${s.Section||''}","${s.RollNumber||''}","${s.Gender||''}","${s.GuardianPhone||''}"\n`;});const blob=new Blob([csv],{type:'text/csv'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`sebs-${new Date().toISOString().split('T')[0]}.csv`;a.click();URL.revokeObjectURL(url);notify('✅ CSV downloaded! / CSV डाउनलोड भयो!','success');}
 
-function printReport() {
-  const w = window.open('', '_blank', 'width=900,height=700');
-  w.document.write(`<!DOCTYPE html><html><head><title>SEBS Attendance Report</title>
-    <style>@page{size:A4 landscape}body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:8px;font-size:12px}th{background:#eee}</style>
-    </head><body>
-    <div style="text-align:center"><img src="logo.png" width="60" onerror="this.style.display='none'">
-    <h2>Systematic English Boarding School</h2><p>${new Date().toLocaleString()}</p></div>
-    <div id="dt"></div>
-    <script>fetch('${API_URL}?action=getStudents').then(r=>r.json()).then(d=>{
-      let h='<table><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th></tr>';
-      if(d&&d.students)d.students.forEach((s,i)=>{h+='<tr><td>'+(i+1)+'</td><td>'+(s.StudentID||'-')+'</td><td>'+(s.StudentName||'-')+'</td><td>'+(s.Class||'-')+'</td><td>'+(s.Section||'-')+'</td><td>'+(s.RollNumber||'-')+'</td><td>'+(s.Gender||'-')+'</td></tr>';});
-      h+='</table>';document.getElementById('dt').innerHTML=h;setTimeout(()=>print(),800);
-    });<\/script></body></html>`);
-  w.document.close();
-}
-
-async function exportCSV() {
-  const d = await apiCall('getStudents');
-  if (!d || !d.students) { notify('No data / डेटा छैन', 'warning'); return; }
-  let csv = '#,ID,Name,Class,Section,Roll,Gender,Phone\n';
-  d.students.forEach((s, i) => {
-    csv += `${i+1},"${s.StudentID||''}","${s.StudentName||''}","${s.Class||''}","${s.Section||''}","${s.RollNumber||''}","${s.Gender||''}","${s.GuardianPhone||''}"\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `sebs-${new Date().toISOString().split('T')[0]}.csv`; a.click();
-  URL.revokeObjectURL(url);
-  notify('✅ CSV downloaded! / CSV डाउनलोड भयो!', 'success');
-}
-
-// ══════════════════════════════════════════════════════════════════
-// BOOT
-// ══════════════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
