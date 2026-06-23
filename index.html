@@ -659,7 +659,7 @@ async function detectionLoop() {
     if (sized.length === 0) {
       el('matchBadge').style.display = 'none';
       if (el('ltip')) el('ltip').style.display = 'none';
-      setStatus('👀 Looking for face... / अनुहार खोज्दै...');
+           setStatus('✅ Face detected... / अनुहार भेटियो...');
       if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
       return;
     }
@@ -733,7 +733,7 @@ async function detectionLoop() {
         : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 No registered faces');
 
       // ── LIVENESS + ACTION ────────────────────────────────────────
-      if (scanEnabled && !processing && Date.now() - lastActionTime > 2500) {
+           if (scanEnabled && !processing && Date.now() - lastActionTime > 1500) {
         if (el('ltip')) el('ltip').style.display = 'block';
         const alive = checkLiveness(det);
 
