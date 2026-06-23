@@ -795,7 +795,6 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-// ── Mark attendance ──────────────────────────────────────────────
 async function doMarkAttendance(studentId, dist, statusLabel) {
   const now = Date.now();
   const todayKey = new Date().toDateString();
@@ -803,41 +802,35 @@ async function doMarkAttendance(studentId, dist, statusLabel) {
 
   // Per-student cooldown (30s)
   if (cooldowns[studentId] && now - cooldowns[studentId] < 30000) {
-    resumeScanning(1500);
+    resumeScanning(500);
     return;
   }
   cooldowns[studentId] = now;
-  setStatus(`⏳ Marking ${studentId}... / हाजिर गर्दै...`);
+  markedToday[markedKey] = true;
 
-  // FIX #14 — look up actual student name from cache for display
+  // Look up actual student name from cache for display
   await fetchStudents();
   const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
   const displayName = stu ? stu.StudentName : studentId;
 
-  const r = await apiCall('markAttendance', {
-    studentId: studentId,
-    studentName: displayName,
-    confidence: (1 - dist).toFixed(3),
-    status: statusLabel
-  });
+  // Show popup IMMEDIATELY - don't wait for API
+  showSuccessPopup(displayName, statusLabel);
+  addMarkedChip(displayName);
 
-  // Fire API in background and show result immediately
+  // Fire API in background
   apiCall('markAttendance', {
     studentId: studentId,
     studentName: displayName,
     confidence: (1 - dist).toFixed(3),
     status: statusLabel
   });
-  
-  markedToday[markedKey] = true;
-  showSuccessPopup(displayName, statusLabel);
-  addMarkedChip(displayName);
+
   resumeScanning(500);
-  return;
+}
+
 function resumeScanning(delay = 1800) {
   setTimeout(() => { scanEnabled = true; processing = false; resetLiveness(); }, delay);
 }
-
 // ── Success popup ───────────────────────────────────────────────
 function showSuccessPopup(name, status) {
   const ov = document.createElement('div');
