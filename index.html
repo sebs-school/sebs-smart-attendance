@@ -31,7 +31,7 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 </head>
 <body>
 
-<div id="lp" class="lc"><div class="lcd"><div class="llw"><img src="logo.png" alt="SEBS" onerror="this.outerHTML='<span style=font-size:2rem>🏫</span>'"></div><h1 class="lsn">Systematic English<br>Boarding School</h1><p class="lst">Smart Attendance</p><div class="login-divider"><span>सुरक्षित पहुँच / Secure Access</span></div><button class="lbtn" onclick="doLogin()">🔑 Sign in</button><p class="login-info">5:30-10:30 Present | 10:30-12 Late | v2.0</p></div></div>
+<div id="lp" class="lc"><div class="lcd"><div class="llw"><img src="logo.png" alt="SEBS" onerror="this.outerHTML='<span style=font-size:2rem>🏫</span>'"></div><h1 class="lsn">Systematic English<br>Boarding School</h1><p class="lst">Smart Attendance</p><div class="login-divider"><span>सुरक्षित पहुँच / Secure Access</span></div><button class="lbtn" onclick="doLogin()">🔑 Sign in</button><p class="login-info">5:30-10:30 Present | 10:30-12 Late | v3.0 Fixed</p></div></div>
 
 <div id="app" class="ac" style="display:none">
   <aside id="sb" class="sb"><div class="sh"><div class="slogo"><img src="logo.png" alt="SEBS" onerror="this.outerHTML='<span style=font-size:1.4rem>🏫</span>'"></div><div><h2 class="sn">SEBS<small>Smart Attendance</small></h2></div></div><nav class="snv"><ul class="sm">
@@ -81,11 +81,11 @@ function nav(p){
   if(p==='db')loadDb(c);else if(p==='att')loadAtt(c);else if(p==='reg')loadReg(c);else if(p==='stu')loadStu(c);else if(p==='rep')loadRep(c);cmsb();
 }
 
-// ═══════════ FACE CACHE - OPTIMIZED ═══════════
+// ═══════════ FACE CACHE ═══════════
 async function loadEmbeddings(){
   const cached=localStorage.getItem('sebs-faces');
-  if(cached){try{const parsed=JSON.parse(cached);if(parsed.length>0){const lb=[];for(const e of parsed){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.52):null;refreshCache();return;}}catch(e){}}
-  const d=await api('getAllEmbeddings');if(!d||!d.embeddings||!d.embeddings.length){faceMatcher=null;return;}localStorage.setItem('sebs-faces',JSON.stringify(d.embeddings));const lb=[];for(const e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.52):null;}
+  if(cached){try{const parsed=JSON.parse(cached);if(parsed.length>0){const lb=[];for(const e of parsed){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.45):null;refreshCache();return;}}catch(e){}}
+  const d=await api('getAllEmbeddings');if(!d||!d.embeddings||!d.embeddings.length){faceMatcher=null;return;}localStorage.setItem('sebs-faces',JSON.stringify(d.embeddings));const lb=[];for(const e of d.embeddings){if(e.embedding&&Array.isArray(e.embedding))lb.push(new faceapi.LabeledFaceDescriptors(e.studentId,[new Float32Array(e.embedding)]));}faceMatcher=lb.length>0?new faceapi.FaceMatcher(lb,0.45):null;}
 async function refreshCache(){const d=await api('getAllEmbeddings');if(d&&d.embeddings&&d.embeddings.length>0){localStorage.setItem('sebs-faces',JSON.stringify(d.embeddings));}}
 
 async function preloadModels(){if(modelsLoaded||modelsLoading)return;modelsLoading=true;notify('⏳ लोड... / Loading...');try{await Promise.all([faceapi.nets.ssdMobilenetv1.loadFromUri(MODELS),faceapi.nets.faceLandmark68Net.loadFromUri(MODELS),faceapi.nets.faceRecognitionNet.loadFromUri(MODELS)]);modelsLoaded=true;modelsLoading=false;await loadEmbeddings();notify('✅ तयार! / Ready!','success');}catch(e){modelsLoading=false;notify('❌ असफल / Failed','error');}}
@@ -105,16 +105,19 @@ function resetL(){lState={prevEAR:1,blinkFrames:0,lastNose:null,headFrames:0};}
 function eyeAR(lm,t,b,lt,rt){const p=lm.positions;const tp=p[t],bp=p[b],lp=p[lt],rp=p[rt];const v=Math.hypot(tp.x-bp.x,tp.y-bp.y),h=Math.hypot(lp.x-rp.x,lp.y-rp.y);return h<0.5?1:v/h;}
 function checkLive(det){if(!det.landmarks)return false;const p=det.landmarks.positions;const le=eyeAR(det.landmarks,37,41,36,39),re=eyeAR(det.landmarks,43,47,42,45),ear=(le+re)/2;if(ear<0.20&&lState.prevEAR>0.24){lState.blinkFrames++;if(lState.blinkFrames>=1){lState.prevEAR=ear;setStatus('👁️ झिम्काइ / Blink!');return true;}}if(ear>0.26)lState.blinkFrames=0;lState.prevEAR=ear;const nn={x:p[30].x,y:p[30].y};if(lState.lastNose){const dx=Math.abs(nn.x-lState.lastNose.x),dy=Math.abs(nn.y-lState.lastNose.y);if(dx>8||dy>8)lState.headFrames++;else lState.headFrames=Math.max(0,lState.headFrames-1);if(lState.headFrames>=5){lState.headFrames=0;setStatus('🤙 हल्लाइ / Move!');return true;}}lState.lastNose=nn;return false;}
 
-// ═══════════ DETECTION - BALANCED ═══════════
+// ═══════════ DETECTION - STRICT MATCHING ═══════════
 async function detectLoop(){
   if(!attActive)return;
   const video=document.getElementById('cam'),canvas=document.getElementById('overlay');if(!video||!canvas||video.readyState<2){rafId=requestAnimationFrame(detectLoop);return;}
-  try{const opts=new faceapi.SsdMobilenetv1Options({minConfidence:0.30});const faces=await faceapi.detectAllFaces(video,opts).withFaceLandmarks().withFaceDescriptors();canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);const rs=faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});
+  try{const opts=new faceapi.SsdMobilenetv1Options({minConfidence:0.40});const faces=await faceapi.detectAllFaces(video,opts).withFaceLandmarks().withFaceDescriptors();canvas.width=video.videoWidth;canvas.height=video.videoHeight;const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);const rs=faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});
     if(rs.length===0){id('matchBadge').style.display='none';if(id('livenessTip'))id('livenessTip').style.display='none';setStatus('👀 खोज्दै... / Looking...');}
     for(const det of rs){
+      // FIX: Ignore small/background faces
+      if(det.detection.box.width<40||det.detection.box.height<40)continue;
       const box=det.detection.box,cx=box.x+box.width/2,cy=box.y+box.height/2,rad=Math.max(box.width,box.height)/1.4;
       let isKnown=false,matchLabel='',matchDist=1;
-      if(faceMatcher&&det.descriptor){const bm=faceMatcher.findBestMatch(det.descriptor);isKnown=bm.label!=='unknown'&&bm.distance<0.52;matchLabel=bm.label;matchDist=bm.distance;}
+      // FIX: Only match if distance is strictly low
+      if(faceMatcher&&det.descriptor){const bm=faceMatcher.findBestMatch(det.descriptor);isKnown=bm.label!=='unknown'&&bm.distance<0.42;matchLabel=bm.label;matchDist=bm.distance;}
       const ringColor=isKnown?'#00c853':'#2196f3';
       ctx.save();ctx.shadowColor=ringColor;ctx.shadowBlur=20;ctx.strokeStyle=ringColor;ctx.lineWidth=3.5;ctx.beginPath();ctx.arc(cx,cy,rad,0,2*Math.PI);ctx.stroke();ctx.restore();
       const labelText=isKnown?`✅ चिनियो: ${matchLabel.substring(0,14)}`:'🆕 नयाँ / New';
