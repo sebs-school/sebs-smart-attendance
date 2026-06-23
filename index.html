@@ -178,7 +178,8 @@ async function detectionLoop(){
           const todayKey=new Date().toDateString(),markedKey=`${matchStudentId||'unknown'}__${todayKey}`;
           if(isKnown){
             if(markedToday[markedKey]){showAlreadyMarked(matchStudentId);}
-            else{const t=getTimeSession();if(!t.open){notify('⛔ '+t.label,'warning');resumeScanning(2000);}else{await doMarkAttendance(matchStudentId,matchDist,t.label);}}
+                          console.log('DO MARK:', matchStudentId, matchDist);
+            else{const t=getTimeSession();if(!t.open){notify('⛔ '+t.label,'warning');resumeScanning(2000);}else{await doMarkAttendance(matchStudentId, matchDist, t.label);}}
           }else{if(!document.querySelector('#modalContainer .modal')){pendingDescriptor=det.descriptor?new Float32Array(det.descriptor):null;showQuickRegister();}else{resumeScanning(1000);}}
           break;
         }
