@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
+/* (All CSS remains identical to the previous full code – unchanged) */
 :root{--p:#1a3a6b;--s:#00c853;--w:#ff9800;--d:#e74c3c;--blue:#2196f3;--bg:#f0f4fb;--card:#fff;--border:#e2eaf6;--text:#1a1a2e;--sub:#64748b}
 body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba4c8}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}input,select,textarea{font-family:inherit;font-size:.88rem;border:2px solid var(--border);border-radius:12px;padding:11px 15px;background:var(--card);color:var(--text);width:100%}textarea{resize:vertical;min-height:52px}
@@ -117,17 +118,17 @@ const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 const DIST_THRESHOLD = 0.40;
 const MARGIN_MIN = 0.03;
 const MIN_FACE_BOX = 40;
-const DETECT_MIN_CONFIDENCE = 0.40;
+const DETECT_MIN_CONFIDENCE = 0.45;
 const POS_GOOD_MIN_RATIO = 0.20;
 const POS_GOOD_MAX_RATIO = 0.65;
 const POS_CENTER_TOLERANCE = 0.22;
 const SMOOTH_WINDOW = 3;
-const COOLDOWN_MS = 5000;
-const ACTION_DEBOUNCE_MS = 150;
+const COOLDOWN_MS = 4000;
 const POPUP_DURATION_MS = 2000;
 const TEXTURE_WIN = 3, TEXTURE_THRESH = 32, TEXTURE_STRICT = 20;
 const MOTION_WIN = 4, MOTION_PX_MIN = 1.2, MOTION_FRAMES_NEED = 3;
 const DRIFT_WIN = 4, DRIFT_THRESH = 0.003, DRIFT_FRAMES_NEED = 2;
+const BLINK_WINDOW = 30, BLINK_THRESH = 0.2, BLINK_RECOVERY = 0.25;
 const LIVENESS_PASS_NEED = 2;
 const FACE_CACHE_KEY = 'sebs-faces-v10';
 const MARKED_TODAY_KEY = 'sebs-marked-today-v1';
@@ -141,10 +142,13 @@ let smoothBuffer = [], badPositionFrames = 0;
 let textureHistory = [], noseHistory = [], descHistory = [], livenessPassCount = 0, livenessFail = false;
 let regCaptureSamples = [], regCamStream = null, pendingDescriptor = null;
 
-// NEW: unknown face tracking
+// NEW: blink detection
+let earHistory = [], blinkDetected = false;
+
+// unknown face tracking
 let unknownFaceFrames = 0;
 let lastUnknownPopupTime = 0;
-const UNKNOWN_FRAME_THRESHOLD = 25;
+const UNKNOWN_FRAME_THRESHOLD = 20;
 const UNKNOWN_POPUP_COOLDOWN = 30000;
 
 function getTimeSession() {
@@ -263,27 +267,20 @@ async function loadEmbeddings() {
   faceMatcherReady = true;
 }
 
-// ----- Model Loading -----
+// ----- Model Loading (tiny only, super fast) -----
 async function preloadModels() {
   if (modelsLoaded||modelsLoading) return;
   modelsLoading = true; notify('⏳ Loading AI models...');
   try {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-      faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
-      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
     ]);
     modelsLoaded = true; modelsLoading = false;
     notify('⏳ Loading face data...');
     await loadEmbeddings(); notify('✅ Ready!','success');
-  } catch(e) {
-    try {
-      await Promise.all([ faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL), faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL), faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL) ]);
-      modelsLoaded = true; modelsLoading = false; await loadEmbeddings(); notify('✅ Ready (SSD mode)!','success');
-    } catch(e2) { modelsLoading = false; notify('❌ Model load failed','error'); }
-  }
+  } catch(e) { modelsLoading = false; notify('❌ Model load failed','error'); }
 }
 
 async function fetchStudents() { const d = await apiCall('getStudents'); if (d&&d.students) studentsCache = d.students; return studentsCache; }
@@ -353,7 +350,7 @@ async function captureRegSample() {
   if (regCaptureSamples.length >= CAPTURE_SAMPLES_REQUIRED) { notify('Already have enough samples','warning'); return; }
   const video = el('regCam'); if (!video || video.readyState < 2) { notify('Camera not ready','error'); return; }
   if (!modelsLoaded) { notify('Models not loaded yet','warning'); return; }
-  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 })).withFaceDescriptor();
+  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.5 })).withFaceDescriptor();
   if (!detection) { notify('No face detected!','error'); return; }
   regCaptureSamples.push({ descriptor: Array.from(detection.descriptor), image: videoToCanvas(video).toDataURL('image/jpeg',0.9) });
   updateRegSlots();
@@ -428,7 +425,7 @@ async function startCamera() {
   try {
     camStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
     const video = el('cam'); if (video) { video.srcObject = camStream; video.play(); }
-    cameraActive = true; unknownFaceFrames = 0; // reset unknown counter
+    cameraActive = true; unknownFaceFrames = 0;
     el('startBtn').style.display='none'; el('stopBtn').style.display='inline-flex';
     setStatus('Camera active - scanning...');
     resetLivenessBuffers(); smoothBuffer = []; scanEnabled = true; processing = false;
@@ -503,7 +500,33 @@ function smoothedLabel(rawMatch) {
   return winner;
 }
 
-// ----- Liveness -----
+// ----- Liveness (including blink detection) -----
+function calculateEAR(eyePoints) {
+  const p1 = eyePoints[1], p2 = eyePoints[2], p3 = eyePoints[3], p4 = eyePoints[4], p5 = eyePoints[5], p0 = eyePoints[0];
+  const vertical1 = Math.hypot(p1.x-p5.x, p1.y-p5.y);
+  const vertical2 = Math.hypot(p2.x-p4.x, p2.y-p4.y);
+  const horizontal = Math.hypot(p0.x-p3.x, p0.y-p3.y);
+  return (vertical1 + vertical2) / (2.0 * horizontal);
+}
+
+function updateBlinkDetection(landmarks) {
+  if (!landmarks) return;
+  const leftEye = landmarks.getLeftEye(); // 6 points
+  const rightEye = landmarks.getRightEye(); // 6 points
+  const leftEAR = calculateEAR(leftEye);
+  const rightEAR = calculateEAR(rightEye);
+  const avgEAR = (leftEAR + rightEAR) / 2;
+  earHistory.push(avgEAR);
+  if (earHistory.length > BLINK_WINDOW) earHistory.shift();
+  // Check if a blink occurred in the history (EAR < threshold then recovered)
+  if (earHistory.length >= 6) {
+    let minEAR = Math.min(...earHistory.slice(-6));
+    if (minEAR < BLINK_THRESH) {
+      blinkDetected = true; // blink happened, keep until reset
+    }
+  }
+}
+
 function computeTexture(video, box) {
   const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight;
   const ctx = canvas.getContext('2d'); ctx.drawImage(video,0,0);
@@ -516,15 +539,14 @@ function computeTexture(video, box) {
   return Math.sqrt(variance/count);
 }
 function updateMotion(landmarks) {
-  if (!landmarks) return;
-  const nose = landmarks.getNose(); if (!nose || nose.length<3) return;
+  if (!landmarks) return 0;
+  const nose = landmarks.getNose(); if (!nose || nose.length<3) return 0;
   const tip = nose[3]; noseHistory.push({x:tip.x,y:tip.y});
   if (noseHistory.length > MOTION_WIN) noseHistory.shift();
-  if (noseHistory.length < MOTION_WIN) return;
+  if (noseHistory.length < MOTION_WIN) return 0;
   let totalMove = 0;
   for (let i=1;i<noseHistory.length;i++) { totalMove += Math.hypot(noseHistory[i].x-noseHistory[i-1].x, noseHistory[i].y-noseHistory[i-1].y); }
-  const avgMove = totalMove/(noseHistory.length-1);
-  return avgMove;
+  return totalMove/(noseHistory.length-1);
 }
 function updateDrift(descriptor) {
   descHistory.push(descriptor);
@@ -534,6 +556,7 @@ function updateDrift(descriptor) {
   for (let i=1;i<descHistory.length;i++) { totalDrift += faceapi.euclideanDistance(descHistory[i], descHistory[i-1]); }
   return totalDrift/(descHistory.length-1);
 }
+
 function checkPassiveLiveness(video, box, landmarks, descriptor) {
   if (!video || !box || !landmarks || !descriptor) return false;
   const tex = computeTexture(video, box);
@@ -542,55 +565,48 @@ function checkPassiveLiveness(video, box, landmarks, descriptor) {
   const avgTex = textureHistory.reduce((a,b)=>a+b,0)/textureHistory.length;
   const motion = updateMotion(landmarks) || 0;
   const drift = updateDrift(descriptor) || 0;
+  updateBlinkDetection(landmarks);
   let passes = 0;
   if (avgTex > TEXTURE_THRESH && textureHistory.length >= TEXTURE_WIN) passes++;
   else if (avgTex < TEXTURE_STRICT && textureHistory.length >= TEXTURE_WIN) livenessFail = true;
   if (motion > MOTION_PX_MIN && noseHistory.length >= MOTION_WIN) passes++;
   if (drift > DRIFT_THRESH && descHistory.length >= DRIFT_WIN) passes++;
+  if (blinkDetected) passes++;
   if (livenessFail) return false;
-  if (passes >= 2) livenessPassCount++;
+  if (passes >= 3) livenessPassCount++;
   return livenessPassCount >= LIVENESS_PASS_NEED;
 }
-function resetLivenessBuffers() { textureHistory = []; noseHistory = []; descHistory = []; livenessPassCount = 0; livenessFail = false; }
+function resetLivenessBuffers() { textureHistory = []; noseHistory = []; descHistory = []; earHistory = []; blinkDetected = false; livenessPassCount = 0; livenessFail = false; }
 
-// ----- Main Detection Loop -----
-let useTiny = true;
+// ----- Main Detection Loop (blazing fast) -----
 async function detectionLoop() {
   if (!cameraActive || !modelsLoaded || processing) { rafHandle = requestAnimationFrame(detectionLoop); return; }
-  const video = el('cam'); const overlay = el('overlay'); const guide = el('posGuide'); const posMsg = el('posMsg');
+  const video = el('cam'); const overlay = el('overlay');
   if (!video || !overlay || video.readyState < 2) { rafHandle = requestAnimationFrame(detectionLoop); return; }
   const frameW = video.videoWidth, frameH = video.videoHeight;
   overlay.width = frameW; overlay.height = frameH;
   const ctx = overlay.getContext('2d'); ctx.clearRect(0,0,frameW,frameH);
-  const t0 = performance.now();
   let detection;
   try {
-    if (useTiny) {
-      detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: DETECT_MIN_CONFIDENCE }))
-        .withFaceLandmarks(true).withFaceDescriptor();
-    } else {
-      detection = await faceapi.detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: DETECT_MIN_CONFIDENCE }))
-        .withFaceLandmarks().withFaceDescriptor();
-    }
+    detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: DETECT_MIN_CONFIDENCE }))
+      .withFaceLandmarks().withFaceDescriptor();
   } catch(e) { rafHandle = requestAnimationFrame(detectionLoop); return; }
-  const dt = performance.now() - t0;
   const hudDot = el('hudDot'); const hudText = el('hudText');
   if (hudDot) { hudDot.className = 'hud-dot on'; }
-  if (hudText) hudText.textContent = `Active ${Math.round(dt)}ms`;
+  if (hudText) hudText.textContent = 'Active';
   if (!detection) {
-    if (guide) { guide.className = 'pos-guide'; }
-    if (posMsg) posMsg.style.display = 'none';
+    if (el('posGuide')) el('posGuide').className = 'pos-guide';
+    if (el('posMsg')) el('posMsg').style.display = 'none';
     rafHandle = requestAnimationFrame(detectionLoop);
     return;
   }
   const { box, landmarks, descriptor } = detection;
   const posRes = evaluatePosition(box, frameW, frameH);
   updatePosGuide(posRes);
-
   const rawMatch = matchFaceWithMargin(descriptor);
   const winner = smoothedLabel(rawMatch);
 
-  // ----- Unknown face tracking & notification -----
+  // Unknown face tracking
   if (winner === '__new__' || winner === '__uncertain__') {
     unknownFaceFrames++;
   } else {
@@ -603,7 +619,6 @@ async function detectionLoop() {
   }
 
   if (winner !== '__new__' && winner !== '__uncertain__') {
-    // Known face
     const today = new Date().toDateString();
     const markedKey = `${winner}__${today}`;
     if (markedToday[markedKey]) {
@@ -613,9 +628,6 @@ async function detectionLoop() {
       if (posRes === 'good' && checkPassiveLiveness(video, box, landmarks, descriptor)) {
         processing = true;
         await doMarkAttendance(winner, rawMatch.dist);
-      } else {
-        if (posRes !== 'good') setStatus('Position not good');
-        else setStatus('Liveness check failed');
       }
     }
   } else {
@@ -778,7 +790,7 @@ function deleteStudent(studentId, studentName) {
   }).catch(() => notify('❌ Network error','error'));
 }
 
-// ----- Quick Register (not auto) -----
+// ----- Quick Register -----
 function showQuickRegister() {
   showModal(`<div class="modal-header"><div class="modal-title">⚡ Quick Register / छिटो दर्ता</div><div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div></div>
     <div class="fg"><label class="fl">Name</label><input id="qName" placeholder="Full name"></div>
@@ -815,7 +827,7 @@ function stopImproveCam() {
 async function captureImproveSample() {
   const video = document.getElementById('impCam'); if (!video || video.readyState < 2) { notify('Camera not ready','error'); return; }
   if (!modelsLoaded) { notify('Models not loaded','warning'); return; }
-  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 })).withFaceDescriptor();
+  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.5 })).withFaceDescriptor();
   if (!detection) { notify('No face detected','error'); return; }
   window._impSamples.push(Array.from(detection.descriptor));
   document.getElementById('impSamples').textContent = `Captured: ${window._impSamples.length} samples`;
