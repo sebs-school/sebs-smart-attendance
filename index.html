@@ -2225,44 +2225,60 @@ async function detectionLoop() {
     return;
   }
 
-  const { box, landmarks, descriptor } = detection;
-  const posRes = evaluatePosition(box, video.videoWidth, video.videoHeight);
-  updatePosGuide(posRes);
+  try {
+    // IMPORTANT: when .withFaceLandmarks().withFaceDescriptor() are chained onto
+    // detectSingleFace(), the returned object nests the bounding box under
+    // `detection.detection.box` — it is NOT `detection.box`. Destructuring the
+    // wrong shape gave `box === undefined`, which crashed evaluatePosition()
+    // on `box.width` every single frame (uncaught — outside any try/catch),
+    // silently killing the loop right after the very first real detection.
+    // That was the actual cause of the permanent "stalled" state.
+    const box = detection.detection.box;
+    const { landmarks, descriptor } = detection;
+    const posRes = evaluatePosition(box, video.videoWidth, video.videoHeight);
+    updatePosGuide(posRes);
 
-  const rawMatch = matchFaceWithMargin(descriptor);
-  const winner   = smoothedLabel(rawMatch);
+    const rawMatch = matchFaceWithMargin(descriptor);
+    const winner   = smoothedLabel(rawMatch);
 
-  if (winner === '__new__') {
-    unknownFaceFrames++;
-    if (posRes !== 'good') {
-      setFeedback(posRes); // too_far / too_close / misaligned
-    } else {
-      setFeedback('unknown');
-    }
-    if (unknownFaceFrames >= UNKNOWN.FRAME_THRESHOLD &&
-        Date.now() - lastUnknownPopupTime > UNKNOWN.POPUP_COOLDOWN) {
-      lastUnknownPopupTime = Date.now();
-      unknownFaceFrames = 0;
-      showUnknownFacePopup();
-    }
-  } else {
-    unknownFaceFrames = 0;
-    const todayStr = new Date().toDateString();
-    const markedKey = `${winner}__${todayStr}`;
-    if (markedToday[markedKey]) {
-      setFeedback('already');
-      showAlreadyMarked(winner);
-      resumeScanning(600);
-    } else if (posRes === 'good') {
-      setFeedback('checking');
-      if (checkPassiveLiveness(video, box, landmarks, descriptor)) {
-        processing = true;
-        setFeedback('good');
-        await doMarkAttendance(winner, rawMatch.dist || 0);
+    if (winner === '__new__') {
+      unknownFaceFrames++;
+      if (posRes !== 'good') {
+        setFeedback(posRes); // too_far / too_close / misaligned
+      } else {
+        setFeedback('unknown');
+      }
+      if (unknownFaceFrames >= UNKNOWN.FRAME_THRESHOLD &&
+          Date.now() - lastUnknownPopupTime > UNKNOWN.POPUP_COOLDOWN) {
+        lastUnknownPopupTime = Date.now();
+        unknownFaceFrames = 0;
+        showUnknownFacePopup();
       }
     } else {
-      setFeedback(posRes); // too_far / too_close / misaligned, even for a known face
+      unknownFaceFrames = 0;
+      const todayStr = new Date().toDateString();
+      const markedKey = `${winner}__${todayStr}`;
+      if (markedToday[markedKey]) {
+        setFeedback('already');
+        showAlreadyMarked(winner);
+        resumeScanning(600);
+      } else if (posRes === 'good') {
+        setFeedback('checking');
+        if (checkPassiveLiveness(video, box, landmarks, descriptor)) {
+          processing = true;
+          setFeedback('good');
+          await doMarkAttendance(winner, rawMatch.dist || 0);
+        }
+      } else {
+        setFeedback(posRes); // too_far / too_close / misaligned, even for a known face
+      }
     }
+  } catch (e) {
+    // Safety net: any future error here (e.g. a face-api shape change again)
+    // degrades to a visible "stalled" message and keeps the loop alive,
+    // instead of dying silently like the original box-destructure bug did.
+    console.error('Frame processing error:', e);
+    setFeedback('stalled');
   }
 
   rafHandle = requestAnimationFrame(detectionLoop);
