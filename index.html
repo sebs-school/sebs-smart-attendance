@@ -123,8 +123,8 @@ const API_URL   = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSf
 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
 // ── MATCHING THRESHOLDS ───────────────────────────────────────────
-const DIST_THRESHOLD = 0.42;
-const MARGIN_MIN     = 0.06;
+const DIST_THRESHOLD = 0.40;
+const MARGIN_MIN     = 0.04;
 
 // ── DETECTION QUALITY ─────────────────────────────────────────────
 const MIN_FACE_BOX          = 60;
@@ -324,7 +324,7 @@ function nav(page) {
   document.getElementById('pt').textContent = titles[page]||page;
   if (page !== 'att') stopCamera();
   if (page !== 'reg') stopRegCamera();
-  if (page === 'att') preloadModels();
+  if (page === 'att') { preloadModels(); fetchStudents(); }
   const c = document.getElementById('pc');
   if      (page==='db')  loadDashboard(c);
   else if (page==='att') loadAttendance(c);
@@ -1006,7 +1006,7 @@ async function detectionLoop() {
     badPositionFrames=0;
 
     // GATE
-    if (!scanEnabled||processing||Date.now()-lastActionTime<=2500) {
+    if (!scanEnabled||processing||Date.now()-lastActionTime<=800) {
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
     }
@@ -1105,66 +1105,67 @@ async function doMarkAttendance(studentId, dist) {
   const now       = Date.now();
   const todayKey  = new Date().toDateString();
   const markedKey = `${studentId}__${todayKey}`;
-  if (cooldowns[studentId]&&now-cooldowns[studentId]<30000) { resumeScanning(1500); return; }
+  if (cooldowns[studentId] && now - cooldowns[studentId] < 8000) { resumeScanning(500); return; }
   cooldowns[studentId] = now;
-  setStatus(`⏳ Marking ${studentId}...`);
-  await fetchStudents();
-  const stu         = studentsCache.find(s=>String(s.StudentID)===String(studentId));
-  const displayName = stu?stu.StudentName:studentId;
-  const r = await apiCall('markAttendance',{
-    studentId, studentName:displayName, confidence:(1-dist).toFixed(3)
+
+  // Use cached student name — no API call to fetch students
+  const stu         = studentsCache.find(s => String(s.StudentID) === String(studentId));
+  const displayName = stu ? stu.StudentName : studentId;
+
+  // Fire mark API immediately — no waiting
+  const r = await apiCall('markAttendance', {
+    studentId, studentName: displayName, confidence: (1 - dist).toFixed(3)
   });
-  if (r&&r.success) {
-    markedToday[markedKey]=true;
-    showSuccessPopup(r.studentName||displayName, r.status);
-    addMarkedChip(r.studentName||displayName);
-  } else if (r&&r.reason==='already_marked') {
+
+  if (r && r.success) {
+    markedToday[markedKey] = true;
+    showSuccessPopup(r.studentName || displayName, r.status);
+    addMarkedChip(r.studentName || displayName);
+    // Refresh student cache in background (non-blocking)
+    if (!studentsCache.length) fetchStudents();
+  } else if (r && r.reason === 'already_marked') {
     showAlreadyMarked(studentId);
-  } else if (r&&r.reason==='outside_window') {
-    notify(`⛔ Attendance window closed: ${r.label}`,'warning');
-    resumeScanning(1500);
+  } else if (r && r.reason === 'outside_window') {
+    notify(`⛔ Attendance window closed: ${r.label}`, 'warning');
+    resumeScanning(800);
   } else {
-    notify('❌ Attendance failed','error');
-    resumeScanning(1500);
+    notify('❌ Attendance failed', 'error');
+    resumeScanning(800);
   }
 }
 
 function showSuccessPopup(name, status) {
   const ov = document.createElement('div');
   ov.className='mo'; ov.style.zIndex='2000';
-  ov.innerHTML=`<div class="modal" style="text-align:center;max-width:340px;padding:32px 28px">
-    <h1 style="font-size:3rem">✅</h1>
-    <h3 style="color:#00c853">${status}</h3>
-    <p style="font-weight:700;font-size:1.1rem">${name}</p>
-    <p style="color:var(--sub);margin-top:4px">Attendance marked! / हाजिर भयो!</p>
-    <p style="font-size:.7rem;color:var(--sub);margin-top:12px">Closes in 5 seconds</p>
+  ov.innerHTML=`<div class="modal" style="text-align:center;max-width:320px;padding:24px 22px">
+    <h1 style="font-size:2.6rem;margin-bottom:4px">✅</h1>
+    <h3 style="color:#00c853;font-size:1.1rem">${status}</h3>
+    <p style="font-weight:700;font-size:1rem;margin-top:4px">${name}</p>
+    <p style="color:var(--sub);font-size:.75rem;margin-top:6px">Attendance marked! / हाजिर भयो!</p>
   </div>`;
   document.body.appendChild(ov);
-  setTimeout(()=>{
-    ov.style.opacity='0'; ov.style.transition='opacity .3s';
-    setTimeout(()=>{ ov.remove(); resumeScanning(0); },300);
-  },5000);
+  setTimeout(() => {
+    ov.style.opacity='0'; ov.style.transition='opacity .2s';
+    setTimeout(() => { ov.remove(); resumeScanning(0); }, 200);
+  }, 2500);
 }
 
 function showAlreadyMarked(studentId) {
-  fetchStudents().then(()=>{
-    const stu  = studentsCache.find(s=>String(s.StudentID)===String(studentId));
-    const name = stu?stu.StudentName:studentId;
-    const ov   = document.createElement('div');
-    ov.className='mo'; ov.style.zIndex='2000';
-    ov.innerHTML=`<div class="modal" style="text-align:center;max-width:340px;padding:32px 28px">
-      <h1 style="font-size:3rem">⚠️</h1>
-      <h3 style="color:#ff9800">Already Marked / पहिल्यै हाजिर</h3>
-      <p style="font-weight:700;font-size:1.1rem">${name}</p>
-      <p style="color:var(--sub);margin-top:4px">Already marked today!</p>
-      <p style="font-size:.7rem;color:var(--sub);margin-top:12px">Closes in 5 seconds</p>
-    </div>`;
-    document.body.appendChild(ov);
-    setTimeout(()=>{
-      ov.style.opacity='0'; ov.style.transition='opacity .3s';
-      setTimeout(()=>{ ov.remove(); resumeScanning(0); },300);
-    },5000);
-  });
+  const stu  = studentsCache.find(s => String(s.StudentID) === String(studentId));
+  const name = stu ? stu.StudentName : studentId;
+  const ov   = document.createElement('div');
+  ov.className='mo'; ov.style.zIndex='2000';
+  ov.innerHTML=`<div class="modal" style="text-align:center;max-width:320px;padding:24px 22px">
+    <h1 style="font-size:2.6rem;margin-bottom:4px">⚠️</h1>
+    <h3 style="color:#ff9800;font-size:1.1rem">Already Marked / पहिल्यै हाजिर</h3>
+    <p style="font-weight:700;font-size:1rem;margin-top:4px">${name}</p>
+    <p style="color:var(--sub);font-size:.75rem;margin-top:6px">Already marked today!</p>
+  </div>`;
+  document.body.appendChild(ov);
+  setTimeout(() => {
+    ov.style.opacity='0'; ov.style.transition='opacity .2s';
+    setTimeout(() => { ov.remove(); resumeScanning(0); }, 200);
+  }, 2500);
 }
 
 function addMarkedChip(name) {
