@@ -495,7 +495,7 @@ async function loadDashboard(c) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REGISTRATION
+// REGISTRATION (unchanged)
 // ══════════════════════════════════════════════════════════════════
 function loadRegister(c) {
   regCaptureSamples = [];
@@ -866,7 +866,6 @@ function matchFaceWithMargin(descriptor) {
   }
   if (bestDist < DIST_THRESHOLD) {
     const margin = secondBestDist === Infinity ? 1 : (secondBestDist - bestDist);
-    // Require a clear margin to prevent ambiguous matches
     if (margin < MARGIN_MIN) {
       return { isKnown: false, studentId: '', dist: bestDist, margin, uncertain: true };
     }
@@ -892,7 +891,6 @@ function smoothedLabel(rawMatch) {
 // ══════════════════════════════════════════════════════════════════
 // PASSIVE LIVENESS (fast anti‑photo)
 // ══════════════════════════════════════════════════════════════════
-
 function computeTexture(video, box) {
   try {
     const off = document.createElement('canvas');
@@ -1287,6 +1285,169 @@ function addMarkedChip(name) {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// STUDENTS LIST – with Edit / Delete controls
+// ══════════════════════════════════════════════════════════════════
+async function loadStudents(c) {
+  c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+  await fetchStudents();
+  if (!studentsCache.length) {
+    c.innerHTML='<div class="card" style="text-align:center;padding:60px"><h3>No students</h3><button class="btn btn-p" onclick="nav(\'reg\')">Register</button></div>';
+    return;
+  }
+
+  let rows = '';
+  studentsCache.forEach((s,i) => {
+    const sid   = s.StudentID || '';
+    const sname = (s.StudentName || '').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    rows += `<tr>
+      <td>${i+1}</td>
+      <td><small>${sid}</small></td>
+      <td><strong>${s.StudentName||'-'}</strong></td>
+      <td>${s.Class||'-'}</td>
+      <td>${s.Section||'-'}</td>
+      <td>${s.RollNumber||'-'}</td>
+      <td>${s.Gender||'-'}</td>
+      <td>${s.GuardianPhone||'-'}</td>
+      <td>${(s.Address||'-').substring(0,22)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="showEditStudentModal('${sid}')" title="Edit"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--d)" onclick="deleteStudent('${sid}','${sname}')" title="Delete"><i class="fas fa-trash-alt"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${sid}','${sname}')" title="Improve Face"><i class="fas fa-camera"></i></button>
+      </td>
+    </tr>`;
+  });
+
+  c.innerHTML = `<div class="card">
+    <h2 style="margin-bottom:16px">Students (${studentsCache.length})</h2>
+    <div class="tbc"><table>
+      <thead><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// EDIT STUDENT (password protected)
+// ══════════════════════════════════════════════════════════════════
+function showEditStudentModal(studentId) {
+  const student = studentsCache.find(s => String(s.StudentID) === String(studentId));
+  if (!student) { notify('Student not found','error'); return; }
+
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Student / विद्यार्थी सम्पादन</div>
+      <div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Full Name</label><input id="editName" value="${escapeHtml(student.StudentName||'')}" placeholder="Student Name"></div>
+      <div class="fg"><label class="fl">Admission No.</label><input id="editAdm" value="${escapeHtml(student.AdmissionNumber||'')}" placeholder="Admission No."></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Date of Birth</label><input type="date" id="editDob" value="${student.DateOfBirth||''}"></div>
+      <div class="fg"><label class="fl">Gender</label>
+        <select id="editGender">
+          <option value="">Select</option>
+          <option ${student.Gender==='Male'?'selected':''}>Male</option>
+          <option ${student.Gender==='Female'?'selected':''}>Female</option>
+        </select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Class</label><select id="editClass"><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option ${student.Class==String(i)?'selected':''}>${i}</option>`).join('')}</select></div>
+      <div class="fg"><label class="fl">Section</label>
+        <select id="editSection">
+          <option value="">Select</option>
+          ${['JUPITER','SATURN','URANUS','NEPTUNE'].map(sec=>`<option ${student.Section===sec?'selected':''}>${sec}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Roll No.</label><input id="editRoll" value="${escapeHtml(student.RollNumber||'')}" placeholder="Roll No."></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Father</label><input id="editFather" value="${escapeHtml(student.FatherName||'')}" placeholder="Father's Name"></div>
+      <div class="fg"><label class="fl">Mother</label><input id="editMother" value="${escapeHtml(student.MotherName||'')}" placeholder="Mother's Name"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Phone</label><input id="editPhone" value="${escapeHtml(student.GuardianPhone||'')}" placeholder="Guardian Phone"></div>
+      <div class="fg"><label class="fl">Address</label><textarea id="editAddr" placeholder="Address">${escapeHtml(student.Address||'')}</textarea></div>
+    </div>
+    <div class="fg">
+      <label class="fl">Password (editsys123)</label>
+      <input type="password" id="editPwd" placeholder="Enter password to save changes">
+    </div>
+    <button class="btn btn-p btn-block" onclick="submitEditStudent('${studentId}')"><i class="fas fa-save"></i> Save Changes</button>
+  `);
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+async function submitEditStudent(studentId) {
+  const pwd = document.getElementById('editPwd').value.trim();
+  if (pwd !== 'editsys123') {
+    notify('❌ Wrong password! You need the edit/delete password.','error');
+    return;
+  }
+
+  const payload = {
+    studentId: studentId,
+    studentName: document.getElementById('editName').value.trim(),
+    admissionNumber: document.getElementById('editAdm').value.trim(),
+    dateOfBirth: document.getElementById('editDob').value,
+    class: document.getElementById('editClass').value,
+    section: document.getElementById('editSection').value,
+    rollNumber: document.getElementById('editRoll').value.trim(),
+    gender: document.getElementById('editGender').value,
+    fatherName: document.getElementById('editFather').value.trim(),
+    motherName: document.getElementById('editMother').value.trim(),
+    guardianPhone: document.getElementById('editPhone').value.trim(),
+    address: document.getElementById('editAddr').value.trim()
+  };
+
+  const btn = document.querySelector('#modalContainer .btn-p');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+  const r = await apiCall('updateStudent', payload);
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+
+  if (r && r.success) {
+    notify('✅ Student updated successfully!','success');
+    closeModal();
+    studentsCache = [];
+    await fetchStudents();
+    loadStudents(document.getElementById('pc'));
+  } else {
+    notify('❌ Update failed: ' + (r?.error || 'unknown error'),'error');
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// DELETE STUDENT (password protected)
+// ══════════════════════════════════════════════════════════════════
+function deleteStudent(studentId, studentName) {
+  const pwd = prompt(`Enter password to DELETE "${studentName}" permanently:`);
+  if (!pwd) return;
+  if (pwd !== 'editsys123') {
+    notify('❌ Wrong password! Deletion cancelled.','error');
+    return;
+  }
+  if (!confirm(`Are you sure you want to delete "${studentName}"?\nThis action cannot be undone.`)) return;
+
+  apiCall('deleteStudent', { studentId: studentId }).then(r => {
+    if (r && r.success) {
+      notify(`✅ ${studentName} deleted successfully.`,'success');
+      studentsCache = studentsCache.filter(s => String(s.StudentID) !== String(studentId));
+      loadStudents(document.getElementById('pc'));
+    } else {
+      notify('❌ Deletion failed: ' + (r?.error || 'unknown error'),'error');
+    }
+  }).catch(() => notify('❌ Network error','error'));
+}
+
+// ══════════════════════════════════════════════════════════════════
 // QUICK REGISTER (only called from Students page, not auto)
 // ══════════════════════════════════════════════════════════════════
 function showQuickRegister() {
@@ -1451,34 +1612,6 @@ async function saveImproveSamples(studentId, studentName) {
     await loadEmbeddings();
   } else { notify('❌ Failed to save samples','error'); }
   window._improveSamples=[];
-}
-
-// ══════════════════════════════════════════════════════════════════
-// STUDENTS LIST
-// ══════════════════════════════════════════════════════════════════
-async function loadStudents(c) {
-  c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
-  await fetchStudents();
-  if (!studentsCache.length) {
-    c.innerHTML='<div class="card" style="text-align:center;padding:60px"><h3>No students</h3><button class="btn btn-p" onclick="nav(\'reg\')">Register</button></div>';
-    return;
-  }
-  c.innerHTML=`<div class="card">
-    <h2 style="margin-bottom:16px">Students (${studentsCache.length})</h2>
-    <div class="tbc"><table>
-      <thead><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Address</th><th>Face</th></tr></thead>
-      <tbody>${studentsCache.map((s,i)=>`<tr>
-        <td>${i+1}</td>
-        <td><small>${s.StudentID||'-'}</small></td>
-        <td><strong>${s.StudentName||'-'}</strong></td>
-        <td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td>
-        <td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td>
-        <td>${(s.Address||'-').substring(0,22)}</td>
-        <td><button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${s.StudentID}','${String(s.StudentName||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}')"><i class="fas fa-camera"></i> Improve</button></td>
-      </tr>`).join('')}
-      </tbody>
-    </table></div>
-  </div>`;
 }
 
 // ══════════════════════════════════════════════════════════════════
