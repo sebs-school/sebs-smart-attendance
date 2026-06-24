@@ -1536,24 +1536,41 @@ async function loadEmbeddings() {
   faceMatcherReady = true;
 }
 
+// Shared in-flight promise. Any caller — nav(), startCamera(), register page, etc. —
+// awaits THIS SAME promise. Previously, a second call while loading was already in
+// progress just returned immediately (a no-op), so startCamera()'s "await preloadModels()"
+// resolved instantly without the models actually being ready yet, and the camera/loop
+// started scanning while modelsLoaded was still false — looking exactly like a frozen
+// "Scanning…" status with no further messages and no console error.
+let _modelsPromise = null;
+
 async function preloadModels() {
-  if (modelsLoaded || modelsLoading) return;
+  if (modelsLoaded) return;
+  if (_modelsPromise) return _modelsPromise;
+
   modelsLoading = true;
   notify('⏳ Loading AI models, please wait…');
-  try {
-    await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-      faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
-      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
-    ]);
-    modelsLoaded = true;
-    modelsLoading = false;
-    await loadEmbeddings();
-    notify(`✅ Ready! ${faceMatcher ? faceMatcher.labeledDescriptors.length : 0} faces loaded.`, 'success');
-  } catch (e) {
-    modelsLoading = false;
-    notify('❌ Failed to load AI models. Check your connection.', 'error');
-  }
+
+  _modelsPromise = (async () => {
+    try {
+      await Promise.all([
+        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+        faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
+        faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
+      ]);
+      modelsLoaded = true;
+      modelsLoading = false;
+      await loadEmbeddings();
+      notify(`✅ Ready! ${faceMatcher ? faceMatcher.labeledDescriptors.length : 0} faces loaded.`, 'success');
+    } catch (e) {
+      modelsLoading = false;
+      _modelsPromise = null;
+      notify('❌ Failed to load AI models. Check your connection.', 'error');
+      throw e;
+    }
+  })();
+
+  return _modelsPromise;
 }
 
 /* -------------------------------------------------------
@@ -1911,6 +1928,9 @@ const STATUS_MESSAGES = {
   already:      { text: '⚠️ Already marked today / आज पहिले नै दर्ता भयो', cls: 'warn' },
   good:         { text: '✅ Detected — marking… / पत्ता लाग्यो…',          cls: 'good' },
   scanning:     { text: 'Camera active — scanning faces… / स्क्यान हुँदैछ', cls: ''     },
+  loading:      { text: '⏳ Loading AI models… / लोड हुँदैछ…',             cls: 'warn' },
+  load_failed:  { text: '❌ Failed to load AI models — check connection',  cls: 'bad'  },
+  stalled:      { text: '⚠️ Scanning stalled — tap Stop then Start',       cls: 'bad'  },
 };
 
 function setFeedback(stateKey) {
@@ -1939,8 +1959,13 @@ function setFeedback(stateKey) {
 async function startCamera() {
   if (cameraActive) return;
   if (!modelsLoaded) {
-    notify('Loading models, please wait…', 'warning');
-    await preloadModels();
+    setFeedback('loading');
+    try {
+      await preloadModels(); // now awaits the REAL shared load, not a no-op
+    } catch (e) {
+      setFeedback('load_failed');
+      return; // don't start the camera/loop if models never loaded
+    }
   }
   try {
     camStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
@@ -1951,6 +1976,7 @@ async function startCamera() {
     unknownFaceFrames = 0;
     lastUnknownPopupTime = 0;
     _frameCount = 0;
+    _lastFrameAt = Date.now();
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('stopBtn').style.display = 'inline-flex';
     setFeedback('scanning');
@@ -1958,9 +1984,23 @@ async function startCamera() {
     smoothBuffer = [];
     processing = false;
     rafHandle = requestAnimationFrame(detectionLoop);
+    startWatchdog();
   } catch (e) {
     notify('Camera error: ' + (e.message || 'permission denied'), 'error');
   }
+}
+
+/* Watchdog: if the loop ever stalls (no frame processed for 4s while camera
+   is supposedly active), surface it instead of sitting frozen silently. */
+let _watchdogTimer = null, _lastFrameAt = 0;
+function startWatchdog() {
+  if (_watchdogTimer) clearInterval(_watchdogTimer);
+  _watchdogTimer = setInterval(() => {
+    if (!cameraActive) { clearInterval(_watchdogTimer); _watchdogTimer = null; return; }
+    if (Date.now() - _lastFrameAt > 4000) {
+      setFeedback('stalled');
+    }
+  }, 1500);
 }
 
 function stopCamera() {
@@ -1968,6 +2008,7 @@ function stopCamera() {
   cameraActive = false;
   unknownFaceFrames = 0;
   if (rafHandle) { cancelAnimationFrame(rafHandle); rafHandle = null; }
+  if (_watchdogTimer) { clearInterval(_watchdogTimer); _watchdogTimer = null; }
   const startBtn = document.getElementById('startBtn');
   const stopBtn = document.getElementById('stopBtn');
   if (startBtn) startBtn.style.display = 'inline-flex';
@@ -2143,11 +2184,19 @@ function resetLivenessBuffers() {
      sees what's happening, with zero added per-frame cost
 ------------------------------------------------------- */
 async function detectionLoop() {
-  if (!cameraActive || !modelsLoaded || processing) { rafHandle = requestAnimationFrame(detectionLoop); return; }
+  if (!cameraActive) { return; } // camera stopped — let stopCamera() own cleanup, don't reschedule
+
+  if (!modelsLoaded || processing) {
+    if (!modelsLoaded) setFeedback('loading');
+    rafHandle = requestAnimationFrame(detectionLoop);
+    return;
+  }
 
   const video = document.getElementById('cam');
   const overlay = document.getElementById('overlay');
   if (!video || !overlay || video.readyState < 2) { rafHandle = requestAnimationFrame(detectionLoop); return; }
+
+  _lastFrameAt = Date.now(); // watchdog heartbeat — proves the loop is alive this frame
 
   overlay.width = video.videoWidth; overlay.height = video.videoHeight;
   overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height);
@@ -2158,7 +2207,12 @@ async function detectionLoop() {
       .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: DETECTION.INPUT_SIZE, scoreThreshold: DETECTION.SCORE_THRESHOLD }))
       .withFaceLandmarks(true)
       .withFaceDescriptor();
-  } catch (e) { rafHandle = requestAnimationFrame(detectionLoop); return; }
+  } catch (e) {
+    console.error('Detection error:', e);
+    setFeedback('stalled');
+    rafHandle = requestAnimationFrame(detectionLoop);
+    return;
+  }
 
   const hudDot = document.getElementById('hudDot'); if (hudDot) hudDot.className = 'hud-dot on';
   const hudText = document.getElementById('hudText'); if (hudText) hudText.textContent = 'Scanning…';
