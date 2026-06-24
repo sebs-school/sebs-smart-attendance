@@ -113,9 +113,9 @@ const USERS = [
 const API_URL   = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
-// ── MATCHING — 50% confidence = dist ≤ 0.50 ───────────────────────
-const DIST_THRESHOLD = 0.50;
-const MARGIN_MIN     = 0.02;
+// ── MATCHING — strict threshold + margin to prevent false positives ──
+const DIST_THRESHOLD = 0.40;   // 60%+ confidence required
+const MARGIN_MIN     = 0.03;   // best match must beat 2nd by at least 0.03
 
 // ── DETECTION — fast TinyFaceDetector settings ────────────────────
 const MIN_FACE_BOX          = 40;
@@ -147,7 +147,7 @@ const LIVENESS_PASS_NEED  = 2;
 
 // ── CACHE ─────────────────────────────────────────────────────────
 const FACE_CACHE_KEY           = 'sebs-faces-v10';
-const MARKED_TODAY_KEY         = 'sebs-marked-today-v1';  // persist marked students
+const MARKED_TODAY_KEY         = 'sebs-marked-today-v1';
 const CAPTURE_SAMPLES_REQUIRED = 3;
 
 // ══════════════════════════════════════════════════════════════════
@@ -162,7 +162,7 @@ let modelsLoading  = false;
 let faceMatcher      = null;
 let faceMatcherReady = false;
 
-let markedToday    = {};   // { "studentId__dateStr": true }
+let markedToday    = {};
 let cooldowns      = {};
 let lastActionTime = 0;
 let scanEnabled    = true;
@@ -174,14 +174,12 @@ let rafHandle      = null;
 let smoothBuffer = [];
 let badPositionFrames = 0;
 
-// Liveness state (fast anti‑photo)
 let textureHistory = [];
 let noseHistory    = [];
 let descHistory    = [];
 let livenessPassCount = 0;
 let livenessFail      = false;
 
-// Registration
 let regCaptureSamples = [];
 let regCamStream      = null;
 let pendingDescriptor = null;
@@ -199,14 +197,13 @@ function getTimeSession() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// MARKED TODAY PERSISTENCE (LOCALSTORAGE)
+// MARKED TODAY PERSISTENCE
 // ══════════════════════════════════════════════════════════════════
 function loadMarkedToday() {
   const saved = localStorage.getItem(MARKED_TODAY_KEY);
   if (!saved) { markedToday = {}; return; }
   try {
     const parsed = JSON.parse(saved);
-    // Keep only today's entries to avoid stale data
     const today = new Date().toDateString();
     const filtered = {};
     for (const key in parsed) {
@@ -226,7 +223,7 @@ function saveMarkedToday() {
 function init() {
   updateClock();
   setInterval(updateClock, 1000);
-  loadMarkedToday();   // restore previously marked students
+  loadMarkedToday();
   if (localStorage.getItem('sebsLoggedIn') === '1') { showApp(); nav('db'); }
   if (localStorage.getItem('sebsTheme') === 'dark') setDark(true);
 }
@@ -398,7 +395,7 @@ async function loadEmbeddings() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// MODEL LOADING — TinyFaceDetector (fastest) + SSD fallback
+// MODEL LOADING
 // ══════════════════════════════════════════════════════════════════
 async function preloadModels() {
   if (modelsLoaded||modelsLoading) return;
@@ -442,7 +439,7 @@ async function fetchStudents() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// DASHBOARD (unchanged)
+// DASHBOARD
 // ══════════════════════════════════════════════════════════════════
 async function loadDashboard(c) {
   c.innerHTML = `<div class="sr">
@@ -498,7 +495,7 @@ async function loadDashboard(c) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REGISTRATION (unchanged)
+// REGISTRATION
 // ══════════════════════════════════════════════════════════════════
 function loadRegister(c) {
   regCaptureSamples = [];
@@ -667,7 +664,6 @@ async function submitRegister() {
     if (attResult&&attResult.success) notify(`✅ ${name} registered and marked ${attResult.status}!`,'success');
     else if (attResult&&attResult.reason==='already_marked') notify(`✅ ${name} registered! Already had attendance today.`,'success');
     else notify(`✅ ${name} registered!`,'success');
-    // Also save to localStorage
     const todayKey = new Date().toDateString();
     markedToday[`${sid}__${todayKey}`] = true;
     saveMarkedToday();
@@ -682,7 +678,7 @@ async function submitRegister() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// ATTENDANCE PAGE HTML
+// ATTENDANCE PAGE
 // ══════════════════════════════════════════════════════════════════
 function loadAttendance(c) {
   const t          = getTimeSession();
@@ -720,16 +716,13 @@ function loadAttendance(c) {
       <div class="marked-strip" id="markedStrip"><span style="font-size:.78rem;color:var(--sub)">None yet</span></div>
     </div>
   </div>`;
-  // Show previously marked students from localStorage
   setTimeout(populateMarkedChips, 200);
 }
 
-// ── RESTORE MARKED CHIPS FROM LOCALSTORAGE ──────────────────────
 function populateMarkedChips() {
   const strip = document.getElementById('markedStrip');
   const cnt   = document.getElementById('markedCount');
   if (!strip || !cnt) return;
-  // remove placeholder
   const ph = strip.querySelector('span:not(.marked-chip)');
   if (ph) ph.remove();
   const today = new Date().toDateString();
@@ -738,7 +731,7 @@ function populateMarkedChips() {
     const studentId = key.split('__')[0];
     const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
     const name = stu ? stu.StudentName : studentId;
-    if (strip.querySelector(`[data-id="${studentId}"]`)) return; // already displayed
+    if (strip.querySelector(`[data-id="${studentId}"]`)) return;
     const chip = document.createElement('div');
     chip.className = 'marked-chip';
     chip.setAttribute('data-id', studentId);
@@ -823,7 +816,7 @@ function setStatus(msg) { const el=document.getElementById('camStatus'); if (el)
 const el = id => document.getElementById(id);
 
 // ══════════════════════════════════════════════════════════════════
-// POSITION GUIDE (cosmetic only)
+// POSITION GUIDE
 // ══════════════════════════════════════════════════════════════════
 function evaluatePosition(box, frameW, frameH) {
   const ratio = box.width/frameW;
@@ -852,25 +845,34 @@ function updatePosGuide(res) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// FACE MATCHING — 50% threshold, instant match
+// STRICT FACE MATCHING (60%+ confidence + margin check)
 // ══════════════════════════════════════════════════════════════════
 function matchFaceWithMargin(descriptor) {
-  if (!faceMatcher||!descriptor) return { isKnown:false, studentId:'', dist:1, margin:0, uncertain:false };
-  let bestId='', bestDist=Infinity, secondBestDist=Infinity;
+  if (!faceMatcher || !descriptor) return { isKnown: false, studentId: '', dist: 1, margin: 0, uncertain: false };
+  let bestId = '', bestDist = Infinity, secondBestDist = Infinity;
   for (const labeled of faceMatcher.labeledDescriptors) {
     let labelBest = Infinity;
     for (const sample of labeled.descriptors) {
-      const d = faceapi.euclideanDistance(descriptor,sample);
-      if (d<labelBest) labelBest=d;
+      const d = faceapi.euclideanDistance(descriptor, sample);
+      if (d < labelBest) labelBest = d;
     }
-    if (labelBest<bestDist) { secondBestDist=bestDist; bestDist=labelBest; bestId=labeled.label; }
-    else if (labelBest<secondBestDist) { secondBestDist=labelBest; }
+    if (labelBest < bestDist) {
+      secondBestDist = bestDist;
+      bestDist = labelBest;
+      bestId = labeled.label;
+    } else if (labelBest < secondBestDist) {
+      secondBestDist = labelBest;
+    }
   }
   if (bestDist < DIST_THRESHOLD) {
-    const margin = secondBestDist===Infinity ? 1 : (secondBestDist - bestDist);
-    return { isKnown:true, studentId:bestId, dist:bestDist, margin, uncertain:false };
+    const margin = secondBestDist === Infinity ? 1 : (secondBestDist - bestDist);
+    // Require a clear margin to prevent ambiguous matches
+    if (margin < MARGIN_MIN) {
+      return { isKnown: false, studentId: '', dist: bestDist, margin, uncertain: true };
+    }
+    return { isKnown: true, studentId: bestId, dist: bestDist, margin, uncertain: false };
   }
-  return { isKnown:false, studentId:'', dist:bestDist, margin:0, uncertain:false };
+  return { isKnown: false, studentId: '', dist: bestDist, margin: 0, uncertain: false };
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -888,7 +890,7 @@ function smoothedLabel(rawMatch) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// PASSIVE LIVENESS (fast anti‑photo, computed every frame)
+// PASSIVE LIVENESS (fast anti‑photo)
 // ══════════════════════════════════════════════════════════════════
 
 function computeTexture(video, box) {
@@ -985,7 +987,7 @@ function resetLivenessBuffers() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// MAIN DETECTION LOOP — instant green + fast liveness, then popup
+// MAIN DETECTION LOOP
 // ══════════════════════════════════════════════════════════════════
 let useTiny = true;
 
@@ -1026,7 +1028,6 @@ async function detectionLoop() {
 
     const sized = faceapi.resizeResults(faces,{width:video.videoWidth,height:video.videoHeight});
 
-    // NO FACE
     if (sized.length===0) {
       el('matchBadge').style.display='none';
       updatePosGuide({status:'none',icon:'🚶',message:'Step into frame / फ्रेममा आउनुहोस्'});
@@ -1037,7 +1038,6 @@ async function detectionLoop() {
       return;
     }
 
-    // MULTIPLE FACES
     if (sized.length>1) {
       updatePosGuide({status:'multi',icon:'👥',message:'One person at a time / एक पटकमा एक जना'});
       setStatus('👥 Multiple faces — one at a time / एक एक जना गर्नुहोस्');
@@ -1052,7 +1052,6 @@ async function detectionLoop() {
       return;
     }
 
-    // SINGLE FACE
     const det = sized[0];
     if (det.detection.box.width<MIN_FACE_BOX||det.detection.box.height<MIN_FACE_BOX) {
       updatePosGuide({status:'far',icon:'↗️',message:'Move closer / नजिक जानुहोस्'});
@@ -1199,7 +1198,7 @@ function resumeScanning(delay=300) {
   }, delay);
 }
 
-// ── MARK ATTENDANCE — instant UI feedback ─────────────────────────
+// ── MARK ATTENDANCE ────────────────────────────────────────────
 async function doMarkAttendance(studentId, dist) {
   const now       = Date.now();
   const todayKey  = new Date().toDateString();
@@ -1210,7 +1209,6 @@ async function doMarkAttendance(studentId, dist) {
   const stu         = studentsCache.find(s => String(s.StudentID) === String(studentId));
   const displayName = stu ? stu.StudentName : studentId;
 
-  // Save locally
   markedToday[markedKey] = true;
   saveMarkedToday();
 
@@ -1221,7 +1219,6 @@ async function doMarkAttendance(studentId, dist) {
   showSuccessPopup(displayName, optimisticStatus);
   addMarkedChip(displayName);
 
-  // Fire API in background
   apiCall('markAttendance', {
     studentId, studentName: displayName, confidence: (1 - dist).toFixed(3)
   }).then(r => {
@@ -1242,7 +1239,7 @@ async function doMarkAttendance(studentId, dist) {
   });
 }
 
-// ── POPUPS ────────────────────────────────────────────────────────
+// ── POPUPS ─────────────────────────────────────────────────────
 function showSuccessPopup(name, status) {
   const ov = document.createElement('div');
   ov.className='mo'; ov.style.zIndex='2000';
@@ -1364,7 +1361,7 @@ async function submitQuickRegister() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// IMPROVE FACE DATA (unchanged)
+// IMPROVE FACE DATA
 // ══════════════════════════════════════════════════════════════════
 function showImproveFaceModal(studentId, studentName) {
   window._improveSamples=[];
@@ -1457,7 +1454,7 @@ async function saveImproveSamples(studentId, studentName) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// STUDENTS LIST (unchanged)
+// STUDENTS LIST
 // ══════════════════════════════════════════════════════════════════
 async function loadStudents(c) {
   c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
@@ -1485,7 +1482,7 @@ async function loadStudents(c) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REPORTS (unchanged)
+// REPORTS
 // ══════════════════════════════════════════════════════════════════
 function loadReports(c) {
   const today   = new Date().toISOString().split('T')[0];
@@ -1581,4 +1578,3 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-```
