@@ -15,20 +15,25 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 @keyframes spin{to{transform:rotate(360deg)}}@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:260px;display:flex;flex-direction:column}.pc{flex:1;padding:28px 32px;overflow-y:auto}
 .sb{width:260px;height:100vh;background:linear-gradient(180deg,#07111f,#0f2044,#1a3a6b);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;box-shadow:4px 0 24px rgba(0,0,0,.18)}.sh{padding:22px 20px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.07)}.slogo{width:44px;height:44px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.25)}.slogo img{width:34px;height:34px;object-fit:contain}.sn{font-weight:800;font-size:1.08rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:14px 10px}.sm{display:flex;flex-direction:column;gap:3px}.sg{margin-bottom:6px}.sg-label{font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.28);padding:8px 16px 4px;text-transform:uppercase}.si{border-radius:11px}.si:hover .sl{background:rgba(255,255,255,.07);color:#c8daf4}.si.act .sl{background:rgba(255,255,255,.14);color:#fff}.sl{display:flex;align-items:center;gap:12px;padding:11px 17px;color:rgba(255,255,255,.55);font-size:.83rem;font-weight:500;border-radius:11px}.sl i{font-size:1rem;width:20px;text-align:center;color:rgba(255,255,255,.35)}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07);margin-top:auto}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 17px;background:rgba(231,76,60,.08);color:#f4877a;font-size:.83rem;font-weight:500;border-radius:11px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;backdrop-filter:blur(2px)}.so.act{display:block}
-.tb{height:68px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:900;backdrop-filter:blur(12px)}#pt{font-size:1.15rem;font-weight:800}.td{font-size:.72rem;color:var(--sub)}.tt{font-size:.8rem;font-weight:700;color:var(--p);font-family:monospace;background:rgba(26,58,107,.07);padding:5px 10px;border-radius:8px}.ttb{background:var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:.9rem}.ttb:hover{background:var(--p);color:#fff}
+.tb{height:68px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:900;backdrop-filter:blur(12px)}#pt{font-size:1.15rem;font-weight:800}.td{font-size:.72rem;color:var(--sub)}.tt{font-size:.8rem;font-weight:700;color:var(--p);font-family:monospace;background:rgba(26,58,107,.07);padding:5px 10px;border-radius:8px}.ttb{background:var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:.9rem}.ttb:hover{background:var(--p);color:#fff}.mtb{display:none;background:var(--border);width:36px;height:36px;border-radius:10px;align-items:center;justify-content:center;cursor:pointer;color:var(--text)}
 .lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#04091a,#0a1628,#1a3a6b)}.lcd{width:100%;max-width:430px;background:rgba(255,255,255,.98);border-radius:28px;padding:52px 42px 44px;box-shadow:0 40px 100px rgba(0,0,0,.35);text-align:center}.llw{width:84px;height:84px;margin:0 auto 20px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.llw img{width:66px;height:66px;object-fit:contain}.lsn{font-size:1.5rem;font-weight:900;color:#1a1a2e;line-height:1.25}.lst{font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:30px}.ldiv{display:flex;align-items:center;gap:14px;margin-bottom:28px}.ldiv::before,.ldiv::after{content:'';flex:1;height:1px;background:#e2e8f0}.ldiv span{color:#94a3b8;font-size:.7rem;font-weight:600}.lbtn{display:block;width:100%;padding:16px 24px;background:linear-gradient(135deg,var(--p),#2a5298);color:#fff;border-radius:14px;font-size:.92rem;font-weight:700;cursor:pointer;border:none;text-align:center;box-shadow:0 6px 24px rgba(26,58,107,.3);font-family:'Inter',sans-serif;transition:.2s}.lbtn:hover{transform:translateY(-2px)}.login-info{margin-top:20px;text-align:center;font-size:.72rem;color:#94a3b8}
-.card{background:var(--card);border-radius:18px;padding:24px 28px;box-shadow:0 2px 16px rgba(26,58,107,.07);border:1px solid var(--border);margin-bottom:20px}.sr{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.stc{background:var(--card);border-radius:18px;padding:22px 24px;box-shadow:0 2px 16px rgba(26,58,107,.07);border:1px solid var(--border);display:flex;align-items:center;gap:18px;cursor:pointer;transition:.2s}.stc:hover{transform:translateY(-3px)}.sci{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.sci.b{background:rgba(26,58,107,.08);color:var(--p)}.sci.g{background:rgba(0,200,83,.1);color:var(--s)}.sci.o{background:rgba(255,152,0,.1);color:var(--w)}.sci.r{background:rgba(231,76,60,.1);color:var(--d)}.sti h3{font-size:1.8rem;font-weight:900;line-height:1}.sti p{font-size:.68rem;color:var(--sub);text-transform:uppercase;margin-top:3px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:.84rem;cursor:pointer;border:none;transition:.15s}.btn-p{background:linear-gradient(135deg,var(--p),#2a5298);color:#fff}.btn-s{background:linear-gradient(135deg,#00c853,#00e676);color:#fff}.btn-d{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}.btn-ghost{background:var(--border);color:var(--text)}.btn-lg{padding:14px 28px;font-size:.92rem;border-radius:14px}.btn-block{width:100%;justify-content:center}
-.tbc{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}table{width:100%;border-collapse:collapse}thead{background:rgba(26,58,107,.04)}th{padding:13px 18px;text-align:left;font-weight:700;font-size:.68rem;text-transform:uppercase;color:var(--sub)}td{padding:12px 18px;border-top:1px solid var(--border);font-size:.82rem}
+.card{background:var(--card);border-radius:18px;padding:24px 28px;box-shadow:0 2px 16px rgba(26,58,107,.07);border:1px solid var(--border);margin-bottom:20px}.sr{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}.stc{background:var(--card);border-radius:18px;padding:22px 24px;box-shadow:0 2px 16px rgba(26,58,107,.07);border:1px solid var(--border);display:flex;align-items:center;gap:18px;cursor:pointer;transition:.2s}.stc:hover{transform:translateY(-3px)}.sci{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}.sci.b{background:rgba(26,58,107,.08);color:var(--p)}.sci.g{background:rgba(0,200,83,.1);color:var(--s)}.sci.o{background:rgba(255,152,0,.1);color:var(--w)}.sci.r{background:rgba(231,76,60,.1);color:var(--d)}.sci.pu{background:rgba(124,77,255,.1);color:#7c4dff}.sti h3{font-size:1.8rem;font-weight:900;line-height:1}.sti p{font-size:.68rem;color:var(--sub);text-transform:uppercase;margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:.84rem;cursor:pointer;border:none;transition:.15s}.btn-p{background:linear-gradient(135deg,var(--p),#2a5298);color:#fff}.btn-s{background:linear-gradient(135deg,#00c853,#00e676);color:#fff}.btn-d{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}.btn-o{background:linear-gradient(135deg,#ff9800,#ffb300);color:#fff}.btn-ghost{background:var(--border);color:var(--text)}.btn-lg{padding:14px 28px;font-size:.92rem;border-radius:14px}.btn-block{width:100%;justify-content:center}.btn:disabled{opacity:.55;cursor:not-allowed}.btn-sm{padding:6px 12px;font-size:.72rem;border-radius:8px}
+.tbc{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}table{width:100%;border-collapse:collapse}thead{background:rgba(26,58,107,.04)}th{padding:13px 18px;text-align:left;font-weight:700;font-size:.68rem;text-transform:uppercase;color:var(--sub);white-space:nowrap}td{padding:12px 18px;border-top:1px solid var(--border);font-size:.82rem}
 .fg{margin-bottom:14px}.fl{display:block;font-size:.7rem;font-weight:700;margin-bottom:6px;text-transform:uppercase;color:var(--sub)}.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}.st{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--p);margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--p);display:inline-block}
-.cw{max-width:720px;margin:0 auto}.cam-box{position:relative;background:#000;border-radius:22px;overflow:hidden;width:100%;aspect-ratio:4/3;box-shadow:0 20px 60px rgba(0,0,0,.35)}.cam-box video{width:100%;height:100%;object-fit:cover;display:block}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}.cam-hud{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;z-index:5;gap:8px}.hud-badge{background:rgba(7,17,31,.72);backdrop-filter:blur(8px);color:#fff;padding:8px 14px;border-radius:22px;font-size:.72rem;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.08)}.hud-dot{width:9px;height:9px;border-radius:50%}.hud-dot.on{background:#00e676;animation:pulse .9s infinite}.hud-dot.off{background:#e74c3c}.cam-footer{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px}.cam-status{text-align:center;margin-top:10px;font-size:.8rem;color:var(--sub)}.time-badge{background:rgba(0,0,0,.5);color:#fff;padding:6px 14px;border-radius:16px;font-size:.7rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}.marked-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.marked-chip{display:flex;align-items:center;gap:6px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);color:#00a544;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;animation:slideIn .25s}
+.cw{max-width:720px;margin:0 auto}.cam-box{position:relative;background:#000;border-radius:22px;overflow:hidden;width:100%;aspect-ratio:4/3;box-shadow:0 20px 60px rgba(0,0,0,.35)}.cam-box video{width:100%;height:100%;object-fit:cover;display:block}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}.cam-hud{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;z-index:5;gap:8px}.hud-badge{background:rgba(7,17,31,.72);backdrop-filter:blur(8px);color:#fff;padding:8px 14px;border-radius:22px;font-size:.72rem;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.08)}.hud-dot{width:9px;height:9px;border-radius:50%}.hud-dot.on{background:#00e676;animation:pulse .9s infinite}.hud-dot.off{background:#e74c3c}.cam-footer{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;flex-wrap:wrap}.cam-status{text-align:center;margin-top:10px;font-size:.8rem;color:var(--sub)}.time-badge{background:rgba(0,0,0,.5);color:#fff;padding:6px 14px;border-radius:16px;font-size:.7rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}.marked-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.marked-chip{display:flex;align-items:center;gap:6px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);color:#00a544;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;animation:slideIn .25s}.pending-chip{display:flex;align-items:center;gap:6px;background:rgba(124,77,255,.08);border:1px solid rgba(124,77,255,.2);color:#7c4dff;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
 .ltip{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(7,17,31,.82);backdrop-filter:blur(8px);color:#fff;padding:10px 20px;border-radius:20px;font-size:.75rem;text-align:center;white-space:nowrap;z-index:10;border:1px solid rgba(255,255,255,.1)}
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.modal{background:var(--card);border-radius:22px;padding:30px 34px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;animation:scaleIn .25s;box-shadow:0 30px 80px rgba(0,0,0,.3);border:1px solid var(--border)}.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.modal-title{font-size:1.1rem;font-weight:800}.modal-close{width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--sub)}.modal-close:hover{background:var(--d);color:#fff}
 .nc{position:fixed;top:18px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:8px;pointer-events:none}.nt{background:var(--card);border-radius:12px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.15);display:flex;align-items:flex-start;gap:10px;border-left:4px solid var(--p);min-width:260px;max-width:340px;animation:slideIn .25s;font-size:.82rem;pointer-events:auto;border:1px solid var(--border);border-left-width:4px}.nt.success{border-left-color:var(--s)}.nt.error{border-left-color:var(--d)}.nt.warning{border-left-color:var(--w)}.nt-icon{font-size:1.1rem}.nt-body{flex:1}.nt-msg{color:var(--sub);font-size:.78rem}
 .db-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}.rate-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px}.rate-num{font-size:4rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--p),#2a5298);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.rate-label{font-size:.72rem;color:var(--sub);text-transform:uppercase;margin-top:6px}
-/* Confidence meter */
 .conf-bar{height:4px;border-radius:4px;background:var(--border);margin-top:6px;overflow:hidden}.conf-fill{height:100%;border-radius:4px;transition:width .3s}
-@media(max-width:1100px){.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}}@media(max-width:860px){.mc{margin-left:0}.sb{transform:translateX(-100%)}.sb.mo{transform:translateX(0)}.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}}@media(max-width:600px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.pc{padding:14px}.tb{padding:0 14px}.cam-box{max-height:320px}.modal{padding:20px 16px}.stc{padding:16px 18px}.sti h3{font-size:1.5rem}}
+.capture-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.capture-slot{aspect-ratio:1;border-radius:14px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--sub);overflow:hidden;position:relative;background:var(--bg)}.capture-slot.filled{border-style:solid;border-color:var(--s)}.capture-slot img{width:100%;height:100%;object-fit:cover}.capture-slot .ck{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--s);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:8px;font-size:.68rem;font-weight:700;text-transform:uppercase}.badge-present{background:rgba(0,200,83,.1);color:#00a544}.badge-late{background:rgba(255,152,0,.1);color:#e08600}.badge-absent{background:rgba(231,76,60,.1);color:var(--d)}.badge-unmarked{background:rgba(100,116,139,.1);color:var(--sub)}
+.tabs{display:flex;gap:6px;background:var(--bg);border-radius:12px;padding:5px;margin-bottom:18px;width:fit-content}.tab-btn{padding:9px 18px;border-radius:9px;font-size:.78rem;font-weight:600;color:var(--sub);background:transparent}.tab-btn.act{background:var(--card);color:var(--p);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+@media print{.no-print{display:none!important}body{background:#fff}.pc{padding:0}}
+@media(max-width:1100px){.sr{grid-template-columns:repeat(3,1fr)}.db-grid{grid-template-columns:1fr}}
+@media(max-width:860px){.mc{margin-left:0}.sb{transform:translateX(-100%);transition:transform .25s}.sb.mo{transform:translateX(0)}.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}.mtb{display:flex}}
+@media(max-width:600px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.pc{padding:14px}.tb{padding:0 14px}.cam-box{max-height:320px}.modal{padding:20px 16px}.stc{padding:16px 18px}.sti h3{font-size:1.5rem}.capture-grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
@@ -40,7 +45,7 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
     <p class="lst">Smart Attendance System / स्मार्ट हाजिरी प्रणाली</p>
     <div class="ldiv"><span>Secure Access / सुरक्षित पहुँच</span></div>
     <button class="lbtn" onclick="doLogin()">🔑 Sign In / साइन इन</button>
-    <p class="login-info">5:30–10:30 → Present | 10:30–12:00 → Late</p>
+    <p class="login-info">5:30–10:30 → Present | 10:30–12:00 → Late | After 12:00 → Absent</p>
   </div>
 </div>
 
@@ -62,7 +67,10 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
   <div class="so" id="so" onclick="cmsb()"></div>
   <main class="mc">
     <header class="tb">
-      <span id="pt">Dashboard</span>
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="mtb" onclick="tmsb()"><i class="fas fa-bars"></i></button>
+        <span id="pt">Dashboard</span>
+      </div>
       <div style="display:flex;gap:16px;align-items:center">
         <span class="td" id="td"></span>
         <span class="tt" id="tt"></span>
@@ -82,14 +90,25 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 const API_URL = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
-// FIX #1 — Single source-of-truth threshold, tightened to 0.42 for accuracy
+// Matching thresholds — tuned together, not in isolation:
+//   DIST_THRESHOLD   — max distance to even consider a candidate match
+//   MARGIN_MIN       — best match must beat the 2nd-best (different person)
+//                       by at least this much, or we call it "Uncertain"
+//                       rather than risk a wrong identification
+//   VOTE_FRAMES      — number of consecutive frames sampled before deciding
+//   VOTE_MIN_AGREE   — how many of those frames must agree on the same
+//                       studentId before we trust the result enough to act
 const DIST_THRESHOLD = 0.42;
+const MARGIN_MIN = 0.06;
+const VOTE_FRAMES = 5;
+const VOTE_MIN_AGREE = 4;
 
-// FIX #2 — Minimum consecutive liveness frames before triggering action
+const MIN_FACE_BOX = 60;          // px — ignore faces smaller than this (too far/unreliable)
+const DETECT_MIN_CONFIDENCE = 0.5; // stricter than before (was 0.35)
 const LIVENESS_FRAMES_REQUIRED = 2;
+const CAPTURE_SAMPLES_REQUIRED = 3; // multi-sample registration
 
-// Cache key — bump this to invalidate old caches
-const FACE_CACHE_KEY = 'sebs-faces-v8';
+const FACE_CACHE_KEY = 'sebs-faces-v9';
 
 // ══════════════════════════════════════════════════════════════════
 // STATE
@@ -100,25 +119,31 @@ let cameraActive = false;
 let modelsLoaded = false;
 let modelsLoading = false;
 
-// FIX #3 — faceMatcher state machine
-//   null         = not loaded yet (never show "new face")
-//   'loading'    = fetch in progress
-//   FaceMatcher  = ready
 let faceMatcher = null;
-let faceMatcherReady = false;   // true only when FM is loaded AND usable
+let faceMatcherReady = false;
 
-let markedToday = {};           // key: `${studentId}__${dateStr}` → true
-let cooldowns = {};             // key: studentId → timestamp
-let pendingDescriptor = null;   // Float32Array captured at liveness for quick-register
-let lastActionTime = 0;         // global cooldown
+let markedToday = {};
+let cooldowns = {};
+let pendingDescriptor = null;        // single capture buffer (quick-register flow)
+let captureBuffer = [];              // multi-sample buffer (quick-register: 3 samples)
+let lastActionTime = 0;
 let scanEnabled = true;
 let processing = false;
 let studentsCache = [];
-let livenessState = { prevEar: 1, blinkFrames: 0, lastNose: null, headFrames: 0, consecutiveLive: 0 };
+let pendingTodayCache = [];
+let livenessState = { prevEar: 1, blinkFrames: 0, lastNose: null, headFrames: 0 };
 let rafHandle = null;
 
+// Vote buffer for temporal smoothing: array of {studentId|null, dist, margin}
+let voteBuffer = [];
+
+// Manual registration multi-capture state (Register page, not quick-register)
+let regCaptureSamples = [];
+let regCamStream = null;
+
 // ══════════════════════════════════════════════════════════════════
-// TIME / SESSION
+// TIME / SESSION  (client-side label only — server is authoritative
+// for whether a mark is actually accepted, see markAttendanceInternal)
 // ══════════════════════════════════════════════════════════════════
 function getTimeSession() {
   const n = new Date();
@@ -163,6 +188,7 @@ function doLogin() {
 }
 function logout() {
   stopCamera();
+  stopRegCamera();
   localStorage.removeItem('sebsLoggedIn');
   document.getElementById('lp').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
@@ -204,6 +230,16 @@ async function apiCall(action, data = null) {
     return null;
   }
 }
+async function apiGetParams(action, params) {
+  try {
+    const qs = new URLSearchParams({ action, ...params }).toString();
+    const r = await fetch(`${API_URL}?${qs}`);
+    return await r.json();
+  } catch (e) {
+    console.error('API error:', action, e);
+    return null;
+  }
+}
 
 // ══════════════════════════════════════════════════════════════════
 // MODAL
@@ -227,6 +263,7 @@ function nav(page) {
   };
   document.getElementById('pt').textContent = titles[page] || page;
   if (page !== 'att') stopCamera();
+  if (page !== 'reg') stopRegCamera();
   if (page === 'att') preloadModels();
   const c = document.getElementById('pc');
   if (page === 'db') loadDashboard(c);
@@ -238,61 +275,57 @@ function nav(page) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// FACE EMBEDDINGS LOADER
-// FIX #4 — properly gates faceMatcherReady; clears stale caches;
-//           never sets ready=true until FM is actually built
+// FACE EMBEDDINGS LOADER (multi-sample per student)
 // ══════════════════════════════════════════════════════════════════
 async function loadEmbeddings() {
-  // Clear ALL old cache keys
-  ['sebs-faces-old','sebs-faces-v6','sebs-faces-v7'].forEach(k => localStorage.removeItem(k));
+  ['sebs-faces-old','sebs-faces-v6','sebs-faces-v7','sebs-faces-v8'].forEach(k => localStorage.removeItem(k));
 
   faceMatcher = null;
   faceMatcherReady = false;
 
   let embeddings = null;
 
-  // Try cache first
   const cached = localStorage.getItem(FACE_CACHE_KEY);
   if (cached) {
     try {
       const parsed = JSON.parse(cached);
       if (Array.isArray(parsed) && parsed.length > 0) {
         embeddings = parsed;
-        console.log('Using cached embeddings:', embeddings.length);
+        console.log('Using cached embeddings:', embeddings.length, 'students');
       }
     } catch (e) { localStorage.removeItem(FACE_CACHE_KEY); }
   }
 
-  // Fetch from API if no cache
   if (!embeddings) {
     const d = await apiCall('getAllEmbeddings');
     if (d && Array.isArray(d.embeddings) && d.embeddings.length > 0) {
       embeddings = d.embeddings;
       localStorage.setItem(FACE_CACHE_KEY, JSON.stringify(embeddings));
-      console.log('Loaded embeddings from API:', embeddings.length);
+      console.log('Loaded embeddings from API:', embeddings.length, 'students');
     }
   }
 
   if (!embeddings || embeddings.length === 0) {
     console.log('No embeddings available — new-face-only mode');
-    faceMatcherReady = true; // ready but empty: all faces will be "new"
+    faceMatcherReady = true;
     return;
   }
 
-  // Build FaceMatcher
+  // Each student record now has multiple samples: { studentId, embeddings: [[128],[128],...] }
   const labeled = [];
   for (const e of embeddings) {
-    if (e.studentId && Array.isArray(e.embedding) && e.embedding.length === 128) {
-      labeled.push(new faceapi.LabeledFaceDescriptors(
-        String(e.studentId),
-        [new Float32Array(e.embedding)]
-      ));
+    if (!e.studentId) continue;
+    const samples = Array.isArray(e.embeddings) ? e.embeddings : (Array.isArray(e.embedding) ? [e.embedding] : []);
+    const validSamples = samples.filter(s => Array.isArray(s) && s.length === 128).map(s => new Float32Array(s));
+    if (validSamples.length > 0) {
+      labeled.push(new faceapi.LabeledFaceDescriptors(String(e.studentId), validSamples));
     }
   }
 
   if (labeled.length > 0) {
     faceMatcher = new faceapi.FaceMatcher(labeled, DIST_THRESHOLD);
-    console.log('FaceMatcher built:', labeled.length, 'students, threshold:', DIST_THRESHOLD);
+    const totalSamples = labeled.reduce((sum, l) => sum + l.descriptors.length, 0);
+    console.log('FaceMatcher built:', labeled.length, 'students,', totalSamples, 'total samples, threshold:', DIST_THRESHOLD);
   } else {
     console.warn('Embeddings found but none valid — running without matcher');
   }
@@ -331,22 +364,28 @@ async function fetchStudents() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// DASHBOARD
+// DASHBOARD (now includes Pending widget)
 // ══════════════════════════════════════════════════════════════════
 async function loadDashboard(c) {
   c.innerHTML = '<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
-  const d = await apiCall('getDashboard');
+  const [d, pendingData] = await Promise.all([apiCall('getDashboard'), apiCall('getPendingToday')]);
   if (!d) {
     c.innerHTML = '<div class="card" style="text-align:center;padding:48px"><h3>API failed / एपीआई असफल</h3><button class="btn btn-p" onclick="loadDashboard(document.getElementById(\'pc\'))">Retry / पुन: प्रयास</button></div>';
     return;
   }
+  pendingTodayCache = (pendingData && pendingData.pending) ? pendingData.pending : [];
   const pct = typeof d.percentage === 'number' ? d.percentage : 0;
+  const pendingCount = typeof d.pending === 'number' ? d.pending : pendingTodayCache.length;
+  const windowOpen = pendingData ? pendingData.windowOpen : true;
+  const windowLabel = pendingData ? pendingData.windowLabel : '';
+
   c.innerHTML = `
     <div class="sr">
       <div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${d.totalStudents||0}</h3><p>Total / कुल</p></div></div>
       <div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${d.present||0}</h3><p>Present / उपस्थित</p></div></div>
       <div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${d.late||0}</h3><p>Late / ढिलो</p></div></div>
       <div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${d.absent||0}</h3><p>Absent / अनुपस्थित</p></div></div>
+      <div class="stc" onclick="document.getElementById('pendingCard').scrollIntoView({behavior:'smooth'})"><div class="sci pu"><i class="fas fa-hourglass-half"></i></div><div class="sti"><h3>${pendingCount}</h3><p>Pending / बाँकी</p></div></div>
     </div>
     <div class="db-grid">
       <div class="card" style="text-align:center"><div class="rate-ring"><div class="rate-num">${pct}%</div><div class="rate-label">Attendance Rate / उपस्थिति दर</div></div></div>
@@ -355,15 +394,48 @@ async function loadDashboard(c) {
         <button class="btn btn-p btn-lg btn-block" style="margin-bottom:10px" onclick="nav('att')"><i class="fas fa-camera"></i> Start Attendance / हाजिरी सुरु</button>
         <button class="btn btn-s btn-lg btn-block" onclick="nav('reg')"><i class="fas fa-user-plus"></i> Register / दर्ता</button>
       </div>
+    </div>
+    <div class="card" id="pendingCard">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <h3>⏳ Pending Today / आज बाँकी (${pendingCount})</h3>
+        <span class="badge ${windowOpen ? 'badge-late' : 'badge-absent'}">${windowOpen ? '🟡 ' + windowLabel : '🔴 ' + windowLabel}</span>
+      </div>
+      ${!windowOpen ? `<div style="background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.2);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:.8rem;color:var(--d)">
+        Attendance window is closed. Students below will be auto-marked <strong>Absent</strong> by the server (daily trigger around 12:05 PM). If it's already past that time and they still show here, the trigger may not be installed — see Reports notes.
+      </div>` : `<div style="background:rgba(255,152,0,.07);border:1px solid rgba(255,152,0,.2);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:.8rem;color:#e08600">
+        These students have not been marked yet today. They'll automatically become <strong>Absent</strong> if unmarked after 12:00 PM.
+      </div>`}
+      ${pendingTodayCache.length === 0
+        ? '<p style="color:var(--sub);font-size:.85rem;text-align:center;padding:20px">🎉 Everyone has been marked today!</p>'
+        : `<div class="tbc"><table><thead><tr><th>#</th><th>Name / नाम</th><th>Class</th><th>Section</th><th>Roll</th></tr></thead><tbody>
+            ${pendingTodayCache.map((s,i)=>`<tr><td>${i+1}</td><td><strong>${s.studentName}</strong></td><td>${s.class}</td><td>${s.section}</td><td>${s.rollNumber}</td></tr>`).join('')}
+          </tbody></table></div>`}
     </div>`;
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REGISTRATION FORM
+// REGISTRATION FORM — now with 3-sample face capture
 // ══════════════════════════════════════════════════════════════════
 function loadRegister(c) {
-  c.innerHTML = `<div class="card" style="max-width:720px;margin:0 auto">
+  regCaptureSamples = [];
+  c.innerHTML = `<div class="card" style="max-width:760px;margin:0 auto">
     <h2>📝 Register Student / विद्यार्थी दर्ता</h2>
+    <span class="st">Face Capture / अनुहार खिच्ने (recommended)</span>
+    <p style="font-size:.78rem;color:var(--sub);margin:8px 0 4px">Capture ${CAPTURE_SAMPLES_REQUIRED} samples (front, slight left, slight right) for much more accurate recognition later.</p>
+    <div class="cam-box" style="max-width:420px;margin:10px auto;aspect-ratio:4/3">
+      <video id="regCam" autoplay playsinline muted></video>
+      <canvas id="regOverlay"></canvas>
+      <div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="regHudDot"></span><span id="regHudText">Inactive</span></span></div>
+    </div>
+    <div class="capture-grid" id="captureGrid" style="max-width:420px;margin:0 auto">
+      ${[0,1,2].map(i=>`<div class="capture-slot" id="capSlot${i}"><i class="fas fa-user"></i></div>`).join('')}
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:18px;flex-wrap:wrap">
+      <button class="btn btn-p" id="regCamBtn" onclick="startRegCamera()"><i class="fas fa-video"></i> Start Camera / क्यामेरा सुरु</button>
+      <button class="btn btn-s" id="regCaptureBtn" onclick="captureRegSample()" style="display:none"><i class="fas fa-camera"></i> Capture / खिच्नुहोस्</button>
+      <button class="btn btn-ghost" id="regRetakeBtn" onclick="resetRegCaptures()" style="display:none"><i class="fas fa-redo"></i> Retake All</button>
+    </div>
+
     <span class="st">Personal / व्यक्तिगत</span>
     <div class="fr" style="margin-top:12px">
       <div class="fg"><label class="fl">Full Name / नाम *</label><input id="sn" placeholder="Student Name" required></div>
@@ -377,7 +449,7 @@ function loadRegister(c) {
     <div class="fr" style="margin-top:12px">
       <div class="fg"><label class="fl">Class / कक्षा *</label><select id="sc" required><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div>
       <div class="fg"><label class="fl">Section / सेक्सन</label><select id="ss"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
-      <div class="fg"><label class="fl">Roll No. / रोल</label><input id="sr" placeholder="Roll Number"></div>
+      <div class="fg"><label class="fl">Roll No. / रोल *</label><input id="sr" placeholder="Roll Number" required></div>
     </div>
     <span class="st">Guardian / अभिभावक</span>
     <div class="fr" style="margin-top:12px">
@@ -392,13 +464,87 @@ function loadRegister(c) {
   </div>`;
 }
 
+async function startRegCamera() {
+  if (!modelsLoaded) { notify('⏳ Loading AI models first... / मोडेल लोड हुँदैछ...'); await preloadModels(); if (!modelsLoaded) return; }
+  try {
+    regCamStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 480 }, height: { ideal: 360 }, facingMode: 'user' } });
+    const v = document.getElementById('regCam');
+    v.srcObject = regCamStream;
+    await new Promise((res, rej) => { v.onloadedmetadata = () => v.play().then(res).catch(rej); setTimeout(() => rej(new Error('timeout')), 6000); });
+    document.getElementById('regHudDot').className = 'hud-dot on';
+    document.getElementById('regHudText').textContent = 'Live';
+    document.getElementById('regCamBtn').style.display = 'none';
+    document.getElementById('regCaptureBtn').style.display = 'inline-flex';
+    document.getElementById('regRetakeBtn').style.display = 'inline-flex';
+    notify('✅ Camera ready. Capture 3 angles. / ३ कोण खिच्नुहोस्', 'success');
+  } catch (e) {
+    notify('❌ Camera error / क्यामेरा त्रुटि: ' + e.message, 'error');
+  }
+}
+
+function stopRegCamera() {
+  if (regCamStream) { regCamStream.getTracks().forEach(t => t.stop()); regCamStream = null; }
+  const dot = document.getElementById('regHudDot'); if (dot) dot.className = 'hud-dot off';
+  const txt = document.getElementById('regHudText'); if (txt) txt.textContent = 'Inactive';
+}
+
+async function captureRegSample() {
+  const v = document.getElementById('regCam');
+  if (!v || !v.videoWidth) { notify('Camera not ready / क्यामेरा तयार छैन', 'warning'); return; }
+  if (regCaptureSamples.length >= CAPTURE_SAMPLES_REQUIRED) { notify('Already captured 3 samples / पहिल्यै ३ खिचियो', 'info'); return; }
+
+  notify('🔎 Detecting face... / अनुहार पत्ता लगाउँदै...');
+  const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: DETECT_MIN_CONFIDENCE });
+  const det = await faceapi.detectSingleFace(v, opts).withFaceLandmarks().withFaceDescriptor();
+  if (!det) { notify('❌ No clear face detected — face the camera / अनुहार देखिएन', 'error'); return; }
+  if (det.detection.box.width < MIN_FACE_BOX || det.detection.box.height < MIN_FACE_BOX) {
+    notify('⚠️ Move closer to the camera / नजिक जानुहोस्', 'warning'); return;
+  }
+
+  // thumbnail snapshot for the slot UI
+  const canvas = document.createElement('canvas');
+  canvas.width = 120; canvas.height = 120;
+  const ctx = canvas.getContext('2d');
+  const box = det.detection.box;
+  const size = Math.max(box.width, box.height) * 1.3;
+  const sx = Math.max(0, box.x + box.width/2 - size/2);
+  const sy = Math.max(0, box.y + box.height/2 - size/2);
+  ctx.drawImage(v, sx, sy, size, size, 0, 0, 120, 120);
+  const thumb = canvas.toDataURL('image/jpeg', 0.7);
+
+  regCaptureSamples.push(Array.from(det.descriptor));
+  const slot = document.getElementById(`capSlot${regCaptureSamples.length - 1}`);
+  if (slot) { slot.classList.add('filled'); slot.innerHTML = `<img src="${thumb}"><span class="ck"><i class="fas fa-check"></i></span>`; }
+
+  if (regCaptureSamples.length >= CAPTURE_SAMPLES_REQUIRED) {
+    notify('✅ All 3 samples captured! / ३ नमूना तयार!', 'success');
+    document.getElementById('regCaptureBtn').style.display = 'none';
+    stopRegCamera();
+  } else {
+    notify(`📸 Captured ${regCaptureSamples.length}/${CAPTURE_SAMPLES_REQUIRED} — turn head slightly and capture again`, 'info');
+  }
+}
+
+function resetRegCaptures() {
+  regCaptureSamples = [];
+  [0,1,2].forEach(i => { const s = document.getElementById(`capSlot${i}`); if (s) { s.classList.remove('filled'); s.innerHTML = '<i class="fas fa-user"></i>'; } });
+  document.getElementById('regCaptureBtn').style.display = regCamStream ? 'inline-flex' : 'none';
+  if (!regCamStream) document.getElementById('regCamBtn').style.display = 'inline-flex';
+}
+
 async function submitRegister() {
   const name = document.getElementById('sn').value.trim();
   const cls = document.getElementById('sc').value;
   const gender = document.getElementById('sg').value;
+  const roll = document.getElementById('sr').value.trim();
   if (!name || !cls || !gender) { notify('Please fill required fields / सबै भर्नुहोस्', 'warning'); return; }
+  if (!roll) { notify('Roll number is required to prevent duplicate-name mix-ups / रोल नम्बर आवश्यक', 'warning'); return; }
+  if (regCaptureSamples.length === 0) {
+    const proceed = confirm('No face captured. Student can still be registered but will not be recognised by the camera until a face is added later. Continue?');
+    if (!proceed) return;
+  }
 
-  const btn = document.querySelector('#pc .btn-p');
+  const btn = document.querySelector('#pc .btn-p.btn-lg.btn-block');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
   const payload = {
@@ -407,48 +553,45 @@ async function submitRegister() {
     dateOfBirth: document.getElementById('sdob').value,
     class: cls,
     section: document.getElementById('ss').value,
-    rollNumber: document.getElementById('sr').value,
+    rollNumber: roll,
     gender,
     fatherName: document.getElementById('sf').value,
     motherName: document.getElementById('sm').value,
     guardianPhone: document.getElementById('sp').value,
     address: document.getElementById('saddr').value
   };
-  if (pendingDescriptor) payload.embedding = Array.from(pendingDescriptor);
+  if (regCaptureSamples.length > 0) payload.embeddings = regCaptureSamples;
 
   const r = await apiCall('registerStudent', payload);
   btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Register & Mark Present / दर्ता र हाजिर';
 
   if (r && r.success) {
-    // FIX #5 — use the returned studentId (not name) for attendance marking
     const sid = r.studentId;
-    const t = getTimeSession();
+    if (r.existing) {
+      notify(`⚠️ A student with this Name+Class+Section+Roll already exists. Face samples (if any) were added to that existing record instead of creating a duplicate.`, 'warning');
+    }
     const attResult = await apiCall('markAttendance', {
-      studentId: sid,
-      studentName: name,
-      class: cls,
-      section: document.getElementById('ss').value,
-      rollNumber: document.getElementById('sr').value,
-      confidence: '0.99',
-      status: t.open ? t.label : 'Present'
+      studentId: sid, studentName: name, class: cls,
+      section: document.getElementById('ss').value, rollNumber: roll, confidence: '0.99'
     });
 
     if (attResult && attResult.success) {
-      notify(`✅ ${name} registered and marked present! / दर्ता र हाजिर!`, 'success');
+      notify(`✅ ${name} registered and marked ${attResult.status}! / दर्ता र हाजिर!`, 'success');
+    } else if (attResult && attResult.reason === 'already_marked') {
+      notify(`✅ ${name} registered! Already had attendance today.`, 'success');
+    } else if (attResult && attResult.reason === 'outside_window') {
+      notify(`✅ ${name} registered! Attendance window closed (${attResult.label}) — not marked.`, 'warning');
     } else {
-      notify(`✅ ${name} registered! Attendance may need manual mark. / दर्ता भयो!`, 'warning');
+      notify(`✅ ${name} registered! Attendance may need manual mark.`, 'warning');
     }
 
-    pendingDescriptor = null;
     loadRegister(document.getElementById('pc'));
-
-    // FIX #6 — always clear cache and reload after new registration
     localStorage.removeItem(FACE_CACHE_KEY);
     faceMatcherReady = false;
     await loadEmbeddings();
     studentsCache = [];
   } else {
-    notify('❌ Registration failed / दर्ता असफल', 'error');
+    notify('❌ Registration failed / दर्ता असफल: ' + (r && r.error ? r.error : 'unknown error'), 'error');
   }
 }
 
@@ -500,7 +643,6 @@ async function startCamera() {
     await preloadModels();
     if (!modelsLoaded) return;
   }
-  // FIX #7 — wait for embeddings to be ready before starting scan
   if (!faceMatcherReady) {
     notify('⏳ Loading face data / अनुहार डेटा लोड हुँदैछ...', 'warning');
     await loadEmbeddings();
@@ -532,6 +674,7 @@ async function startCamera() {
     cameraActive = true;
     scanEnabled = true;
     resetLiveness();
+    voteBuffer = [];
     detectionLoop();
 
     const t = getTimeSession();
@@ -551,6 +694,7 @@ function stopCamera() {
   cameraActive = false;
   scanEnabled = false;
   processing = false;
+  voteBuffer = [];
   if (rafHandle) { cancelAnimationFrame(rafHandle); rafHandle = null; }
   if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
   const g = id => document.getElementById(id);
@@ -570,16 +714,15 @@ async function refreshFaces() {
   faceMatcherReady = false;
   await loadEmbeddings();
   const count = faceMatcher ? faceMatcher.labeledDescriptors.length : 0;
-  notify(`✅ Refreshed! ${count} face(s) loaded / ${count} अनुहार लोड`, 'success');
+  notify(`✅ Refreshed! ${count} student(s) loaded / ${count} विद्यार्थी लोड`, 'success');
 }
 
 function setStatus(msg) { const el = document.getElementById('camStatus'); if (el) el.textContent = msg; }
 const el = id => document.getElementById(id);
-function resetLiveness() { livenessState = { prevEar: 1, blinkFrames: 0, lastNose: null, headFrames: 0, consecutiveLive: 0 }; }
+function resetLiveness() { livenessState = { prevEar: 1, blinkFrames: 0, lastNose: null, headFrames: 0 }; }
 
 // ══════════════════════════════════════════════════════════════════
 // EAR LIVENESS CHECK
-// FIX #8 — requires multiple consecutive frames to prevent false triggers
 // ══════════════════════════════════════════════════════════════════
 function calcEAR(landmarks, topIdx, bottomIdx, leftIdx, rightIdx) {
   const p = landmarks.positions;
@@ -596,7 +739,6 @@ function checkLiveness(det) {
   const rightEAR = calcEAR(det.landmarks, 43, 47, 42, 45);
   const ear = (leftEAR + rightEAR) / 2;
 
-  // Blink: EAR drops below 0.20 (closed) then rises above 0.26 (open)
   if (ear < 0.20 && livenessState.prevEar > 0.24) {
     livenessState.blinkFrames++;
     if (livenessState.blinkFrames >= LIVENESS_FRAMES_REQUIRED) {
@@ -608,7 +750,6 @@ function checkLiveness(det) {
   if (ear > 0.26) livenessState.blinkFrames = 0;
   livenessState.prevEar = ear;
 
-  // Head movement: nose tip horizontal/vertical shift
   const nose = { x: p[30].x, y: p[30].y };
   if (livenessState.lastNose) {
     const dx = Math.abs(nose.x - livenessState.lastNose.x);
@@ -626,8 +767,81 @@ function checkLiveness(det) {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// MATCH WITH MARGIN CHECK
+// Returns { isKnown, studentId, dist, margin, uncertain }
+// "uncertain" = a candidate was close to the threshold but didn't clear
+// it by a safe margin over the next-best different student — we do NOT
+// guess in this case, we ask the loop to keep collecting more frames.
+// ══════════════════════════════════════════════════════════════════
+function matchFaceWithMargin(descriptor) {
+  if (!faceMatcher || !descriptor) return { isKnown: false, studentId: '', dist: 1, margin: 0, uncertain: false };
+
+  // Compute distance to every individual stored sample (not just FaceMatcher's
+  // single best-per-label result) so we can get a true second-best DIFFERENT
+  // student distance for the margin check.
+  let bestId = '', bestDist = Infinity;
+  let secondBestDist = Infinity;
+
+  for (const labeled of faceMatcher.labeledDescriptors) {
+    let labelBest = Infinity;
+    for (const sample of labeled.descriptors) {
+      const d = faceapi.euclideanDistance(descriptor, sample);
+      if (d < labelBest) labelBest = d;
+    }
+    if (labelBest < bestDist) {
+      secondBestDist = bestDist;
+      bestDist = labelBest;
+      bestId = labeled.label;
+    } else if (labelBest < secondBestDist) {
+      secondBestDist = labelBest;
+    }
+  }
+
+  if (bestDist >= DIST_THRESHOLD) {
+    return { isKnown: false, studentId: '', dist: bestDist, margin: 0, uncertain: false };
+  }
+
+  const margin = secondBestDist === Infinity ? 1 : (secondBestDist - bestDist);
+  if (margin < MARGIN_MIN) {
+    // Too close to call between two different students — don't guess.
+    return { isKnown: false, studentId: '', dist: bestDist, margin: margin, uncertain: true };
+  }
+
+  return { isKnown: true, studentId: bestId, dist: bestDist, margin: margin, uncertain: false };
+}
+
+// ══════════════════════════════════════════════════════════════════
+// TEMPORAL VOTE BUFFER
+// Pushes one frame's match result; once VOTE_FRAMES collected, decides
+// whether VOTE_MIN_AGREE of them agree on the same studentId (or all
+// agree on "new/unknown"). Returns a decision object or null if still
+// collecting.
+// ══════════════════════════════════════════════════════════════════
+function pushVote(matchResult) {
+  voteBuffer.push(matchResult);
+  if (voteBuffer.length < VOTE_FRAMES) return null;
+
+  const counts = {};
+  voteBuffer.forEach(v => {
+    const key = v.isKnown ? v.studentId : (v.uncertain ? '__uncertain__' : '__new__');
+    counts[key] = (counts[key] || 0) + 1;
+  });
+
+  let winnerKey = null, winnerCount = 0;
+  for (const k in counts) { if (counts[k] > winnerCount) { winnerKey = k; winnerCount = counts[k]; } }
+
+  const decided = winnerCount >= VOTE_MIN_AGREE;
+  voteBuffer = []; // reset for next decision cycle regardless of outcome
+
+  if (!decided) return { settled: false };
+  if (winnerKey === '__uncertain__') return { settled: true, isKnown: false, uncertain: true, studentId: '' };
+  if (winnerKey === '__new__') return { settled: true, isKnown: false, uncertain: false, studentId: '' };
+
+  return { settled: true, isKnown: true, uncertain: false, studentId: winnerKey };
+}
+
+// ══════════════════════════════════════════════════════════════════
 // MAIN DETECTION LOOP
-// FIX #9 — completely rewritten matching + colour logic
 // ══════════════════════════════════════════════════════════════════
 async function detectionLoop() {
   if (!cameraActive) return;
@@ -639,7 +853,7 @@ async function detectionLoop() {
   }
 
   try {
-    const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.35 });
+    const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: DETECT_MIN_CONFIDENCE });
     const faces = await faceapi.detectAllFaces(video, opts).withFaceLandmarks().withFaceDescriptors();
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -647,7 +861,6 @@ async function detectionLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (!faceMatcherReady) {
-      // Still loading — show spinner in status, don't process faces
       el('matchBadge').style.display = 'none';
       setStatus('⏳ Loading face data... / अनुहार डेटा लोड हुँदैछ...');
       if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
@@ -660,46 +873,37 @@ async function detectionLoop() {
       el('matchBadge').style.display = 'none';
       if (el('ltip')) el('ltip').style.display = 'none';
       setStatus('👀 Looking for face... / अनुहार खोज्दै...');
+      voteBuffer = []; // no face = reset voting, avoid stale votes carrying over
       if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
       return;
     }
 
+    if (sized.length > 1) {
+      // Multiple faces in frame — recognition for attendance marking is
+      // ambiguous about who's actually stepping up. Show all boxes but
+      // don't auto-mark anyone until only one face remains.
+      setStatus('👥 Multiple faces detected — one person at a time / एक पटक एक मात्र');
+    }
+
     for (const det of sized) {
-      if (det.detection.box.width < 35 || det.detection.box.height < 35) continue;
+      if (det.detection.box.width < MIN_FACE_BOX || det.detection.box.height < MIN_FACE_BOX) continue;
 
       const box = det.detection.box;
       const cx = box.x + box.width / 2;
       const cy = box.y + box.height / 2;
       const rad = Math.max(box.width, box.height) / 1.4;
 
-      // ── MATCHING ─────────────────────────────────────────────────
-      // FIX #10 — faceMatcher=null means "no registered students", NOT "unknown"
-      //   isKnown = false when faceMatcher is null (no students registered yet)
-      //   isKnown = false when faceMatcher exists but distance ≥ threshold
-      //   isKnown = true  when faceMatcher exists AND distance < threshold
-      let isKnown = false;
-      let matchLabel = '';
-      let matchStudentId = '';
-      let matchDist = 1.0;
-
-      if (faceMatcher && det.descriptor) {
-        const best = faceMatcher.findBestMatch(det.descriptor);
-        matchDist = best.distance;
-        matchLabel = best.label; // this is the studentId string we stored
-
-        // FIX #11 — enforce our own threshold (double-guard against FaceMatcher internals)
-        isKnown = (matchLabel !== 'unknown' && matchDist < DIST_THRESHOLD);
-        matchStudentId = isKnown ? matchLabel : '';
-
-        console.log(`Face: label=${matchLabel} dist=${matchDist.toFixed(3)} known=${isKnown}`);
-      }
+      const match = matchFaceWithMargin(det.descriptor);
 
       // ── CIRCLE COLOUR ────────────────────────────────────────────
-      // 🟢 GREEN  = recognised registered student
-      // 🔵 BLUE   = face detected but no match (new person)
-      // (orange for loading is handled above, never reaches here)
-      const circleColor = isKnown ? '#00c853' : '#2196f3';
-      const confidence = isKnown ? Math.round((1 - matchDist) * 100) : null;
+      // 🟢 GREEN  = recognised registered student (confident)
+      // 🔵 BLUE   = face detected, no confident match (new person OR no faceMatcher yet)
+      // 🟠 ORANGE = uncertain — close to a match but margin too small to trust
+      let circleColor = '#2196f3';
+      if (match.isKnown) circleColor = '#00c853';
+      else if (match.uncertain) circleColor = '#ff9800';
+
+      const confidence = match.isKnown ? Math.round((1 - match.dist) * 100) : null;
 
       ctx.save();
       ctx.shadowColor = circleColor;
@@ -711,10 +915,11 @@ async function detectionLoop() {
       ctx.stroke();
       ctx.restore();
 
-      // ── LABEL ────────────────────────────────────────────────────
-      const labelText = isKnown
-        ? `✅ ${matchStudentId.substring(0, 16)}${confidence ? ` (${confidence}%)` : ''}`
-        : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 Register First / दर्ता गर्नुहोस्');
+      const labelText = match.isKnown
+        ? `✅ ${match.studentId.substring(0, 16)}${confidence ? ` (${confidence}%)` : ''}`
+        : match.uncertain
+          ? '🤔 Uncertain — hold still / अस्पष्ट'
+          : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 Register First / दर्ता गर्नुहोस्');
 
       ctx.font = 'bold 13px Inter';
       const tw = ctx.measureText(labelText).width;
@@ -726,52 +931,50 @@ async function detectionLoop() {
       ctx.fillStyle = '#fff';
       ctx.fillText(labelText, cx - tw / 2, ly + 16);
 
-      // ── HUD BADGE ────────────────────────────────────────────────
       el('matchBadge').style.display = 'flex';
-      el('matchText').textContent = isKnown
-        ? `✅ Recognised: ${matchStudentId}`
-        : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 No registered faces');
+      el('matchText').textContent = match.isKnown
+        ? `✅ Recognised: ${match.studentId}`
+        : match.uncertain
+          ? '🤔 Uncertain — please hold still'
+          : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 No registered faces');
 
-      // ── LIVENESS + ACTION ────────────────────────────────────────
-      if (scanEnabled && !processing && Date.now() - lastActionTime > 2500) {
+      // ── LIVENESS + VOTING + ACTION ────────────────────────────────
+      if (sized.length === 1 && scanEnabled && !processing && Date.now() - lastActionTime > 2500) {
         if (el('ltip')) el('ltip').style.display = 'block';
         const alive = checkLiveness(det);
 
         if (alive) {
-          lastActionTime = Date.now();
-          scanEnabled = false;
-          if (el('ltip')) el('ltip').style.display = 'none';
-          processing = true;
+          const decision = pushVote(match);
+          if (decision && decision.settled) {
+            lastActionTime = Date.now();
+            scanEnabled = false;
+            if (el('ltip')) el('ltip').style.display = 'none';
+            processing = true;
 
-          const todayKey = new Date().toDateString();
-          const markedKey = `${matchStudentId || 'unknown'}__${todayKey}`;
-
-          if (isKnown) {
-            if (markedToday[markedKey]) {
-              // Already marked today
-              showAlreadyMarked(matchStudentId);
-            } else {
-              // FIX #12 — pass studentId not name to markAttendance
-              const t = getTimeSession();
-              if (!t.open) {
-                notify('⛔ ' + t.label, 'warning');
-                resumeScanning(2000);
+            if (decision.uncertain) {
+              notify('🤔 Could not confidently identify this face. Try again with better lighting, or register if new.', 'warning');
+              resumeScanning(1500);
+            } else if (decision.isKnown) {
+              const todayKey = new Date().toDateString();
+              const markedKey = `${decision.studentId}__${todayKey}`;
+              if (markedToday[markedKey]) {
+                showAlreadyMarked(decision.studentId);
               } else {
-                await doMarkAttendance(matchStudentId, matchDist, t.label);
+                await doMarkAttendance(decision.studentId, match.dist);
+              }
+            } else {
+              if (!document.querySelector('#modalContainer .modal')) {
+                pendingDescriptor = det.descriptor ? new Float32Array(det.descriptor) : null;
+                showQuickRegister();
+              } else {
+                resumeScanning(1000);
               }
             }
-          } else {
-            // Unknown face → capture descriptor and open quick-register
-            // FIX #13 — only open modal if NOT already open
-            if (!document.querySelector('#modalContainer .modal')) {
-              pendingDescriptor = det.descriptor ? new Float32Array(det.descriptor) : null;
-              showQuickRegister();
-            } else {
-              resumeScanning(1000);
-            }
           }
-          break; // process only the first valid face per frame
+          // else: still collecting votes, keep looping without acting
         }
+      } else if (sized.length !== 1) {
+        voteBuffer = [];
       }
     }
   } catch (e) {
@@ -781,7 +984,6 @@ async function detectionLoop() {
   if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
 }
 
-// ── Rounded rect helper ─────────────────────────────────────────
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y);
@@ -797,12 +999,12 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 // ── Mark attendance ──────────────────────────────────────────────
-async function doMarkAttendance(studentId, dist, statusLabel) {
+// NOTE: status is now decided by the SERVER, never trusted from the client.
+async function doMarkAttendance(studentId, dist) {
   const now = Date.now();
   const todayKey = new Date().toDateString();
   const markedKey = `${studentId}__${todayKey}`;
 
-  // Per-student cooldown (30s)
   if (cooldowns[studentId] && now - cooldowns[studentId] < 30000) {
     resumeScanning(1500);
     return;
@@ -810,7 +1012,6 @@ async function doMarkAttendance(studentId, dist, statusLabel) {
   cooldowns[studentId] = now;
   setStatus(`⏳ Marking ${studentId}... / हाजिर गर्दै...`);
 
-  // FIX #14 — look up actual student name from cache for display
   await fetchStudents();
   const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
   const displayName = stu ? stu.StudentName : studentId;
@@ -818,15 +1019,19 @@ async function doMarkAttendance(studentId, dist, statusLabel) {
   const r = await apiCall('markAttendance', {
     studentId: studentId,
     studentName: displayName,
-    confidence: (1 - dist).toFixed(3),
-    status: statusLabel
+    confidence: (1 - dist).toFixed(3)
   });
 
   if (r && r.success) {
     markedToday[markedKey] = true;
     const name = r.studentName || displayName;
-    showSuccessPopup(name, statusLabel);
+    showSuccessPopup(name, r.status);
     addMarkedChip(name);
+  } else if (r && r.reason === 'already_marked') {
+    showAlreadyMarked(studentId);
+  } else if (r && r.reason === 'outside_window') {
+    notify(`⛔ Attendance window closed: ${r.label}`, 'warning');
+    resumeScanning(1500);
   } else {
     notify('❌ Attendance failed / हाजिर असफल', 'error');
     resumeScanning(1500);
@@ -834,10 +1039,9 @@ async function doMarkAttendance(studentId, dist, statusLabel) {
 }
 
 function resumeScanning(delay = 1800) {
-  setTimeout(() => { scanEnabled = true; processing = false; resetLiveness(); }, delay);
+  setTimeout(() => { scanEnabled = true; processing = false; resetLiveness(); voteBuffer = []; }, delay);
 }
 
-// ── Success popup ───────────────────────────────────────────────
 function showSuccessPopup(name, status) {
   const ov = document.createElement('div');
   ov.className = 'mo'; ov.style.zIndex = '2000';
@@ -855,7 +1059,6 @@ function showSuccessPopup(name, status) {
   }, 5000);
 }
 
-// ── Already marked popup ────────────────────────────────────────
 function showAlreadyMarked(studentId) {
   fetchStudents().then(() => {
     const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
@@ -890,8 +1093,9 @@ function addMarkedChip(name) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// QUICK REGISTER MODAL (new face detected via camera)
-// FIX #15 — closeModal now properly resumes scanning
+// QUICK REGISTER MODAL (new face detected via camera) — single sample.
+// For full 3-sample accuracy, staff should still use the Register page;
+// this is a fast path for walk-up new admissions.
 // ══════════════════════════════════════════════════════════════════
 function showQuickRegister() {
   showModal(`
@@ -899,8 +1103,11 @@ function showQuickRegister() {
       <div class="modal-title">🆕 New Student / नयाँ विद्यार्थी</div>
       <div class="modal-close" onclick="closeModal();resumeScanning()"><i class="fas fa-times"></i></div>
     </div>
-    <div style="background:rgba(0,200,83,.07);border:1px solid rgba(0,200,83,.2);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.82rem;color:var(--s);font-weight:600">
+    <div style="background:rgba(0,200,83,.07);border:1px solid rgba(0,200,83,.2);border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:.82rem;color:var(--s);font-weight:600">
       ✅ Liveness confirmed / जीवन्तता पुष्टि भयो
+    </div>
+    <div style="background:rgba(255,152,0,.07);border:1px solid rgba(255,152,0,.2);border-radius:12px;padding:10px 14px;margin-bottom:18px;font-size:.76rem;color:#e08600">
+      ℹ️ This captures 1 face sample only. For best accuracy, add 2 more samples later from the Students page ("Improve Face Data").
     </div>
     <div class="fr">
       <div class="fg"><label class="fl">Full Name / नाम *</label><input id="qn" placeholder="Student Name" required></div>
@@ -911,7 +1118,7 @@ function showQuickRegister() {
       <div class="fg"><label class="fl">Section / सेक्सन</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
     </div>
     <div class="fr">
-      <div class="fg"><label class="fl">Roll No. / रोल</label><input id="qr" placeholder="Roll No."></div>
+      <div class="fg"><label class="fl">Roll No. / रोल *</label><input id="qr" placeholder="Roll No." required></div>
       <div class="fg"><label class="fl">Gender / लिङ्ग *</label><select id="qg" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
     </div>
     <div class="fr">
@@ -929,7 +1136,8 @@ async function submitQuickRegister() {
   const name = document.getElementById('qn').value.trim();
   const cls = document.getElementById('qc').value;
   const gender = document.getElementById('qg').value;
-  if (!name || !cls || !gender) { notify('Fill required fields / सबै भर्नुहोस्', 'warning'); return; }
+  const roll = document.getElementById('qr').value.trim();
+  if (!name || !cls || !gender || !roll) { notify('Fill required fields incl. Roll No. / सबै भर्नुहोस्', 'warning'); return; }
 
   const btn = document.querySelector('#modalContainer .btn-p');
   btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -940,41 +1148,34 @@ async function submitQuickRegister() {
     dateOfBirth: '',
     class: cls,
     section: document.getElementById('qs').value,
-    rollNumber: document.getElementById('qr').value,
+    rollNumber: roll,
     gender,
     fatherName: document.getElementById('qf').value,
     motherName: '',
     guardianPhone: document.getElementById('qp').value,
     address: document.getElementById('qad').value
   };
-  if (pendingDescriptor) payload.embedding = Array.from(pendingDescriptor);
+  if (pendingDescriptor) payload.embeddings = [Array.from(pendingDescriptor)];
 
   const r = await apiCall('registerStudent', payload);
 
   if (r && r.success) {
-    const sid = r.studentId; // FIX #16 — use returned ID, not name
-    const t = getTimeSession();
+    const sid = r.studentId;
     const attResult = await apiCall('markAttendance', {
-      studentId: sid,
-      studentName: name,
-      class: cls,
-      section: document.getElementById('qs').value,
-      rollNumber: document.getElementById('qr').value,
-      confidence: '0.99',
-      status: t.open ? t.label : 'Present'
+      studentId: sid, studentName: name, class: cls,
+      section: document.getElementById('qs').value, rollNumber: roll, confidence: '0.99'
     });
 
     closeModal();
 
     if (attResult && attResult.success) {
-      showSuccessPopup(name, t.open ? t.label : 'Present');
+      showSuccessPopup(name, attResult.status);
       addMarkedChip(name);
     } else {
       notify(`✅ ${name} registered! / दर्ता भयो!`, 'success');
       resumeScanning(0);
     }
 
-    // FIX #17 — refresh face matcher immediately so new student is recognised next time
     localStorage.removeItem(FACE_CACHE_KEY);
     faceMatcher = null;
     faceMatcherReady = false;
@@ -986,6 +1187,90 @@ async function submitQuickRegister() {
     btn.disabled = false;
     btn.innerHTML = '<i class="fas fa-save"></i> Register & Mark Present';
   }
+}
+
+// ══════════════════════════════════════════════════════════════════
+// IMPROVE FACE DATA — add more samples to an existing student
+// (fixes the old loophole where a bad single capture was permanent)
+// ══════════════════════════════════════════════════════════════════
+function showImproveFaceModal(studentId, studentName) {
+  let samples = [];
+  let stream = null;
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">📸 Improve Face Data — ${studentName}</div>
+      <div class="modal-close" onclick="stopImproveCam();closeModal()"><i class="fas fa-times"></i></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--sub);margin-bottom:12px">Capture up to 3 new samples. These are added to the student's existing face data (old samples are kept too, oldest dropped first beyond 5 total).</p>
+    <div class="cam-box" style="max-width:380px;margin:0 auto;aspect-ratio:4/3">
+      <video id="impCam" autoplay playsinline muted></video>
+    </div>
+    <div class="capture-grid" id="impGrid" style="max-width:380px;margin:0 auto">
+      ${[0,1,2].map(i=>`<div class="capture-slot" id="impSlot${i}"><i class="fas fa-user"></i></div>`).join('')}
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin:14px 0">
+      <button class="btn btn-p" id="impStartBtn" onclick="startImproveCam('${studentId}')"><i class="fas fa-video"></i> Start Camera</button>
+      <button class="btn btn-s" id="impCapBtn" style="display:none" onclick="captureImproveSample()"><i class="fas fa-camera"></i> Capture</button>
+    </div>
+    <button class="btn btn-p btn-block" id="impSaveBtn" style="display:none" onclick="saveImproveSamples('${studentId}','${studentName.replace(/'/g, "\\'")}')"><i class="fas fa-save"></i> Save Samples</button>
+  `);
+  window._improveSamples = [];
+}
+
+async function startImproveCam(studentId) {
+  if (!modelsLoaded) { notify('⏳ Loading models first...'); await preloadModels(); if (!modelsLoaded) return; }
+  try {
+    window._improveStream = await navigator.mediaDevices.getUserMedia({ video: { width: 480, height: 360, facingMode: 'user' } });
+    const v = document.getElementById('impCam');
+    v.srcObject = window._improveStream;
+    await v.play();
+    document.getElementById('impStartBtn').style.display = 'none';
+    document.getElementById('impCapBtn').style.display = 'inline-flex';
+  } catch (e) { notify('❌ Camera error: ' + e.message, 'error'); }
+}
+
+function stopImproveCam() {
+  if (window._improveStream) { window._improveStream.getTracks().forEach(t => t.stop()); window._improveStream = null; }
+}
+
+async function captureImproveSample() {
+  const v = document.getElementById('impCam');
+  if (!v || !v.videoWidth) return;
+  const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: DETECT_MIN_CONFIDENCE });
+  const det = await faceapi.detectSingleFace(v, opts).withFaceLandmarks().withFaceDescriptor();
+  if (!det) { notify('❌ No clear face detected', 'error'); return; }
+
+  window._improveSamples = window._improveSamples || [];
+  if (window._improveSamples.length >= 3) return;
+  window._improveSamples.push(Array.from(det.descriptor));
+
+  const slot = document.getElementById(`impSlot${window._improveSamples.length - 1}`);
+  if (slot) { slot.classList.add('filled'); slot.innerHTML = '<i class="fas fa-check" style="color:var(--s)"></i>'; }
+
+  if (window._improveSamples.length >= 3) {
+    document.getElementById('impCapBtn').style.display = 'none';
+    document.getElementById('impSaveBtn').style.display = 'flex';
+    stopImproveCam();
+  } else {
+    document.getElementById('impSaveBtn').style.display = 'flex';
+  }
+}
+
+async function saveImproveSamples(studentId, studentName) {
+  const samples = window._improveSamples || [];
+  if (samples.length === 0) { notify('No samples captured', 'warning'); return; }
+  const r = await apiCall('updateEmbedding', { studentId, studentName, embeddings: samples });
+  stopImproveCam();
+  closeModal();
+  if (r && r.success) {
+    notify(`✅ Added ${samples.length} new face sample(s) for ${studentName}`, 'success');
+    localStorage.removeItem(FACE_CACHE_KEY);
+    faceMatcherReady = false;
+    await loadEmbeddings();
+  } else {
+    notify('❌ Failed to save samples', 'error');
+  }
+  window._improveSamples = [];
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -1001,7 +1286,7 @@ async function loadStudents(c) {
   c.innerHTML = `<div class="card">
     <h2 style="margin-bottom:16px">Students / विद्यार्थी (${studentsCache.length})</h2>
     <div class="tbc"><table>
-      <thead><tr><th>#</th><th>ID</th><th>Name / नाम</th><th>Class / कक्षा</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone / फोन</th><th>Address / ठेगाना</th></tr></thead>
+      <thead><tr><th>#</th><th>ID</th><th>Name / नाम</th><th>Class / कक्षा</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone / फोन</th><th>Address / ठेगाना</th><th>Face Data</th></tr></thead>
       <tbody>${studentsCache.map((s, i) => `<tr>
         <td>${i + 1}</td>
         <td><small>${s.StudentID || '-'}</small></td>
@@ -1012,52 +1297,105 @@ async function loadStudents(c) {
         <td>${s.Gender || '-'}</td>
         <td>${s.GuardianPhone || '-'}</td>
         <td>${(s.Address || '-').substring(0, 25)}</td>
+        <td><button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${s.StudentID}','${String(s.StudentName||'').replace(/'/g, "\\'")}')"><i class="fas fa-camera"></i> Improve</button></td>
       </tr>`).join('')}</tbody>
     </table></div>
   </div>`;
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REPORTS
+// REPORTS — date range, present/late/absent per day, printable
 // ══════════════════════════════════════════════════════════════════
 function loadReports(c) {
-  c.innerHTML = `<div class="card">
-    <h2>📊 Reports / रिपोर्ट</h2>
-    <p style="color:var(--sub);margin:8px 0 16px">Date / मिति: <strong>${new Date().toISOString().split('T')[0]}</strong></p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-p btn-lg" onclick="printReport()"><i class="fas fa-print"></i> Print / प्रिन्ट</button>
-      <button class="btn btn-s btn-lg" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+  const today = new Date().toISOString().split('T')[0];
+  const weekAgo = new Date(Date.now() - 6*24*60*60*1000).toISOString().split('T')[0];
+  c.innerHTML = `
+    <div class="card no-print">
+      <h2>📊 Reports / रिपोर्ट</h2>
+      <p style="font-size:.78rem;color:var(--sub);margin:8px 0 16px">Shows Present / Late / Absent per student per day. Days are marked "Unmarked" instead of "Absent" if the server's daily absent-trigger had not run for that date yet (e.g. for "today" before 12 PM, or dates before the trigger was installed).</p>
+      <div class="fr">
+        <div class="fg"><label class="fl">From / देखि</label><input type="date" id="repStart" value="${weekAgo}"></div>
+        <div class="fg"><label class="fl">To / सम्म</label><input type="date" id="repEnd" value="${today}"></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-p btn-lg" onclick="runReport()"><i class="fas fa-search"></i> Generate / उत्पन्न गर्नुहोस्</button>
+        <button class="btn btn-s btn-lg" onclick="exportReportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+        <button class="btn btn-o btn-lg" onclick="window.print()"><i class="fas fa-print"></i> Print / प्रिन्ट</button>
+      </div>
     </div>
-  </div>`;
+    <div id="reportOutput"></div>`;
+  runReport();
 }
 
-function printReport() {
-  const w = window.open('', '_blank', 'width=900,height=700');
-  w.document.write(`<!DOCTYPE html><html><head><title>SEBS Attendance Report</title>
-    <style>@page{size:A4 landscape}body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:8px;font-size:12px}th{background:#eee}</style>
-    </head><body>
-    <div style="text-align:center"><img src="logo.png" width="60" onerror="this.style.display='none'">
-    <h2>Systematic English Boarding School</h2><p>${new Date().toLocaleString()}</p></div>
-    <div id="dt"></div>
-    <script>fetch('${API_URL}?action=getStudents').then(r=>r.json()).then(d=>{
-      let h='<table><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th></tr>';
-      if(d&&d.students)d.students.forEach((s,i)=>{h+='<tr><td>'+(i+1)+'</td><td>'+(s.StudentID||'-')+'</td><td>'+(s.StudentName||'-')+'</td><td>'+(s.Class||'-')+'</td><td>'+(s.Section||'-')+'</td><td>'+(s.RollNumber||'-')+'</td><td>'+(s.Gender||'-')+'</td></tr>';});
-      h+='</table>';document.getElementById('dt').innerHTML=h;setTimeout(()=>print(),800);
-    });<\/script></body></html>`);
-  w.document.close();
+let lastReportData = null;
+
+async function runReport() {
+  const start = document.getElementById('repStart').value;
+  const end = document.getElementById('repEnd').value;
+  const out = document.getElementById('reportOutput');
+  out.innerHTML = '<div style="text-align:center;padding:30px"><div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+
+  const d = await apiGetParams('getAttendanceReport', { start, end });
+  if (!d || !d.days) {
+    out.innerHTML = '<div class="card" style="text-align:center;padding:40px">Failed to load report.</div>';
+    return;
+  }
+  lastReportData = d;
+
+  let html = `<div class="card" id="printArea">
+    <div style="text-align:center;margin-bottom:18px">
+      <h2>Systematic English Boarding School</h2>
+      <p style="color:var(--sub);font-size:.82rem">Attendance Report: ${d.start} to ${d.end}</p>
+    </div>`;
+
+  d.days.forEach(day => {
+    const presentCt = day.records.filter(r => r.status === 'Present').length;
+    const lateCt = day.records.filter(r => r.status === 'Late').length;
+    const absentCt = day.records.filter(r => r.status === 'Absent').length;
+    const unmarkedCt = day.records.filter(r => r.status === 'Unmarked').length;
+
+    html += `<div style="margin-bottom:26px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+        <h3>${formatDateNice(day.date)}</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-present">${presentCt} Present</span>
+          <span class="badge badge-late">${lateCt} Late</span>
+          <span class="badge badge-absent">${absentCt} Absent</span>
+          ${unmarkedCt > 0 ? `<span class="badge badge-unmarked">${unmarkedCt} Unmarked</span>` : ''}
+        </div>
+      </div>
+      <div class="tbc"><table>
+        <thead><tr><th>#</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody>${day.records.map((r,i) => `<tr>
+          <td>${i+1}</td><td><strong>${r.studentName}</strong></td><td>${r.class}</td><td>${r.section}</td><td>${r.rollNumber}</td>
+          <td><span class="badge badge-${r.status.toLowerCase()}">${r.status}</span></td>
+          <td>${r.time || '-'}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>`;
+  });
+
+  html += '</div>';
+  out.innerHTML = html;
 }
 
-async function exportCSV() {
-  const d = await apiCall('getStudents');
-  if (!d || !d.students) { notify('No data / डेटा छैन', 'warning'); return; }
-  let csv = '#,ID,Name,Class,Section,Roll,Gender,Phone\n';
-  d.students.forEach((s, i) => {
-    csv += `${i+1},"${s.StudentID||''}","${s.StudentName||''}","${s.Class||''}","${s.Section||''}","${s.RollNumber||''}","${s.Gender||''}","${s.GuardianPhone||''}"\n`;
+function formatDateNice(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+function exportReportCSV() {
+  if (!lastReportData) { notify('Generate a report first / पहिले रिपोर्ट उत्पन्न गर्नुहोस्', 'warning'); return; }
+  let csv = 'Date,StudentID,Name,Class,Section,Roll,Status,Time\n';
+  lastReportData.days.forEach(day => {
+    day.records.forEach(r => {
+      csv += `${day.date},"${r.studentId}","${r.studentName}","${r.class}","${r.section}","${r.rollNumber}","${r.status}","${r.time}"\n`;
+    });
   });
   const blob = new Blob([csv], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `sebs-${new Date().toISOString().split('T')[0]}.csv`; a.click();
+  a.href = url; a.download = `sebs-report-${lastReportData.start}-to-${lastReportData.end}.csv`; a.click();
   URL.revokeObjectURL(url);
   notify('✅ CSV downloaded! / CSV डाउनलोड भयो!', 'success');
 }
