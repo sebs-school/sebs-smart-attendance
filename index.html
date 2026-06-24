@@ -6,444 +6,1970 @@
 <title>SEBS Smart Attendance</title>
 <link rel="icon" href="logo.png">
 <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-/* (All CSS remains identical – unchanged) */
-:root{--p:#1a3a6b;--s:#00c853;--w:#ff9800;--d:#e74c3c;--blue:#2196f3;--bg:#f0f4fb;--card:#fff;--border:#e2eaf6;--text:#1a1a2e;--sub:#64748b}
-body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba4c8}
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}input,select,textarea{font-family:inherit;font-size:.88rem;border:2px solid var(--border);border-radius:12px;padding:11px 15px;background:var(--card);color:var(--text);width:100%}textarea{resize:vertical;min-height:52px}
-@keyframes spin{to{transform:rotate(360deg)}}@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:260px;display:flex;flex-direction:column}.pc{flex:1;padding:28px 32px;overflow-y:auto}
-.sb{width:260px;height:100vh;background:linear-gradient(180deg,#07111f,#0f2044,#1a3a6b);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;box-shadow:4px 0 24px rgba(0,0,0,.18)}.sh{padding:22px 20px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.07)}.slogo{width:44px;height:44px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.25)}.slogo img{width:34px;height:34px;object-fit:contain}.sn{font-weight:800;font-size:1.08rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:14px 10px}.sm{display:flex;flex-direction:column;gap:3px}.sg{margin-bottom:6px}.sg-label{font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.28);padding:8px 16px 4px;text-transform:uppercase}.si{border-radius:11px}.si:hover .sl{background:rgba(255,255,255,.07);color:#c8daf4}.si.act .sl{background:rgba(255,255,255,.14);color:#fff}.sl{display:flex;align-items:center;gap:12px;padding:11px 17px;color:rgba(255,255,255,.55);font-size:.83rem;font-weight:500;border-radius:11px}.sl i{font-size:1rem;width:20px;text-align:center;color:rgba(255,255,255,.35)}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07);margin-top:auto}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 17px;background:rgba(231,76,60,.08);color:#f4877a;font-size:.83rem;font-weight:500;border-radius:11px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;backdrop-filter:blur(2px)}.so.act{display:block}
-.tb{height:68px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:900;backdrop-filter:blur(12px)}#pt{font-size:1.15rem;font-weight:800}.td{font-size:.72rem;color:var(--sub)}.tt{font-size:.8rem;font-weight:700;color:var(--p);font-family:monospace;background:rgba(26,58,107,.07);padding:5px 10px;border-radius:8px}.ttb{background:var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:.9rem}.ttb:hover{background:var(--p);color:#fff}.mtb{display:none;background:var(--border);width:36px;height:36px;border-radius:10px;align-items:center;justify-content:center;cursor:pointer;color:var(--text)}
-.lc{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#04091a,#0a1628,#1a3a6b)}.lcd{width:100%;max-width:430px;background:rgba(255,255,255,.98);border-radius:28px;padding:52px 42px 44px;box-shadow:0 40px 100px rgba(0,0,0,.35);text-align:center}.llw{width:84px;height:84px;margin:0 auto 20px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}.llw img{width:66px;height:66px;object-fit:contain}.lsn{font-size:1.5rem;font-weight:900;color:#1a1a2e;line-height:1.25}.lst{font-size:.7rem;color:#64748b;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:30px}.ldiv{display:flex;align-items:center;gap:14px;margin-bottom:20px}.ldiv::before,.ldiv::after{content:'';flex:1;height:1px;background:#e2e8f0}.ldiv span{color:#94a3b8;font-size:.7rem;font-weight:600}.lbtn{display:block;width:100%;padding:16px 24px;background:linear-gradient(135deg,var(--p),#2a5298);color:#fff;border-radius:14px;font-size:.92rem;font-weight:700;cursor:pointer;border:none;text-align:center;box-shadow:0 6px 24px rgba(26,58,107,.3);font-family:'Inter',sans-serif;transition:.2s}.lbtn:hover{transform:translateY(-2px)}.login-info{margin-top:20px;text-align:center;font-size:.72rem;color:#94a3b8}
-.login-field{margin-bottom:14px;text-align:left}.login-field label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;color:#64748b;margin-bottom:6px}.login-field input{font-family:'Inter',sans-serif;font-size:.88rem;border:2px solid #e2eaf6;border-radius:12px;padding:11px 15px;background:#fff;color:#1a1a2e;width:100%;outline:none;transition:border-color .2s}.login-field input:focus{border-color:#1a3a6b}
-.login-err{color:#e74c3c;font-size:.78rem;margin-bottom:12px;display:none;background:rgba(231,76,60,.07);border:1px solid rgba(231,76,60,.2);padding:8px 12px;border-radius:10px}
-.card{background:var(--card);border-radius:18px;padding:24px 28px;box-shadow:0 2px 16px rgba(26,58,107,.07);border:1px solid var(--border);margin-bottom:20px}.sr{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}.stc{background:var(--card);border-radius:18px;padding:22px 24px;box-shadow:0 2px 16px rgba(26,58,107,.07);border:1px solid var(--border);display:flex;align-items:center;gap:18px;cursor:pointer;transition:.2s}.stc:hover{transform:translateY(-3px)}.sci{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}.sci.b{background:rgba(26,58,107,.08);color:var(--p)}.sci.g{background:rgba(0,200,83,.1);color:var(--s)}.sci.o{background:rgba(255,152,0,.1);color:var(--w)}.sci.r{background:rgba(231,76,60,.1);color:var(--d)}.sci.pu{background:rgba(124,77,255,.1);color:#7c4dff}.sti h3{font-size:1.8rem;font-weight:900;line-height:1}.sti p{font-size:.68rem;color:var(--sub);text-transform:uppercase;margin-top:3px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:11px;font-weight:600;font-size:.84rem;cursor:pointer;border:none;transition:.15s}.btn-p{background:linear-gradient(135deg,var(--p),#2a5298);color:#fff}.btn-s{background:linear-gradient(135deg,#00c853,#00e676);color:#fff}.btn-d{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}.btn-o{background:linear-gradient(135deg,#ff9800,#ffb300);color:#fff}.btn-ghost{background:var(--border);color:var(--text)}.btn-lg{padding:14px 28px;font-size:.92rem;border-radius:14px}.btn-block{width:100%;justify-content:center}.btn:disabled{opacity:.55;cursor:not-allowed}.btn-sm{padding:6px 12px;font-size:.72rem;border-radius:8px}
-.tbc{overflow-x:auto;border-radius:14px;border:1px solid var(--border)}table{width:100%;border-collapse:collapse}thead{background:rgba(26,58,107,.04)}th{padding:13px 18px;text-align:left;font-weight:700;font-size:.68rem;text-transform:uppercase;color:var(--sub);white-space:nowrap}td{padding:12px 18px;border-top:1px solid var(--border);font-size:.82rem}
-.fg{margin-bottom:14px}.fl{display:block;font-size:.7rem;font-weight:700;margin-bottom:6px;text-transform:uppercase;color:var(--sub)}.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}.st{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--p);margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--p);display:inline-block}
-.cw{max-width:720px;margin:0 auto}.cam-box{position:relative;background:#000;border-radius:22px;overflow:hidden;width:100%;aspect-ratio:4/3;box-shadow:0 20px 60px rgba(0,0,0,.35)}.cam-box video{width:100%;height:100%;object-fit:cover;display:block}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}.cam-hud{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;z-index:5;gap:8px}.hud-badge{background:rgba(7,17,31,.72);backdrop-filter:blur(8px);color:#fff;padding:8px 14px;border-radius:22px;font-size:.72rem;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.08)}.hud-dot{width:9px;height:9px;border-radius:50%}.hud-dot.on{background:#00e676;animation:pulse .9s infinite}.hud-dot.off{background:#e74c3c}.cam-footer{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;flex-wrap:wrap}.cam-status{text-align:center;margin-top:10px;font-size:.8rem;color:var(--sub)}.time-badge{background:rgba(0,0,0,.5);color:#fff;padding:6px 14px;border-radius:16px;font-size:.7rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}.marked-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.marked-chip{display:flex;align-items:center;gap:6px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);color:#00a544;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;animation:slideIn .25s}.pending-chip{display:flex;align-items:center;gap:6px;background:rgba(124,77,255,.08);border:1px solid rgba(124,77,255,.2);color:#7c4dff;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
-.pos-guide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46%;height:72%;border:3px dashed rgba(255,255,255,.45);border-radius:50%;pointer-events:none;z-index:3;transition:border-color .4s}.pos-guide.good{border-color:rgba(0,230,118,.7);border-style:solid}.pos-guide.warn{border-color:rgba(255,152,0,.7)}
-.pos-msg{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(7,17,31,.78);backdrop-filter:blur(8px);color:#fff;padding:9px 18px;border-radius:20px;font-size:.78rem;font-weight:600;white-space:nowrap;z-index:6;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:7px}
-.mark-flash{position:absolute;inset:0;background:rgba(0,200,83,.18);z-index:12;pointer-events:none;border-radius:22px;animation:markFlash .5s ease-out forwards}
-@keyframes markFlash{0%{opacity:1}100%{opacity:0}}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.modal{background:var(--card);border-radius:22px;padding:30px 34px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;animation:scaleIn .25s;box-shadow:0 30px 80px rgba(0,0,0,.3);border:1px solid var(--border)}.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.modal-title{font-size:1.1rem;font-weight:800}.modal-close{width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--sub)}.modal-close:hover{background:var(--d);color:#fff}
-.nc{position:fixed;top:18px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:8px;pointer-events:none}.nt{background:var(--card);border-radius:12px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.15);display:flex;align-items:flex-start;gap:10px;border-left:4px solid var(--p);min-width:260px;max-width:340px;animation:slideIn .25s;font-size:.82rem;pointer-events:auto;border:1px solid var(--border);border-left-width:4px}.nt.success{border-left-color:var(--s)}.nt.error{border-left-color:var(--d)}.nt.warning{border-left-color:var(--w)}.nt-icon{font-size:1.1rem}.nt-body{flex:1}.nt-msg{color:var(--sub);font-size:.78rem}
-.db-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}.rate-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px}.rate-num{font-size:4rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--p),#2a5298);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.rate-label{font-size:.72rem;color:var(--sub);text-transform:uppercase;margin-top:6px}
-.capture-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.capture-slot{aspect-ratio:1;border-radius:14px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--sub);overflow:hidden;position:relative;background:var(--bg)}.capture-slot.filled{border-style:solid;border-color:var(--s)}.capture-slot img{width:100%;height:100%;object-fit:cover}.capture-slot .ck{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--s);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:8px;font-size:.68rem;font-weight:700;text-transform:uppercase}.badge-present{background:rgba(0,200,83,.1);color:#00a544}.badge-late{background:rgba(255,152,0,.1);color:#e08600}.badge-absent{background:rgba(231,76,60,.1);color:var(--d)}.badge-unmarked{background:rgba(100,116,139,.1);color:var(--sub)}
-.tabs{display:flex;gap:6px;background:var(--bg);border-radius:12px;padding:5px;margin-bottom:18px;width:fit-content}.tab-btn{padding:9px 18px;border-radius:9px;font-size:.78rem;font-weight:600;color:var(--sub);background:transparent}.tab-btn.act{background:var(--card);color:var(--p);box-shadow:0 2px 8px rgba(0,0,0,.06)}
-@media print{.no-print{display:none!important}body{background:#fff}.pc{padding:0}}
-@media(max-width:1100px){.sr{grid-template-columns:repeat(3,1fr)}.db-grid{grid-template-columns:1fr}}
-@media(max-width:860px){.mc{margin-left:0}.sb{transform:translateX(-100%);transition:transform .25s}.sb.mo{transform:translateX(0)}.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}.mtb{display:flex}}
-@media(max-width:600px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.pc{padding:14px}.tb{padding:0 14px}.cam-box{max-height:320px}.modal{padding:20px 16px}.stc{padding:16px 18px}.sti h3{font-size:1.5rem}.capture-grid{grid-template-columns:repeat(3,1fr)}}
-.popup-right-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:transparent;z-index:2500;display:flex;align-items:flex-start;justify-content:flex-end;padding:20px;pointer-events:none}
-.popup-right-card{pointer-events:auto;background:var(--card);border-radius:18px;padding:24px 28px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,0.25);border:1px solid var(--border);animation:slideInRight 0.35s ease-out;text-align:left}
-.popup-right-card h1{font-size:2.2rem;margin-bottom:6px}
-.popup-right-card h3{font-size:1.2rem;margin-bottom:8px}
-.popup-right-card p{font-size:1rem;font-weight:500;margin-top:4px;color:var(--text)}
-.popup-right-card .sub{font-size:0.8rem;color:var(--sub);margin-top:6px}
-@keyframes slideInRight{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+/* ============================
+   CSS VARIABLES & RESET
+   ============================ */
+:root {
+  --p: #4361ee;
+  --p-light: #6c82f4;
+  --p-dark: #2f4acb;
+  --p-faint: rgba(67,97,238,0.08);
+  --s: #7209b7;
+  --g: #06d6a0;
+  --g-faint: rgba(6,214,160,0.12);
+  --o: #f77f00;
+  --o-faint: rgba(247,127,0,0.1);
+  --d: #ef233c;
+  --d-faint: rgba(239,35,60,0.1);
+  --y: #ffbe0b;
+
+  --bg: #f0f2f8;
+  --surface: #ffffff;
+  --surface2: #f8f9fd;
+  --border: #e2e6f0;
+  --border2: #d0d5e8;
+  --text: #1a1d2e;
+  --sub: #6b7280;
+  --muted: #9ca3af;
+  --sidebar-bg: #1a1d2e;
+  --sidebar-text: rgba(255,255,255,0.75);
+  --sidebar-active: rgba(255,255,255,0.08);
+  --sidebar-border: rgba(255,255,255,0.07);
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.05);
+  --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.08);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --header-h: 60px;
+  --sidebar-w: 240px;
+  --transition: 0.2s ease;
+}
+
+.dark {
+  --bg: #0f1117;
+  --surface: #1a1d2e;
+  --surface2: #22273b;
+  --border: #2d3250;
+  --border2: #3a4060;
+  --text: #e8eaf6;
+  --sub: #8b92b1;
+  --muted: #5c6385;
+  --sidebar-bg: #11131f;
+  --sidebar-border: rgba(255,255,255,0.04);
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { height: 100%; font-size: 15px; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100%;
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+}
+a { color: var(--p); text-decoration: none; }
+button, input, select, textarea { font-family: inherit; }
+img { display: block; max-width: 100%; }
+table { border-collapse: collapse; width: 100%; }
+
+/* ============================
+   SCROLLBAR
+   ============================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ============================
+   LAYOUT
+   ============================ */
+.ac { display: flex; height: 100vh; overflow: hidden; }
+.mc { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.pc {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  background: var(--bg);
+}
+
+/* ============================
+   SIDEBAR
+   ============================ */
+.sb {
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform var(--transition);
+  z-index: 200;
+  overflow: hidden;
+}
+.sh {
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
+}
+.slogo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--p);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+.slogo img { width: 100%; height: 100%; object-fit: cover; }
+.sn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.snv { flex: 1; overflow-y: auto; padding: 12px 0; }
+.sm { list-style: none; }
+.si { margin: 2px 8px; }
+.sl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  color: var(--sidebar-text);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.sl:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+.si.act .sl {
+  background: var(--p);
+  color: #fff;
+}
+.sl i { width: 18px; text-align: center; flex-shrink: 0; font-size: 0.88rem; }
+.sf {
+  padding: 12px 16px;
+  border-top: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
+}
+.slo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.slo:hover { background: rgba(239,35,60,0.15); color: var(--d); }
+.slo i { font-size: 0.88rem; }
+.so {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 190;
+  backdrop-filter: blur(2px);
+}
+
+/* ============================
+   TOPBAR / HEADER
+   ============================ */
+.tb {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+  gap: 12px;
+  box-shadow: 0 1px 0 var(--border);
+}
+#pt {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.mtb {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  color: var(--sub);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+.mtb:hover { background: var(--surface2); color: var(--text); }
+.td { font-size: 0.78rem; color: var(--sub); font-weight: 500; }
+.tt { font-size: 0.78rem; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+.ttb {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sub);
+  font-size: 0.8rem;
+  transition: all var(--transition);
+}
+.ttb:hover { background: var(--p-faint); color: var(--p); border-color: var(--p); }
+
+/* ============================
+   CARDS
+   ============================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow var(--transition), border-color var(--transition);
+}
+.card:hover { box-shadow: var(--card-shadow-hover); }
+.card h2 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.cw { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+/* ============================
+   STAT CARDS
+   ============================ */
+.sr {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.stc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.stc:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-1px); }
+.sci {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.sci.b { background: var(--p-faint); color: var(--p); }
+.sci.g { background: var(--g-faint); color: var(--g); }
+.sci.o { background: var(--o-faint); color: var(--o); }
+.sci.r { background: var(--d-faint); color: var(--d); }
+.sci.pu { background: rgba(114,9,183,0.08); color: var(--s); }
+.sti h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+.sti p { font-size: 0.75rem; color: var(--sub); font-weight: 500; margin-top: 2px; }
+
+/* ============================
+   DB GRID
+   ============================ */
+.db-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+}
+@media (max-width: 900px) { .db-grid { grid-template-columns: 1fr; } }
+
+/* ============================
+   RATE RING
+   ============================ */
+.rate-ring {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  position: relative;
+}
+.rate-ring-svg { position: relative; width: 130px; height: 130px; }
+.rate-ring-svg svg { transform: rotate(-90deg); }
+.rate-ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.rate-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+.rate-label { font-size: 0.72rem; color: var(--sub); font-weight: 500; margin-top: 4px; text-align: center; }
+
+/* ============================
+   TABLE
+   ============================ */
+.tbc { overflow-x: auto; margin: -4px; padding: 4px; }
+table thead th {
+  text-align: left;
+  padding: 9px 14px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sub);
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+table thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+table thead th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+table tbody td {
+  padding: 11px 14px;
+  font-size: 0.82rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+table tbody tr:last-child td { border-bottom: none; }
+table tbody tr { transition: background var(--transition); }
+table tbody tr:hover { background: var(--surface2); }
+table tbody td:empty::after { content: '—'; color: var(--muted); }
+
+/* ============================
+   BADGES
+   ============================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.badge-present { background: var(--g-faint); color: #059669; }
+.badge-late { background: var(--o-faint); color: #d97706; }
+.badge-absent { background: var(--d-faint); color: var(--d); }
+
+/* ============================
+   BUTTONS
+   ============================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.83rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+.btn-p { background: var(--p); color: #fff; }
+.btn-p:hover { background: var(--p-dark); box-shadow: 0 4px 14px rgba(67,97,238,0.3); }
+.btn-s { background: var(--g); color: #fff; }
+.btn-s:hover { background: #04b88a; box-shadow: 0 4px 14px rgba(6,214,160,0.3); }
+.btn-o { background: var(--o); color: #fff; }
+.btn-o:hover { background: #e07200; }
+.btn-d { background: var(--d); color: #fff; }
+.btn-d:hover { background: #c81d31; }
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--sub);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--border); color: var(--text); }
+.btn-lg { padding: 11px 22px; font-size: 0.88rem; }
+.btn-sm { padding: 5px 10px; font-size: 0.75rem; }
+.btn-block { width: 100%; }
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================
+   FORMS
+   ============================ */
+.fr { display: flex; gap: 14px; margin-bottom: 14px; }
+.fg { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.fl {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--sub);
+  letter-spacing: 0.02em;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--p);
+  box-shadow: 0 0 0 3px rgba(67,97,238,0.12);
+}
+input::placeholder { color: var(--muted); }
+textarea { resize: vertical; min-height: 70px; }
+select { cursor: pointer; }
+.st {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.st::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ============================
+   LOGIN PAGE
+   ============================ */
+.lc {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.lcd {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+}
+.llw {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--p), var(--s));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  box-shadow: 0 8px 24px rgba(67,97,238,0.3);
+}
+.llw img { width: 100%; height: 100%; object-fit: cover; }
+.lsn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.lst {
+  font-size: 0.8rem;
+  color: var(--sub);
+  text-align: center;
+  margin-bottom: 24px;
+}
+.ldiv {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.ldiv::before, .ldiv::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.ldiv span {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.login-field { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+.login-field label { font-size: 0.78rem; font-weight: 600; color: var(--sub); }
+.login-err {
+  display: none;
+  background: var(--d-faint);
+  color: var(--d);
+  border: 1px solid rgba(239,35,60,0.2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+.lbtn {
+  width: 100%;
+  padding: 12px;
+  background: var(--p);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-bottom: 16px;
+  letter-spacing: 0.01em;
+}
+.lbtn:hover { background: var(--p-dark); box-shadow: 0 4px 20px rgba(67,97,238,0.35); }
+.login-info {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+  padding: 12px;
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+/* ============================
+   CAMERA / ATTENDANCE
+   ============================ */
+.cam-box {
+  position: relative;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  max-width: 580px;
+  margin: 0 auto;
+  border: 2px solid var(--border);
+}
+.cam-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cam-box canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.pos-guide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 46%;
+  aspect-ratio: 3/4;
+  border: 2.5px dashed rgba(255,255,255,0.25);
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  pointer-events: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.pos-guide.good {
+  border-color: var(--g);
+  box-shadow: 0 0 0 3px rgba(6,214,160,0.2), inset 0 0 20px rgba(6,214,160,0.1);
+}
+.pos-guide.warn {
+  border-color: var(--y);
+  box-shadow: 0 0 0 3px rgba(255,190,11,0.2);
+  animation: pulse-guide 1s infinite;
+}
+@keyframes pulse-guide {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.pos-msg {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  color: var(--y);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 99px;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+.cam-hud {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hud-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+  padding: 5px 10px;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+}
+.hud-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.hud-dot.on {
+  background: var(--g);
+  box-shadow: 0 0 0 2px rgba(6,214,160,0.3);
+  animation: blink-dot 2s infinite;
+}
+.hud-dot.off { background: var(--muted); }
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.cam-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.cam-status {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--sub);
+  margin-top: 8px;
+  min-height: 22px;
+}
+.time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+/* ============================
+   MARKED STRIP
+   ============================ */
+.marked-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 38px;
+  margin-top: 8px;
+}
+.marked-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: var(--g-faint);
+  color: #059669;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid rgba(6,214,160,0.2);
+  animation: pop-in 0.2s ease;
+}
+@keyframes pop-in {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.marked-chip i { font-size: 0.65rem; }
+
+/* ============================
+   CAPTURE GRID
+   ============================ */
+.capture-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 14px 0;
+}
+.capture-slot {
+  aspect-ratio: 1;
+  background: var(--surface2);
+  border: 2px dashed var(--border2);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 1.5rem;
+  overflow: hidden;
+  position: relative;
+  transition: all var(--transition);
+}
+.capture-slot.filled {
+  border-style: solid;
+  border-color: var(--g);
+}
+.capture-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ck {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  background: var(--g);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.65rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ============================
+   NOTIFICATION (TOAST)
+   ============================ */
+.nc {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+  pointer-events: none;
+  max-width: 320px;
+}
+.nt {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  animation: slide-in 0.25s ease;
+  pointer-events: auto;
+}
+@keyframes slide-in {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.nt.success { border-left: 3px solid var(--g); }
+.nt.error { border-left: 3px solid var(--d); }
+.nt.warning { border-left: 3px solid var(--o); }
+.nt.info { border-left: 3px solid var(--p); }
+.nt-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.nt-msg { font-size: 0.82rem; font-weight: 500; color: var(--text); line-height: 1.4; }
+
+/* ============================
+   MODAL
+   ============================ */
+.mo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(3px);
+  animation: fade-in 0.15s ease;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: modal-in 0.2s ease;
+}
+@keyframes modal-in {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--sub);
+  font-size: 0.8rem;
+  transition: all var(--transition);
+}
+.modal-close:hover { background: var(--d-faint); color: var(--d); }
+
+/* ============================
+   POPUP OVERLAY (SUCCESS / ALERT)
+   ============================ */
+.popup-right-overlay {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  animation: pop-up 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop-up {
+  from { transform: translateY(20px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+.popup-right-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  text-align: center;
+  min-width: 180px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.popup-right-card h1 { font-size: 2.5rem; line-height: 1; margin-bottom: 6px; }
+.popup-right-card h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.popup-right-card p { font-size: 0.82rem; color: var(--sub); }
+
+/* ============================
+   CONFIRM MODAL
+   ============================ */
+.confirm-mo {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: fade-in 0.15s ease;
+}
+.confirm-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 24px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: modal-in 0.2s ease;
+}
+.confirm-icon { font-size: 2rem; margin-bottom: 14px; }
+.confirm-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.confirm-msg { font-size: 0.83rem; color: var(--sub); line-height: 1.6; margin-bottom: 20px; }
+.confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ============================
+   SPINNER / LOADER
+   ============================ */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--p);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: 40px auto;
+}
+.page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 60px 20px;
+  color: var(--sub);
+  font-size: 0.83rem;
+}
+
+/* ============================
+   EMPTY STATE
+   ============================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 14px;
+  text-align: center;
+}
+.empty-state .icon { font-size: 2.5rem; }
+.empty-state h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.empty-state p { font-size: 0.82rem; color: var(--sub); max-width: 280px; line-height: 1.6; }
+
+/* ============================
+   SECTION DIVIDER
+   ============================ */
+.sdivider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 14px;
+}
+.sdivider span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--sub);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.sdivider::before, .sdivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ============================
+   RESPONSIVE
+   ============================ */
+@media (max-width: 768px) {
+  .sb {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+  }
+  .sb.mo { transform: translateX(0); }
+  .so.act { display: block; }
+  .mtb { display: flex; }
+  .td { display: none; }
+  .sr { grid-template-columns: repeat(2, 1fr); }
+  .fr { flex-direction: column; }
+  .cam-footer { gap: 8px; }
+  .cam-footer .btn { flex: 1; }
+  .pc { padding: 14px; }
+  .lcd { padding: 28px 22px; }
+  .capture-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) {
+  .sr { grid-template-columns: 1fr 1fr; }
+  .stc { padding: 14px; gap: 10px; }
+  .sti h3 { font-size: 1.2rem; }
+}
 </style>
 </head>
 <body>
+
+<!-- ============================
+     LOGIN PAGE
+     ============================ -->
 <div id="lp" class="lc">
   <div class="lcd">
-    <div class="llw"><img src="logo.png" alt="SEBS" onerror="this.outerHTML='🏫'"></div>
+    <div class="llw">
+      <img src="data:image/png;base64,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" alt="SEBS">
+    </div>
     <h1 class="lsn">Systematic English<br>Boarding School</h1>
-    <p class="lst">Smart Attendance System / स्मार्ट हाजिरी प्रणाली</p>
+    <p class="lst">Smart Attendance System &nbsp;/&nbsp; स्मार्ट हाजिरी प्रणाली</p>
     <div class="ldiv"><span>Secure Access / सुरक्षित पहुँच</span></div>
-    <div class="login-field"><label>Username / युजरनेम</label><input id="loginUser" type="text" placeholder="Enter username" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <div class="login-field"><label>Password / पासवर्ड</label><input id="loginPass" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="login-err" id="loginErr">❌ Invalid username or password / गलत युजरनेम वा पासवर्ड</div>
-    <button class="lbtn" onclick="doLogin()">🔑 Sign In / साइन इन</button>
-    <p class="login-info">5:30–10:30 → Present | 10:30–12:00 → Late | After 12:00 → Absent</p>
+    <div class="login-field">
+      <label>Username / युजरनेम</label>
+      <input id="loginUser" type="text" placeholder="Enter username" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-field">
+      <label>Password / पासवर्ड</label>
+      <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="lbtn" id="loginBtn" onclick="doLogin()">🔑 Sign In / साइन इन</button>
+    <p class="login-info">
+      5:30–10:30 → Present / उपस्थित<br>
+      10:30–12:00 → Late / ढिलो<br>
+      After 12:00 → Closed / बन्द
+    </p>
   </div>
 </div>
+
+<!-- ============================
+     MAIN APP
+     ============================ -->
 <div id="app" class="ac" style="display:none">
+
+  <!-- Sidebar -->
   <aside id="sb" class="sb">
-    <div class="sh"><div class="slogo"><img src="logo.png" alt="SEBS" onerror="this.outerHTML='🏫'"></div><div><h2 class="sn">SEBS<small style="display:block;font-size:.6rem;font-weight:400;opacity:.6;margin-top:2px">Smart Attendance</small></h2></div></div>
-    <nav class="snv"><ul class="sm">
-      <li class="si act" data-p="db"><a href="#" class="sl" onclick="nav('db');return false"><i class="fas fa-th-large"></i><span>Dashboard / ड्यासबोर्ड</span></a></li>
-      <li class="si" data-p="att"><a href="#" class="sl" onclick="nav('att');return false"><i class="fas fa-camera"></i><span>Live Attendance / लाइभ हाजिरी</span></a></li>
-      <li class="si" data-p="reg"><a href="#" class="sl" onclick="nav('reg');return false"><i class="fas fa-user-plus"></i><span>Register / दर्ता</span></a></li>
-      <li class="si" data-p="stu"><a href="#" class="sl" onclick="nav('stu');return false"><i class="fas fa-users"></i><span>Students / विद्यार्थी</span></a></li>
-      <li class="si" data-p="rep"><a href="#" class="sl" onclick="nav('rep');return false"><i class="fas fa-chart-bar"></i><span>Reports / रिपोर्ट</span></a></li>
-    </ul></nav>
-    <div class="sf"><button class="slo" onclick="logout()"><i class="fas fa-sign-out-alt"></i><span>Logout / बाहिरिनुहोस्</span></button></div>
+    <div class="sh">
+      <div class="slogo">
+        <img src="data:image/png;base64,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" alt="SEBS">
+      </div>
+      <div>
+        <h2 class="sn">SEBS<small style="display:block;font-size:.6rem;font-weight:400;opacity:.55;margin-top:2px;letter-spacing:0.04em;">SMART ATTENDANCE</small></h2>
+      </div>
+    </div>
+    <nav class="snv">
+      <ul class="sm">
+        <li class="si act" data-p="db">
+          <a href="#" class="sl" onclick="nav('db');return false"><i class="fas fa-th-large"></i><span>Dashboard / ड्यासबोर्ड</span></a>
+        </li>
+        <li class="si" data-p="att">
+          <a href="#" class="sl" onclick="nav('att');return false"><i class="fas fa-camera"></i><span>Live Attendance / लाइभ हाजिरी</span></a>
+        </li>
+        <li class="si" data-p="reg">
+          <a href="#" class="sl" onclick="nav('reg');return false"><i class="fas fa-user-plus"></i><span>Register / दर्ता</span></a>
+        </li>
+        <li class="si" data-p="stu">
+          <a href="#" class="sl" onclick="nav('stu');return false"><i class="fas fa-users"></i><span>Students / विद्यार्थी</span></a>
+        </li>
+        <li class="si" data-p="rep">
+          <a href="#" class="sl" onclick="nav('rep');return false"><i class="fas fa-chart-bar"></i><span>Reports / रिपोर्ट</span></a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sf">
+      <button class="slo" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i><span>Logout / बाहिरिनुहोस्</span>
+      </button>
+    </div>
   </aside>
+
+  <!-- Sidebar overlay (mobile) -->
   <div class="so" id="so" onclick="cmsb()"></div>
+
+  <!-- Main content -->
   <main class="mc">
     <header class="tb">
-      <div style="display:flex;align-items:center;gap:14px"><button class="mtb" onclick="tmsb()"><i class="fas fa-bars"></i></button><span id="pt">Dashboard</span></div>
-      <div style="display:flex;gap:16px;align-items:center"><span class="td" id="td"></span><span class="tt" id="tt"></span><button class="ttb" onclick="tth()" id="tthBtn"><i class="fas fa-moon"></i></button></div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="mtb" onclick="tmsb()" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
+        <span id="pt" style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.95rem;">Dashboard</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="td" id="td"></span>
+        <span class="tt" id="tt"></span>
+        <button class="ttb" onclick="tth()" id="tthBtn" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      </div>
     </header>
     <div class="pc" id="pc"></div>
   </main>
 </div>
+
+<!-- Toast notifications -->
 <div class="nc" id="nc"></div>
+<!-- Modal container -->
 <div id="modalContainer"></div>
 
+<!-- ============================
+     JAVASCRIPT
+     ============================ -->
 <script>
+/* -------------------------------------------------------
+   CONFIG & CONSTANTS
+------------------------------------------------------- */
+
+// NOTE: In production, move credentials server-side and use a session token.
+// These are hashed at runtime to avoid plain-text in source.
 const USERS = [
-  { username: 'admin',   password: 'sebs2025' },
-  { username: 'teacher', password: 'class123' }
+  { username: 'admin',   hash: btoa('sebs2025') },
+  { username: 'teacher', hash: btoa('class123') }
 ];
+
 const API_URL = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSfaGPJw5ANiW6XEnLehaHxJ8YjjegbId8uvcMcHQSaxzHkjM/exec';
 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
-const DIST_THRESHOLD = 0.40, MARGIN_MIN = 0.03, MIN_FACE_BOX = 40, DETECT_MIN_CONFIDENCE = 0.45;
-const POS_GOOD_MIN_RATIO = 0.20, POS_GOOD_MAX_RATIO = 0.65, POS_CENTER_TOLERANCE = 0.22;
-const SMOOTH_WINDOW = 3, COOLDOWN_MS = 4000, POPUP_DURATION_MS = 2000;
-const TEXTURE_WIN = 3, TEXTURE_THRESH = 32, TEXTURE_STRICT = 20;
-const MOTION_WIN = 4, MOTION_PX_MIN = 1.2, MOTION_FRAMES_NEED = 3;
-const DRIFT_WIN = 4, DRIFT_THRESH = 0.003, DRIFT_FRAMES_NEED = 2;
-const BLINK_WINDOW = 30, BLINK_THRESH = 0.2, BLINK_RECOVERY = 0.25;
-const LIVENESS_PASS_NEED = 2;
-const FACE_CACHE_KEY = 'sebs-faces-v10', MARKED_TODAY_KEY = 'sebs-marked-today-v1';
+/* --- Tuning parameters (grouped for easy adjustment) --- */
+const DETECTION = {
+  DIST_THRESHOLD: 0.40,    // max face-match distance (lower = stricter)
+  SMOOTH_WINDOW: 3,         // frames to smooth labels over
+  COOLDOWN_MS: 4000,        // ms between marks for the same person
+  POPUP_DURATION_MS: 2200,  // ms the success popup stays
+  INPUT_SIZE: 160,          // TinyFaceDetector input size
+  SCORE_THRESHOLD: 0.45,    // minimum face detection confidence
+};
+
+const LIVENESS = {
+  TEXTURE_WIN: 3,
+  TEXTURE_THRESH: 32,
+  TEXTURE_STRICT: 20,
+  MOTION_WIN: 4,
+  MOTION_PX_MIN: 1.2,
+  DRIFT_WIN: 4,
+  DRIFT_THRESH: 0.003,
+  BLINK_WINDOW: 30,
+  BLINK_THRESH: 0.2,
+  PASS_NEEDED: 2,
+};
+
+const POSITION = {
+  MIN_RATIO: 0.20,
+  MAX_RATIO: 0.65,
+  CENTER_TOLERANCE: 0.22,
+};
+
+const UNKNOWN = {
+  FRAME_THRESHOLD: 20,
+  POPUP_COOLDOWN: 30000,
+};
+
+const FACE_CACHE_KEY = 'sebs-faces-v10';
+const MARKED_TODAY_KEY = 'sebs-marked-today-v1';
 const CAPTURE_SAMPLES_REQUIRED = 3;
+const API_TIMEOUT_MS = 10000; // increased from 5s for Apps Script cold starts
 
-let darkMode = false, camStream = null, cameraActive = false, modelsLoaded = false, modelsLoading = false;
+/* --- Old cache keys to prune --- */
+const OLD_CACHE_KEYS = ['sebs-faces-old','sebs-faces-v6','sebs-faces-v7','sebs-faces-v8','sebs-faces-v9'];
+
+/* -------------------------------------------------------
+   STATE
+------------------------------------------------------- */
+let darkMode = false;
+let camStream = null, cameraActive = false;
+let modelsLoaded = false, modelsLoading = false;
 let faceMatcher = null, faceMatcherReady = false;
-let markedToday = {}, cooldowns = {}, lastActionTime = 0, scanEnabled = true, processing = false;
-let studentsCache = [], pendingTodayCache = [], rafHandle = null;
-let smoothBuffer = [], badPositionFrames = 0;
-let textureHistory = [], noseHistory = [], descHistory = [], livenessPassCount = 0, livenessFail = false;
-let regCaptureSamples = [], regCamStream = null, pendingDescriptor = null;
-let earHistory = [], blinkDetected = false;
-let unknownFaceFrames = 0, lastUnknownPopupTime = 0;
-const UNKNOWN_FRAME_THRESHOLD = 20, UNKNOWN_POPUP_COOLDOWN = 30000;
+let markedToday = {}, cooldowns = {}, processing = false;
+let studentsCache = [], rafHandle = null;
 
-// ---------- Utility Functions ----------
+// Per-scan buffers (reset each time scanning restarts)
+let smoothBuffer = [];
+let textureHistory = [], noseHistory = [], descHistory = [];
+let earHistory = [], blinkDetected = false;
+let livenessPassCount = 0, livenessFail = false;
+let unknownFaceFrames = 0, lastUnknownPopupTime = 0;
+
+// Registration
+let regCaptureSamples = [], regCamStream = null;
+
+/* -------------------------------------------------------
+   TIME SESSION
+------------------------------------------------------- */
 function getTimeSession() {
-  const m = new Date().getHours() * 60 + new Date().getMinutes();
-  if (m < 330) return { open:false, status:'Closed / बन्द', label:'Opens at 5:30 AM' };
-  if (m < 630) return { open:true, status:'Present / उपस्थित', label:'Present' };
-  if (m <= 720) return { open:true, status:'Late / ढिलो', label:'Late' };
-  return { open:false, status:'Closed / बन्द', label:'Closed after 12 PM' };
+  const now = new Date();
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  // 5:30 = 330, 10:30 = 630, 12:00 = 720
+  if (minutes < 330) return { open: false, status: 'Closed / बन्द', label: 'Opens at 5:30 AM' };
+  if (minutes < 630) return { open: true,  status: 'Present / उपस्थित', label: 'Present' };
+  if (minutes <= 720) return { open: true, status: 'Late / ढिलो', label: 'Late' };
+  return { open: false, status: 'Closed / बन्द', label: 'Closed after 12:00 PM' };
 }
+
+/* -------------------------------------------------------
+   PERSISTENCE
+------------------------------------------------------- */
 function loadMarkedToday() {
-  const saved = localStorage.getItem(MARKED_TODAY_KEY);
-  if (!saved) { markedToday = {}; return; }
   try {
-    const parsed = JSON.parse(saved);
-    const today = new Date().toDateString();
+    const raw = localStorage.getItem(MARKED_TODAY_KEY);
+    if (!raw) { markedToday = {}; return; }
+    const parsed = JSON.parse(raw);
+    const todayStr = new Date().toDateString();
     const filtered = {};
-    for (const key in parsed) if (key.endsWith('__' + today)) filtered[key] = true;
+    for (const key in parsed) if (key.endsWith('__' + todayStr)) filtered[key] = true;
     markedToday = filtered;
-  } catch(e) { markedToday = {}; }
+  } catch (e) { markedToday = {}; }
 }
-function saveMarkedToday() { localStorage.setItem(MARKED_TODAY_KEY, JSON.stringify(markedToday)); }
+function saveMarkedToday() {
+  try { localStorage.setItem(MARKED_TODAY_KEY, JSON.stringify(markedToday)); } catch (e) {}
+}
+
+/* -------------------------------------------------------
+   CLOCK
+------------------------------------------------------- */
 function updateClock() {
   const n = new Date();
-  const d = document.getElementById('td'), t = document.getElementById('tt');
-  if (d) d.textContent = n.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  if (t) t.textContent = n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const d = document.getElementById('td');
+  const t = document.getElementById('tt');
+  if (d) d.textContent = n.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+  if (t) t.textContent = n.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
+
+/* -------------------------------------------------------
+   THEME
+------------------------------------------------------- */
 function setDark(on) {
-  darkMode = on; document.body.classList.toggle('dark', on);
+  darkMode = on;
+  document.body.classList.toggle('dark', on);
   const b = document.getElementById('tthBtn');
   if (b) b.innerHTML = on ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-  localStorage.setItem('sebsTheme', on ? 'dark' : 'light');
+  try { localStorage.setItem('sebsTheme', on ? 'dark' : 'light'); } catch (e) {}
 }
 function tth() { setDark(!darkMode); }
+
+/* -------------------------------------------------------
+   AUTH  (client-side only — hardened slightly)
+------------------------------------------------------- */
 function doLogin() {
   const u = (document.getElementById('loginUser').value || '').trim().toLowerCase();
   const p = (document.getElementById('loginPass').value || '').trim();
   const err = document.getElementById('loginErr');
-  const match = USERS.find(x => x.username === u && x.password === p);
-  if (!match) { err.style.display = 'block'; document.getElementById('loginPass').value = ''; document.getElementById('loginPass').focus(); return; }
-  err.style.display = 'none'; localStorage.setItem('sebsLoggedIn', '1'); showApp(); nav('db'); notify('Welcome! / स्वागत!', 'success');
+  const btn = document.getElementById('loginBtn');
+
+  // Small rate-limit hint via UI (real rate-limiting must be server-side)
+  btn.disabled = true;
+  btn.textContent = 'Verifying…';
+
+  const match = USERS.find(x => x.username === u && btoa(p) === x.hash);
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.innerHTML = '🔑 Sign In / साइन इन';
+    if (!match) {
+      err.style.display = 'block';
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginPass').focus();
+      return;
+    }
+    err.style.display = 'none';
+    try { sessionStorage.setItem('sebsLoggedIn', '1'); } catch (e) {}
+    showApp();
+    nav('db');
+    notify('Welcome back! / स्वागत छ!', 'success');
+  }, 400);
 }
+
 function logout() {
-  if (typeof stopCamera === 'function') stopCamera();
-  if (typeof stopRegCamera === 'function') stopRegCamera();
-  localStorage.removeItem('sebsLoggedIn');
+  stopCamera();
+  stopRegCamera();
+  try { sessionStorage.removeItem('sebsLoggedIn'); } catch (e) {}
   document.getElementById('lp').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
 }
-function showApp() { document.getElementById('lp').style.display = 'none'; document.getElementById('app').style.display = 'flex'; }
-function tmsb(){ document.getElementById('sb').classList.toggle('mo'); document.getElementById('so').classList.toggle('act'); }
-function cmsb(){ document.getElementById('sb').classList.remove('mo'); document.getElementById('so').classList.remove('act'); }
 
-function notify(msg, type='info') {
+function showApp() {
+  document.getElementById('lp').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+}
+
+/* -------------------------------------------------------
+   SIDEBAR
+------------------------------------------------------- */
+function tmsb() {
+  document.getElementById('sb').classList.toggle('mo');
+  document.getElementById('so').classList.toggle('act');
+}
+function cmsb() {
+  document.getElementById('sb').classList.remove('mo');
+  document.getElementById('so').classList.remove('act');
+}
+
+/* -------------------------------------------------------
+   NOTIFICATIONS (TOAST)
+------------------------------------------------------- */
+function notify(msg, type = 'info') {
   const nc = document.getElementById('nc');
-  const icons = { success:'✅', error:'❌', warning:'⚠️', info:'ℹ️' };
+  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
   const n = document.createElement('div');
   n.className = `nt ${type}`;
-  n.innerHTML = `<span class="nt-icon">${icons[type]||'ℹ️'}</span><div class="nt-body"><div class="nt-msg">${msg}</div></div>`;
+  n.innerHTML = `<span class="nt-icon">${icons[type] || 'ℹ️'}</span><div class="nt-body"><div class="nt-msg">${msg}</div></div>`;
   nc.appendChild(n);
-  setTimeout(() => { n.style.opacity='0'; n.style.transform='translateX(40px)'; n.style.transition='all .3s'; setTimeout(()=>n.remove(),300); }, 3500);
+  setTimeout(() => {
+    n.style.opacity = '0';
+    n.style.transform = 'translateX(40px)';
+    n.style.transition = 'all .3s';
+    setTimeout(() => n.remove(), 300);
+  }, 3500);
 }
 
-// ---------- API Helper with timeout ----------
-function apiCall(action, data=null) {
+/* -------------------------------------------------------
+   CONFIRM DIALOG (replaces browser prompt/confirm)
+------------------------------------------------------- */
+function showConfirm({ icon = '⚠️', title = 'Are you sure?', message = '', confirmText = 'Confirm', confirmClass = 'btn-d', onConfirm, onCancel } = {}) {
+  const el = document.createElement('div');
+  el.className = 'confirm-mo';
+  el.id = '_confirmMo';
+  el.innerHTML = `
+    <div class="confirm-card">
+      <div class="confirm-icon">${icon}</div>
+      <div class="confirm-title">${title}</div>
+      <div class="confirm-msg">${message}</div>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" onclick="document.getElementById('_confirmMo').remove();${onCancel ? '('+onCancel+')()' : ''}">Cancel</button>
+        <button class="btn ${confirmClass}" id="_confirmOk">${confirmText}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+  document.getElementById('_confirmOk').onclick = () => {
+    el.remove();
+    if (onConfirm) onConfirm();
+  };
+}
+
+function showPasswordPrompt(title, onConfirm) {
+  const el = document.createElement('div');
+  el.className = 'confirm-mo';
+  el.id = '_pwdMo';
+  el.innerHTML = `
+    <div class="confirm-card">
+      <div class="confirm-icon">🔒</div>
+      <div class="confirm-title">${title}</div>
+      <div class="confirm-msg" style="margin-bottom:12px">Enter the edit password to proceed.</div>
+      <input type="password" id="_pwdInput" placeholder="Password" style="margin-bottom:16px">
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" onclick="document.getElementById('_pwdMo').remove()">Cancel</button>
+        <button class="btn btn-p" onclick="
+          const v=document.getElementById('_pwdInput').value.trim();
+          document.getElementById('_pwdMo').remove();
+          (${onConfirm})(v);
+        ">Confirm</button>
+      </div>
+    </div>`;
+  document.body.appendChild(el);
+  setTimeout(() => { const i = document.getElementById('_pwdInput'); if (i) i.focus(); }, 100);
+}
+
+/* -------------------------------------------------------
+   API
+------------------------------------------------------- */
+async function apiCall(action, data = null) {
   return new Promise(async (resolve) => {
-    const timeout = setTimeout(() => { resolve(null); }, 5000);
+    const timer = setTimeout(() => resolve(null), API_TIMEOUT_MS);
     try {
-      let res;
+      let r;
       if (data) {
-        const r = await fetch(API_URL,{method:'POST',body:JSON.stringify({action,...data})});
-        res = await r.json();
+        r = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action, ...data }) });
       } else {
-        const r = await fetch(`${API_URL}?action=${action}`);
-        res = await r.json();
+        r = await fetch(`${API_URL}?action=${action}`);
       }
-      clearTimeout(timeout);
-      resolve(res);
-    } catch(e) { clearTimeout(timeout); resolve(null); }
+      clearTimeout(timer);
+      resolve(await r.json());
+    } catch (e) { clearTimeout(timer); resolve(null); }
   });
 }
+
 async function apiGetParams(action, params) {
   return new Promise(async (resolve) => {
-    const timeout = setTimeout(() => { resolve(null); }, 5000);
+    const timer = setTimeout(() => resolve(null), API_TIMEOUT_MS);
     try {
-      const qs = new URLSearchParams({action,...params}).toString();
+      const qs = new URLSearchParams({ action, ...params }).toString();
       const r = await fetch(`${API_URL}?${qs}`);
-      const res = await r.json();
-      clearTimeout(timeout);
-      resolve(res);
-    } catch(e) { clearTimeout(timeout); resolve(null); }
+      clearTimeout(timer);
+      resolve(await r.json());
+    } catch (e) { clearTimeout(timer); resolve(null); }
   });
 }
 
-// ---------- Modal ----------
-function showModal(html) { document.getElementById('modalContainer').innerHTML = `<div class="mo" onclick="if(event.target===this)closeModal()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`; }
+/* -------------------------------------------------------
+   MODAL
+------------------------------------------------------- */
+function showModal(html) {
+  document.getElementById('modalContainer').innerHTML =
+    `<div class="mo" onclick="if(event.target===this)closeModal()"><div class="modal" onclick="event.stopPropagation()">${html}</div></div>`;
+}
 function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
 
-// ---------- Navigation ----------
+/* -------------------------------------------------------
+   NAVIGATION
+------------------------------------------------------- */
 function nav(page) {
-  document.querySelectorAll('.si').forEach(e=>e.classList.remove('act'));
-  const item = document.querySelector(`[data-p="${page}"]`); if (item) item.classList.add('act');
-  const titles = { db:'Dashboard / ड्यासबोर्ड', att:'Live Attendance / लाइभ हाजिरी', reg:'Register / दर्ता', stu:'Students / विद्यार्थी', rep:'Reports / रिपोर्ट' };
-  document.getElementById('pt').textContent = titles[page]||page;
-  if (page !== 'att') { if (typeof stopCamera === 'function') stopCamera(); }
-  if (page !== 'reg') { if (typeof stopRegCamera === 'function') stopRegCamera(); }
+  document.querySelectorAll('.si').forEach(e => e.classList.remove('act'));
+  const item = document.querySelector(`[data-p="${page}"]`);
+  if (item) item.classList.add('act');
+
+  const titles = {
+    db: 'Dashboard / ड्यासबोर्ड',
+    att: 'Live Attendance / लाइभ हाजिरी',
+    reg: 'Register / दर्ता',
+    stu: 'Students / विद्यार्थी',
+    rep: 'Reports / रिपोर्ट'
+  };
+  document.getElementById('pt').textContent = titles[page] || page;
+
+  if (page !== 'att') stopCamera();
+  if (page !== 'reg') stopRegCamera();
   if (page === 'att') { preloadModels(); fetchStudents(); }
+
   const c = document.getElementById('pc');
-  if (page==='db') loadDashboard(c); else if (page==='att') loadAttendance(c); else if (page==='reg') loadRegister(c); else if (page==='stu') loadStudents(c); else if (page==='rep') loadReports(c);
+  const pages = { db: loadDashboard, att: loadAttendance, reg: loadRegister, stu: loadStudents, rep: loadReports };
+  if (pages[page]) pages[page](c);
   cmsb();
 }
 
-// ---------- Embeddings Loader ----------
+/* -------------------------------------------------------
+   FACE EMBEDDINGS
+------------------------------------------------------- */
 async function loadEmbeddings() {
-  ['sebs-faces-old','sebs-faces-v6','sebs-faces-v7','sebs-faces-v8','sebs-faces-v9'].forEach(k=>localStorage.removeItem(k));
+  // Remove stale cache keys
+  OLD_CACHE_KEYS.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
   faceMatcher = null; faceMatcherReady = false;
+
   let embeddings = null;
-  const cached = localStorage.getItem(FACE_CACHE_KEY);
-  if (cached) { try { const p = JSON.parse(cached); if (Array.isArray(p) && p.length>0) embeddings = p; } catch(e) { localStorage.removeItem(FACE_CACHE_KEY); } }
+  try {
+    const cached = localStorage.getItem(FACE_CACHE_KEY);
+    if (cached) {
+      const p = JSON.parse(cached);
+      if (Array.isArray(p) && p.length > 0) embeddings = p;
+    }
+  } catch (e) { try { localStorage.removeItem(FACE_CACHE_KEY); } catch (_) {} }
+
   if (!embeddings) {
     const d = await apiCall('getAllEmbeddings');
-    if (d && Array.isArray(d.embeddings) && d.embeddings.length>0) { embeddings = d.embeddings; localStorage.setItem(FACE_CACHE_KEY, JSON.stringify(embeddings)); }
+    if (d && Array.isArray(d.embeddings) && d.embeddings.length > 0) {
+      embeddings = d.embeddings;
+      try { localStorage.setItem(FACE_CACHE_KEY, JSON.stringify(embeddings)); } catch (e) {}
+    }
   }
-  if (!embeddings || embeddings.length===0) { faceMatcherReady=true; return; }
+
+  if (!embeddings || embeddings.length === 0) { faceMatcherReady = true; return; }
+
   const labeled = [];
   for (const e of embeddings) {
     if (!e.studentId) continue;
-    const samples = Array.isArray(e.embeddings) ? e.embeddings : (Array.isArray(e.embedding)?[e.embedding]:[]);
-    const valid = samples.filter(s=>Array.isArray(s)&&s.length===128).map(s=>new Float32Array(s));
-    if (valid.length>0) labeled.push(new faceapi.LabeledFaceDescriptors(String(e.studentId),valid));
+    const samples = Array.isArray(e.embeddings) ? e.embeddings : (Array.isArray(e.embedding) ? [e.embedding] : []);
+    const valid = samples.filter(s => Array.isArray(s) && s.length === 128).map(s => new Float32Array(s));
+    if (valid.length > 0) labeled.push(new faceapi.LabeledFaceDescriptors(String(e.studentId), valid));
   }
-  if (labeled.length>0) { faceMatcher = new faceapi.FaceMatcher(labeled, DIST_THRESHOLD); }
+  if (labeled.length > 0) faceMatcher = new faceapi.FaceMatcher(labeled, DETECTION.DIST_THRESHOLD);
   faceMatcherReady = true;
 }
 
-// ---------- Model Loading ----------
 async function preloadModels() {
-  if (modelsLoaded||modelsLoading) return;
-  modelsLoading = true; notify('⏳ Loading AI models...');
+  if (modelsLoaded || modelsLoading) return;
+  modelsLoading = true;
+  notify('⏳ Loading AI models, please wait…');
   try {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
       faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)
     ]);
-    modelsLoaded = true; modelsLoading = false;
-    await loadEmbeddings(); notify('✅ Ready!','success');
-  } catch(e) { modelsLoading = false; notify('❌ Model load failed','error'); }
+    modelsLoaded = true;
+    modelsLoading = false;
+    await loadEmbeddings();
+    notify(`✅ Ready! ${faceMatcher ? faceMatcher.labeledDescriptors.length : 0} faces loaded.`, 'success');
+  } catch (e) {
+    modelsLoading = false;
+    notify('❌ Failed to load AI models. Check your connection.', 'error');
+  }
 }
 
+/* -------------------------------------------------------
+   STUDENTS
+------------------------------------------------------- */
 async function fetchStudents() {
   const d = await apiCall('getStudents');
-  if (d && d.students) studentsCache = d.students;
-  else studentsCache = [];
+  studentsCache = (d && d.students) ? d.students : [];
   return studentsCache;
 }
 
-// ---------- Dashboard (fail-safe) ----------
+/* -------------------------------------------------------
+   DASHBOARD
+------------------------------------------------------- */
 async function loadDashboard(c) {
-  c.innerHTML = '<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+  c.innerHTML = `<div class="page-loading"><div class="spinner"></div><span>Loading dashboard…</span></div>`;
+
   let total = 0, presentCount = 0, lateCount = 0, absentCount = 0, rate = 0, attRows = '';
   try {
     const todayStr = new Date().toDateString();
-    const [students, todayAtt] = await Promise.all([ apiCall('getStudents'), apiCall('getAttendance',{date:todayStr}) ]);
-    const studentsList = students?.students || [];
-    const attendanceList = todayAtt?.attendance || [];
+    const [studentsRes, todayAttRes] = await Promise.all([
+      apiCall('getStudents'),
+      apiCall('getAttendance', { date: todayStr })
+    ]);
+    const studentsList = studentsRes?.students || [];
+    const attendanceList = todayAttRes?.attendance || [];
     total = studentsList.length;
-    presentCount = attendanceList.filter(r=>r.Status==='Present').length;
-    lateCount = attendanceList.filter(r=>r.Status==='Late').length;
+    presentCount = attendanceList.filter(r => r.Status === 'Present').length;
+    lateCount = attendanceList.filter(r => r.Status === 'Late').length;
     absentCount = total - presentCount - lateCount;
-    rate = total>0 ? Math.round((presentCount+lateCount)/total*100) : 0;
-    attRows = attendanceList.slice(0,10).map(r=>{
-      const badge = r.Status==='Present'?'badge-present':(r.Status==='Late'?'badge-late':'badge-absent');
-      return `<tr><td>${r.StudentName||'-'}</td><td>${r.Class||'-'}</td><td>${r.Section||'-'}</td><td><span class="badge ${badge}">${r.Status||'Absent'}</span></td><td>${r.Timestamp||''}</td></tr>`;
+    rate = total > 0 ? Math.round((presentCount + lateCount) / total * 100) : 0;
+
+    attRows = attendanceList.slice(0, 15).map(r => {
+      const badge = r.Status === 'Present' ? 'badge-present' : (r.Status === 'Late' ? 'badge-late' : 'badge-absent');
+      return `<tr>
+        <td><strong>${escapeHtml(r.StudentName || '—')}</strong></td>
+        <td>${r.Class || '—'}</td>
+        <td>${r.Section || '—'}</td>
+        <td><span class="badge ${badge}">${r.Status || 'Absent'}</span></td>
+        <td style="color:var(--sub);font-size:.78rem">${r.Timestamp || ''}</td>
+      </tr>`;
     }).join('');
-  } catch(e) {}
+  } catch (e) {}
+
+  // Build SVG ring
+  const circumference = 2 * Math.PI * 48;
+  const dash = (rate / 100) * circumference;
+  const ringColor = rate >= 75 ? 'var(--g)' : rate >= 50 ? 'var(--o)' : 'var(--d)';
+
   c.innerHTML = `
-    <div class="sr"><div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${total}</h3><p>Total Students</p></div></div>
-    <div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${presentCount}</h3><p>Present</p></div></div>
-    <div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${lateCount}</h3><p>Late</p></div></div>
-    <div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${absentCount}</h3><p>Absent</p></div></div>
-    <div class="stc"><div class="sci pu"><i class="fas fa-chart-line"></i></div><div class="sti"><h3>${rate}%</h3><p>Today's Rate</p></div></div></div>
+    <div class="sr">
+      <div class="stc">
+        <div class="sci b"><i class="fas fa-users"></i></div>
+        <div class="sti"><h3>${total}</h3><p>Total Students</p></div>
+      </div>
+      <div class="stc">
+        <div class="sci g"><i class="fas fa-check-circle"></i></div>
+        <div class="sti"><h3>${presentCount}</h3><p>Present</p></div>
+      </div>
+      <div class="stc">
+        <div class="sci o"><i class="fas fa-clock"></i></div>
+        <div class="sti"><h3>${lateCount}</h3><p>Late</p></div>
+      </div>
+      <div class="stc">
+        <div class="sci r"><i class="fas fa-times-circle"></i></div>
+        <div class="sti"><h3>${absentCount < 0 ? 0 : absentCount}</h3><p>Absent</p></div>
+      </div>
+      <div class="stc">
+        <div class="sci pu"><i class="fas fa-chart-line"></i></div>
+        <div class="sti"><h3>${rate}%</h3><p>Attendance Rate</p></div>
+      </div>
+    </div>
     <div class="db-grid">
-      <div class="card"><h2>Today's Attendance</h2><div class="tbc"><table><thead><tr><th>Name</th><th>Class</th><th>Section</th><th>Status</th><th>Time</th></tr></thead><tbody>${attRows||'<tr><td colspan="5">No data yet</td></tr>'}</tbody></table></div></div>
-      <div class="card"><div class="rate-ring"><div class="rate-num">${rate}%</div><div class="rate-label">Attendance Rate</div></div></div>
+      <div class="card">
+        <h2>📋 Today's Attendance</h2>
+        <div class="tbc">
+          <table>
+            <thead><tr><th>Name</th><th>Class</th><th>Section</th><th>Status</th><th>Time</th></tr></thead>
+            <tbody>${attRows || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:32px">No records yet today</td></tr>'}</tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h2>📊 Attendance Rate</h2>
+        <div class="rate-ring">
+          <div class="rate-ring-svg">
+            <svg viewBox="0 0 110 110" width="130" height="130">
+              <circle cx="55" cy="55" r="48" fill="none" stroke="var(--border)" stroke-width="10"/>
+              <circle cx="55" cy="55" r="48" fill="none" stroke="${ringColor}" stroke-width="10"
+                stroke-dasharray="${dash.toFixed(1)} ${circumference.toFixed(1)}"
+                stroke-linecap="round" style="transition:stroke-dasharray 1s ease"/>
+            </svg>
+            <div class="rate-ring-inner">
+              <div class="rate-num">${rate}%</div>
+              <div class="rate-label">Today</div>
+            </div>
+          </div>
+          <div style="margin-top:20px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="text-align:center;padding:10px;background:var(--g-faint);border-radius:var(--radius-sm)">
+              <div style="font-size:1.1rem;font-weight:800;color:#059669">${presentCount}</div>
+              <div style="font-size:.72rem;color:var(--sub)">Present</div>
+            </div>
+            <div style="text-align:center;padding:10px;background:var(--o-faint);border-radius:var(--radius-sm)">
+              <div style="font-size:1.1rem;font-weight:800;color:#d97706">${lateCount}</div>
+              <div style="font-size:.72rem;color:var(--sub)">Late</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>`;
 }
 
-// ---------- Registration ----------
+/* -------------------------------------------------------
+   REGISTER
+------------------------------------------------------- */
 function loadRegister(c) {
-  c.innerHTML = `<div class="cw"><div class="card"><h2>📸 Register New Student / नयाँ विद्यार्थी दर्ता</h2>
-    <div class="fr"><div class="fg"><label class="fl">Full Name *</label><input id="regName"></div><div class="fg"><label class="fl">Admission No.</label><input id="regAdm"></div></div>
-    <div class="fr"><div class="fg"><label class="fl">Date of Birth</label><input type="date" id="regDob"></div><div class="fg"><label class="fl">Gender</label><select id="regGender"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div>
-    <div class="fr"><div class="fg"><label class="fl">Class *</label><select id="regClass"><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section</label><select id="regSection"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div>
-    <div class="fr"><div class="fg"><label class="fl">Roll No.</label><input id="regRoll"></div></div>
-    <div class="fr"><div class="fg"><label class="fl">Father</label><input id="regFather"></div><div class="fg"><label class="fl">Mother</label><input id="regMother"></div></div>
-    <div class="fr"><div class="fg"><label class="fl">Phone</label><input id="regPhone"></div><div class="fg"><label class="fl">Address</label><textarea id="regAddr"></textarea></div></div>
-    <div class="st">Face Capture (3 samples)</div>
-    <div class="cam-box" style="max-width:400px;margin:0 auto"><video id="regCam" autoplay playsinline muted></video></div>
-    <div class="cam-footer"><button class="btn btn-p" id="regCamBtn" onclick="startRegCamera()">Start Camera</button><button class="btn btn-o" onclick="captureRegSample()" id="captureBtn" disabled>Capture</button><button class="btn btn-ghost" onclick="resetRegCaptures()">Reset</button><button class="btn btn-d" onclick="stopRegCamera()">Stop Camera</button></div>
-    <div class="capture-grid" id="captureGrid">${Array(CAPTURE_SAMPLES_REQUIRED).fill(0).map((_,i)=>`<div class="capture-slot" id="slot${i}"><i class="fas fa-image"></i></div>`).join('')}</div>
-    <button class="btn btn-s btn-block btn-lg" id="submitRegBtn" onclick="submitRegister()" disabled>Submit</button>
-  </div></div>`;
+  regCaptureSamples = [];
+  c.innerHTML = `
+    <div class="cw">
+      <div class="card">
+        <h2>📸 Register New Student / नयाँ विद्यार्थी दर्ता</h2>
+        <div class="sdivider"><span>Personal Information</span></div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Full Name *</label><input id="regName" placeholder="Student full name"></div>
+          <div class="fg"><label class="fl">Admission No.</label><input id="regAdm" placeholder="e.g. 2025-001"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Date of Birth</label><input type="date" id="regDob"></div>
+          <div class="fg"><label class="fl">Gender</label><select id="regGender"><option value="">Select gender</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Class *</label><select id="regClass"><option value="">Select class</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div>
+          <div class="fg"><label class="fl">Section</label><select id="regSection"><option value="">Select section</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Roll No.</label><input id="regRoll" placeholder="e.g. 12"></div>
+        </div>
+        <div class="sdivider"><span>Guardian Information</span></div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Father's Name</label><input id="regFather" placeholder="Father's full name"></div>
+          <div class="fg"><label class="fl">Mother's Name</label><input id="regMother" placeholder="Mother's full name"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Phone No.</label><input id="regPhone" type="tel" placeholder="+977-XXXXXXXXXX"></div>
+          <div class="fg"><label class="fl">Address</label><textarea id="regAddr" placeholder="Home address"></textarea></div>
+        </div>
+        <div class="sdivider"><span>Face Capture — 3 samples required</span></div>
+        <div class="cam-box" style="max-width:420px;margin:0 auto">
+          <video id="regCam" autoplay playsinline muted></video>
+        </div>
+        <div class="cam-footer">
+          <button class="btn btn-p" id="regCamBtn" onclick="startRegCamera()"><i class="fas fa-video"></i> Start Camera</button>
+          <button class="btn btn-o" onclick="captureRegSample()" id="captureBtn" disabled><i class="fas fa-camera"></i> Capture</button>
+          <button class="btn btn-ghost" onclick="resetRegCaptures()"><i class="fas fa-redo"></i> Reset</button>
+          <button class="btn btn-d" onclick="stopRegCamera()"><i class="fas fa-stop"></i> Stop</button>
+        </div>
+        <div class="capture-grid" id="captureGrid">
+          ${Array(CAPTURE_SAMPLES_REQUIRED).fill(0).map((_,i)=>`<div class="capture-slot" id="slot${i}"><i class="fas fa-image"></i></div>`).join('')}
+        </div>
+        <button class="btn btn-s btn-block btn-lg" id="submitRegBtn" onclick="submitRegister()" disabled style="margin-top:8px">
+          <i class="fas fa-save"></i> Submit Registration
+        </button>
+      </div>
+    </div>`;
+
+  if (!modelsLoaded && !modelsLoading) preloadModels();
 }
+
 async function startRegCamera() {
   if (regCamStream) stopRegCamera();
   try {
     regCamStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
-    document.getElementById('regCam').srcObject = regCamStream;
-    document.getElementById('regCamBtn').style.display='none';
-    document.getElementById('captureBtn').disabled=false;
-  } catch(e) { notify('Camera error: '+e.message,'error'); }
-}
-function stopRegCamera() {
-  if (regCamStream) { regCamStream.getTracks().forEach(t=>t.stop()); regCamStream = null; }
-  const video = document.getElementById('regCam'); if (video) video.srcObject = null;
-  document.getElementById('regCamBtn').style.display='inline-flex';
-  document.getElementById('captureBtn').disabled=true;
-}
-async function captureRegSample() {
-  if (regCaptureSamples.length >= CAPTURE_SAMPLES_REQUIRED) return notify('Already enough samples','warning');
-  const video = document.getElementById('regCam');
-  if (!video || video.readyState < 2) return notify('Camera not ready','error');
-  if (!modelsLoaded) return notify('Models not loaded','warning');
-  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.5 })).withFaceDescriptor();
-  if (!detection) return notify('No face detected','error');
-  regCaptureSamples.push({ descriptor: Array.from(detection.descriptor), image: videoToCanvas(video).toDataURL('image/jpeg',0.9) });
-  updateRegSlots();
-  document.getElementById('submitRegBtn').disabled = regCaptureSamples.length < CAPTURE_SAMPLES_REQUIRED;
-  notify(`✅ Sample ${regCaptureSamples.length}/${CAPTURE_SAMPLES_REQUIRED} captured`,'success');
-}
-function videoToCanvas(video) { const c = document.createElement('canvas'); c.width = video.videoWidth; c.height = video.videoHeight; c.getContext('2d').drawImage(video,0,0); return c; }
-function updateRegSlots() {
-  for (let i=0; i<CAPTURE_SAMPLES_REQUIRED; i++) {
-    const slot = document.getElementById('slot'+i);
-    if (regCaptureSamples[i]) { slot.innerHTML = `<img src="${regCaptureSamples[i].image}"><div class="ck"><i class="fas fa-check"></i></div>`; slot.classList.add('filled'); }
-    else { slot.innerHTML = '<i class="fas fa-image"></i>'; slot.classList.remove('filled'); }
-  }
-}
-function resetRegCaptures() { regCaptureSamples=[]; updateRegSlots(); document.getElementById('submitRegBtn').disabled=true; }
-async function submitRegister() {
-  if (regCaptureSamples.length < CAPTURE_SAMPLES_REQUIRED) return notify('Capture at least 3 samples','error');
-  const btn = document.getElementById('submitRegBtn'); btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';
-  const payload = {
-    studentName: document.getElementById('regName').value.trim(), admissionNumber: document.getElementById('regAdm').value.trim(),
-    dateOfBirth: document.getElementById('regDob').value, class: document.getElementById('regClass').value,
-    section: document.getElementById('regSection').value, rollNumber: document.getElementById('regRoll').value.trim(),
-    gender: document.getElementById('regGender').value, fatherName: document.getElementById('regFather').value.trim(),
-    motherName: document.getElementById('regMother').value.trim(), guardianPhone: document.getElementById('regPhone').value.trim(),
-    address: document.getElementById('regAddr').value.trim(), embeddings: regCaptureSamples.map(s=>s.descriptor)
-  };
-  const r = await apiCall('registerStudent', payload);
-  btn.disabled=false; btn.innerHTML='<i class="fas fa-save"></i> Submit';
-  if (r && r.success) { notify('✅ Registered!','success'); resetRegCaptures(); studentsCache = []; }
-  else notify('❌ Registration failed: '+(r?.error||'unknown'),'error');
+    const v = document.getElementById('regCam');
+    if (v) v.srcObject = regCamStream;
+    const btn = document.getElementById('regCamBtn');
+    if (btn) btn.style.display = 'none';
+    const cap = document.getElementById('captureBtn');
+    if (cap) cap.disabled = false;
+  } catch (e) { notify('Camera error: ' + e.message, 'error'); }
 }
 
-// ---------- Attendance Page ----------
+function stopRegCamera() {
+  if (regCamStream) { regCamStream.getTracks().forEach(t => t.stop()); regCamStream = null; }
+  const v = document.getElementById('regCam'); if (v) v.srcObject = null;
+  const btn = document.getElementById('regCamBtn'); if (btn) btn.style.display = 'inline-flex';
+  const cap = document.getElementById('captureBtn'); if (cap) cap.disabled = true;
+}
+
+async function captureRegSample() {
+  if (regCaptureSamples.length >= CAPTURE_SAMPLES_REQUIRED) { notify('Already captured 3 samples', 'warning'); return; }
+  const video = document.getElementById('regCam');
+  if (!video || video.readyState < 2) { notify('Camera not ready', 'error'); return; }
+  if (!modelsLoaded) { notify('AI models not loaded yet', 'warning'); return; }
+
+  const btn = document.getElementById('captureBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting…'; }
+
+  const detection = await faceapi.detectSingleFace(video,
+    new faceapi.TinyFaceDetectorOptions({ inputSize: DETECTION.INPUT_SIZE, scoreThreshold: 0.5 })
+  ).withFaceDescriptor();
+
+  if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-camera"></i> Capture'; }
+
+  if (!detection) { notify('No face detected. Look directly at the camera.', 'error'); return; }
+
+  regCaptureSamples.push({ descriptor: Array.from(detection.descriptor), image: videoToCanvas(video).toDataURL('image/jpeg', 0.9) });
+  updateRegSlots();
+  const sub = document.getElementById('submitRegBtn');
+  if (sub) sub.disabled = regCaptureSamples.length < CAPTURE_SAMPLES_REQUIRED;
+  notify(`✅ Sample ${regCaptureSamples.length}/${CAPTURE_SAMPLES_REQUIRED} captured`, 'success');
+}
+
+function videoToCanvas(video) {
+  const c = document.createElement('canvas');
+  c.width = video.videoWidth; c.height = video.videoHeight;
+  c.getContext('2d').drawImage(video, 0, 0);
+  return c;
+}
+
+function updateRegSlots() {
+  for (let i = 0; i < CAPTURE_SAMPLES_REQUIRED; i++) {
+    const slot = document.getElementById('slot' + i);
+    if (!slot) continue;
+    if (regCaptureSamples[i]) {
+      slot.innerHTML = `<img src="${regCaptureSamples[i].image}" alt="Sample ${i+1}"><div class="ck"><i class="fas fa-check"></i></div>`;
+      slot.classList.add('filled');
+    } else {
+      slot.innerHTML = `<i class="fas fa-image"></i><span style="font-size:.7rem;margin-top:4px;color:var(--muted)">Sample ${i+1}</span>`;
+      slot.classList.remove('filled');
+    }
+  }
+}
+
+function resetRegCaptures() {
+  regCaptureSamples = [];
+  updateRegSlots();
+  const sub = document.getElementById('submitRegBtn');
+  if (sub) sub.disabled = true;
+}
+
+async function submitRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const cls = document.getElementById('regClass').value;
+  if (!name) { notify('Full Name is required', 'error'); return; }
+  if (!cls) { notify('Class is required', 'error'); return; }
+  if (regCaptureSamples.length < CAPTURE_SAMPLES_REQUIRED) { notify('Please capture 3 face samples', 'error'); return; }
+
+  const btn = document.getElementById('submitRegBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting…';
+
+  const payload = {
+    studentName:     name,
+    admissionNumber: document.getElementById('regAdm').value.trim(),
+    dateOfBirth:     document.getElementById('regDob').value,
+    class:           cls,
+    section:         document.getElementById('regSection').value,
+    rollNumber:      document.getElementById('regRoll').value.trim(),
+    gender:          document.getElementById('regGender').value,
+    fatherName:      document.getElementById('regFather').value.trim(),
+    motherName:      document.getElementById('regMother').value.trim(),
+    guardianPhone:   document.getElementById('regPhone').value.trim(),
+    address:         document.getElementById('regAddr').value.trim(),
+    embeddings:      regCaptureSamples.map(s => s.descriptor)
+  };
+
+  const r = await apiCall('registerStudent', payload);
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fas fa-save"></i> Submit Registration';
+
+  if (r && r.success) {
+    notify('✅ Student registered successfully!', 'success');
+    resetRegCaptures();
+    // Invalidate cache
+    try { localStorage.removeItem(FACE_CACHE_KEY); } catch (e) {}
+    studentsCache = [];
+  } else {
+    notify('❌ Registration failed: ' + (r?.error || 'unknown error'), 'error');
+  }
+}
+
+/* -------------------------------------------------------
+   ATTENDANCE PAGE
+------------------------------------------------------- */
 function loadAttendance(c) {
   const t = getTimeSession();
-  const badgeColor = t.open ? (t.label==='Late'?'rgba(255,152,0,.75)':'rgba(0,200,83,.75)') : 'rgba(231,76,60,.75)';
-  c.innerHTML = `<div class="cw"><div style="text-align:center;margin-bottom:12px"><span class="time-badge" style="background:${badgeColor}">${t.open?'🟢':'🔴'} ${t.status}</span></div>
-    <div class="cam-box"><video id="cam" autoplay playsinline muted></video><canvas id="overlay"></canvas><div class="pos-guide" id="posGuide"></div><div class="pos-msg" id="posMsg" style="display:none"></div>
-      <div class="cam-hud"><span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Inactive</span></span><span class="hud-badge" id="matchBadge" style="display:none"><span id="matchText"></span></span></div></div>
-    <div class="cam-footer"><button class="btn btn-p btn-lg" id="startBtn" onclick="startCamera()">Start</button><button class="btn btn-d btn-lg" id="stopBtn" onclick="stopCamera()" style="display:none">Stop</button><button class="btn btn-ghost btn-lg" onclick="refreshFaces()">Refresh</button></div>
-    <div class="cam-status" id="camStatus">Press Start</div>
-    <div class="card"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><span>✅ Marked Today</span><span id="markedCount">0</span></div><div class="marked-strip" id="markedStrip"></div></div></div>`;
-  setTimeout(populateMarkedChips, 200);
+  const badgeColor = !t.open ? 'rgba(239,35,60,.8)' : (t.label === 'Late' ? 'rgba(247,127,0,.8)' : 'rgba(6,214,160,.8)');
+
+  c.innerHTML = `
+    <div class="cw">
+      <div style="text-align:center;margin-bottom:16px">
+        <span class="time-badge" style="background:${badgeColor}">${t.open ? '🟢' : '🔴'} ${t.status}</span>
+      </div>
+      <div class="card">
+        <div class="cam-box">
+          <video id="cam" autoplay playsinline muted></video>
+          <canvas id="overlay"></canvas>
+          <div class="pos-guide" id="posGuide"></div>
+          <div class="pos-msg" id="posMsg" style="display:none"></div>
+          <div class="cam-hud">
+            <span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Inactive</span></span>
+            <span class="hud-badge" id="matchBadge" style="display:none"><span id="matchText"></span></span>
+          </div>
+        </div>
+        <div class="cam-footer">
+          <button class="btn btn-p btn-lg" id="startBtn" onclick="startCamera()"><i class="fas fa-play"></i> Start</button>
+          <button class="btn btn-d btn-lg" id="stopBtn" onclick="stopCamera()" style="display:none"><i class="fas fa-stop"></i> Stop</button>
+          <button class="btn btn-ghost btn-lg" onclick="refreshFaces()"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <div class="cam-status" id="camStatus">Press Start to begin scanning</div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-weight:600;font-size:.88rem">✅ Marked Today</span>
+          <span style="background:var(--p-faint);color:var(--p);font-weight:700;font-size:.78rem;padding:3px 10px;border-radius:99px" id="markedCount">0</span>
+        </div>
+        <div class="marked-strip" id="markedStrip"><span style="color:var(--muted);font-size:.78rem">No one marked yet today</span></div>
+      </div>
+    </div>`;
+
+  setTimeout(populateMarkedChips, 150);
 }
+
 function populateMarkedChips() {
-  const strip = document.getElementById('markedStrip'), cnt = document.getElementById('markedCount');
+  const strip = document.getElementById('markedStrip');
+  const cnt = document.getElementById('markedCount');
   if (!strip || !cnt) return;
-  const today = new Date().toDateString();
-  const ids = Object.keys(markedToday).filter(k => k.endsWith('__' + today));
+  const todayStr = new Date().toDateString();
+  const ids = Object.keys(markedToday).filter(k => k.endsWith('__' + todayStr));
+  if (ids.length === 0) return;
+  strip.innerHTML = '';
   ids.forEach(key => {
     const studentId = key.split('__')[0];
     const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
     const name = stu ? stu.StudentName : studentId;
-    if (strip.querySelector(`[data-id="${studentId}"]`)) return;
-    const chip = document.createElement('div'); chip.className = 'marked-chip'; chip.setAttribute('data-id', studentId);
-    chip.innerHTML = `<i class="fas fa-check"></i>${name}`; strip.appendChild(chip);
+    const chip = document.createElement('div');
+    chip.className = 'marked-chip';
+    chip.setAttribute('data-id', studentId);
+    chip.innerHTML = `<i class="fas fa-check"></i>${name}`;
+    strip.appendChild(chip);
   });
   cnt.textContent = ids.length;
 }
 
-// ---------- Camera Start / Stop ----------
+/* -------------------------------------------------------
+   CAMERA & DETECTION LOOP
+------------------------------------------------------- */
 async function startCamera() {
   if (cameraActive) return;
-  if (!modelsLoaded) { notify('Models not ready...','warning'); await preloadModels(); }
+  if (!modelsLoaded) {
+    notify('Loading models, please wait…', 'warning');
+    await preloadModels();
+  }
   try {
     camStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
-    document.getElementById('cam').srcObject = camStream;
-    cameraActive = true; unknownFaceFrames = 0;
-    document.getElementById('startBtn').style.display='none'; document.getElementById('stopBtn').style.display='inline-flex';
-    setStatus('Camera active');
-    resetLivenessBuffers(); smoothBuffer = []; scanEnabled = true; processing = false;
+    const v = document.getElementById('cam');
+    if (!v) { camStream.getTracks().forEach(t => t.stop()); return; }
+    v.srcObject = camStream;
+    cameraActive = true;
+    unknownFaceFrames = 0;
+    lastUnknownPopupTime = 0;
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('stopBtn').style.display = 'inline-flex';
+    setStatus('Camera active — scanning faces…');
+    resetLivenessBuffers();
+    smoothBuffer = [];
+    processing = false;
     rafHandle = requestAnimationFrame(detectionLoop);
-  } catch(e) { notify('Camera error: '+e.message,'error'); }
+  } catch (e) {
+    notify('Camera error: ' + (e.message || 'permission denied'), 'error');
+  }
 }
-function stopCamera() {
-  if (camStream) { camStream.getTracks().forEach(t=>t.stop()); camStream = null; }
-  cameraActive = false; unknownFaceFrames = 0;
-  if (rafHandle) cancelAnimationFrame(rafHandle);
-  document.getElementById('startBtn').style.display='inline-flex'; document.getElementById('stopBtn').style.display='none';
-  document.getElementById('hudDot').className='hud-dot off'; document.getElementById('hudText').textContent='Inactive';
-  document.getElementById('posGuide').className='pos-guide'; document.getElementById('posMsg').style.display='none';
-  const overlay = document.getElementById('overlay'); if (overlay) overlay.getContext('2d').clearRect(0,0,overlay.width,overlay.height);
-  setStatus('Stopped');
-}
-async function refreshFaces() { notify('🔄 Refreshing...'); localStorage.removeItem(FACE_CACHE_KEY); faceMatcher=null; faceMatcherReady=false; await loadEmbeddings(); notify(`✅ Refreshed! ${faceMatcher?faceMatcher.labeledDescriptors.length:0} students`,'success'); }
-function setStatus(msg) { const el=document.getElementById('camStatus'); if (el) el.textContent=msg; }
 
-// ---------- Position Guide ----------
+function stopCamera() {
+  if (camStream) { camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+  cameraActive = false;
+  unknownFaceFrames = 0;
+  if (rafHandle) { cancelAnimationFrame(rafHandle); rafHandle = null; }
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  if (startBtn) startBtn.style.display = 'inline-flex';
+  if (stopBtn) stopBtn.style.display = 'none';
+  const hudDot = document.getElementById('hudDot'); if (hudDot) hudDot.className = 'hud-dot off';
+  const hudText = document.getElementById('hudText'); if (hudText) hudText.textContent = 'Inactive';
+  const guide = document.getElementById('posGuide'); if (guide) guide.className = 'pos-guide';
+  const msg = document.getElementById('posMsg'); if (msg) msg.style.display = 'none';
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height);
+  setStatus('Camera stopped');
+}
+
+async function refreshFaces() {
+  notify('🔄 Refreshing face database…');
+  try { localStorage.removeItem(FACE_CACHE_KEY); } catch (e) {}
+  faceMatcher = null; faceMatcherReady = false;
+  await loadEmbeddings();
+  notify(`✅ Refreshed! ${faceMatcher ? faceMatcher.labeledDescriptors.length : 0} students loaded.`, 'success');
+}
+
+function setStatus(msg) {
+  const el = document.getElementById('camStatus');
+  if (el) el.textContent = msg;
+}
+
+/* -------------------------------------------------------
+   POSITION CHECK
+------------------------------------------------------- */
 function evaluatePosition(box, frameW, frameH) {
-  const ratioW = box.width / frameW, ratioH = box.height / frameH;
-  const cx = (box.x + box.width/2)/frameW, cy = (box.y + box.height/2)/frameH;
-  if (ratioW > POS_GOOD_MIN_RATIO && ratioW < POS_GOOD_MAX_RATIO && ratioH > POS_GOOD_MIN_RATIO && ratioH < POS_GOOD_MAX_RATIO && Math.abs(cx-0.5)<POS_CENTER_TOLERANCE && Math.abs(cy-0.5)<POS_CENTER_TOLERANCE) return 'good';
-  if (ratioW < POS_GOOD_MIN_RATIO || ratioH < POS_GOOD_MIN_RATIO) return 'too_far';
-  if (ratioW > POS_GOOD_MAX_RATIO || ratioH > POS_GOOD_MAX_RATIO) return 'too_close';
+  const rW = box.width / frameW, rH = box.height / frameH;
+  const cx = (box.x + box.width / 2) / frameW;
+  const cy = (box.y + box.height / 2) / frameH;
+  if (rW > POSITION.MIN_RATIO && rW < POSITION.MAX_RATIO &&
+      rH > POSITION.MIN_RATIO && rH < POSITION.MAX_RATIO &&
+      Math.abs(cx - 0.5) < POSITION.CENTER_TOLERANCE &&
+      Math.abs(cy - 0.5) < POSITION.CENTER_TOLERANCE) return 'good';
+  if (rW < POSITION.MIN_RATIO || rH < POSITION.MIN_RATIO) return 'too_far';
+  if (rW > POSITION.MAX_RATIO || rH > POSITION.MAX_RATIO) return 'too_close';
   return 'misaligned';
 }
+
 function updatePosGuide(res) {
-  const guide = document.getElementById('posGuide'), msg = document.getElementById('posMsg');
-  if (res === 'good') { guide.className='pos-guide good'; msg.style.display='none'; }
-  else if (res === 'too_far' || res === 'too_close') { guide.className='pos-guide warn'; msg.style.display='flex'; msg.innerHTML = res==='too_far'?'Move closer / नजिक आउनुहोस्':'Move back / पछाडि जानुहोस्'; }
-  else { guide.className='pos-guide'; msg.style.display='none'; }
+  const guide = document.getElementById('posGuide');
+  const msg = document.getElementById('posMsg');
+  if (!guide || !msg) return;
+  if (res === 'good') { guide.className = 'pos-guide good'; msg.style.display = 'none'; }
+  else if (res === 'too_far') { guide.className = 'pos-guide warn'; msg.style.display = 'flex'; msg.textContent = '↔ Move closer / नजिक आउनुहोस्'; }
+  else if (res === 'too_close') { guide.className = 'pos-guide warn'; msg.style.display = 'flex'; msg.textContent = '↔ Move back / पछाडि जानुहोस्'; }
+  else { guide.className = 'pos-guide'; msg.style.display = 'none'; }
 }
 
-// ---------- Face Matching ----------
+/* -------------------------------------------------------
+   FACE MATCHING
+------------------------------------------------------- */
 function matchFaceWithMargin(descriptor) {
   if (!faceMatcher || !descriptor) return { isKnown: false };
   let bestId = '', bestDist = Infinity;
@@ -453,194 +1979,573 @@ function matchFaceWithMargin(descriptor) {
       if (d < bestDist) { bestDist = d; bestId = labeled.label; }
     }
   }
-  if (bestDist < DIST_THRESHOLD) return { isKnown: true, studentId: bestId, dist: bestDist };
+  if (bestDist < DETECTION.DIST_THRESHOLD) return { isKnown: true, studentId: bestId, dist: bestDist };
   return { isKnown: false };
 }
 
 function smoothedLabel(rawMatch) {
   const key = rawMatch.isKnown ? rawMatch.studentId : '__new__';
-  smoothBuffer.push(key); if (smoothBuffer.length > SMOOTH_WINDOW) smoothBuffer.shift();
-  const counts = {}; smoothBuffer.forEach(k=>counts[k]=(counts[k]||0)+1);
+  smoothBuffer.push(key);
+  if (smoothBuffer.length > DETECTION.SMOOTH_WINDOW) smoothBuffer.shift();
+  const counts = {};
+  smoothBuffer.forEach(k => counts[k] = (counts[k] || 0) + 1);
   let winner = key, max = 0;
   for (const k in counts) if (counts[k] > max) { winner = k; max = counts[k]; }
   return winner;
 }
 
-// ---------- Liveness with Blink ----------
+/* -------------------------------------------------------
+   LIVENESS DETECTION
+------------------------------------------------------- */
 function calculateEAR(eye) {
-  const p1=eye[1],p2=eye[2],p3=eye[3],p4=eye[4],p5=eye[5],p0=eye[0];
-  const v1 = Math.hypot(p1.x-p5.x,p1.y-p5.y), v2 = Math.hypot(p2.x-p4.x,p2.y-p4.y);
-  const h = Math.hypot(p0.x-p3.x,p0.y-p3.y);
-  return (v1+v2)/(2*h);
+  const [p0, p1, p2, p3, p4, p5] = eye;
+  const v1 = Math.hypot(p1.x - p5.x, p1.y - p5.y);
+  const v2 = Math.hypot(p2.x - p4.x, p2.y - p4.y);
+  const h  = Math.hypot(p0.x - p3.x, p0.y - p3.y);
+  return (v1 + v2) / (2.0 * h);
 }
+
 function updateBlinkDetection(landmarks) {
-  const le = landmarks.getLeftEye(), re = landmarks.getRightEye();
-  const ear = (calculateEAR(le)+calculateEAR(re))/2;
-  earHistory.push(ear); if (earHistory.length > BLINK_WINDOW) earHistory.shift();
-  if (earHistory.length>=6 && Math.min(...earHistory.slice(-6)) < BLINK_THRESH) blinkDetected = true;
+  const ear = (calculateEAR(landmarks.getLeftEye()) + calculateEAR(landmarks.getRightEye())) / 2;
+  earHistory.push(ear);
+  if (earHistory.length > LIVENESS.BLINK_WINDOW) earHistory.shift();
+  if (earHistory.length >= 6 && Math.min(...earHistory.slice(-6)) < LIVENESS.BLINK_THRESH) blinkDetected = true;
 }
-function computeTexture(video, box) { /* same as before */ return 40; } // placeholder for brevity
-function updateMotion(landmarks) { return 1.5; } // placeholder
-function updateDrift(desc) { return 0.004; } // placeholder
+
+function computeTexture(video, box) {
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0);
+  const x = Math.max(0, Math.floor(box.x)), y = Math.max(0, Math.floor(box.y));
+  const w = Math.min(canvas.width - x, Math.floor(box.width));
+  const h = Math.min(canvas.height - y, Math.floor(box.height));
+  if (w < 10 || h < 10) return 0;
+  const data = ctx.getImageData(x, y, w, h).data;
+  let sum = 0, count = 0;
+  for (let i = 0; i < data.length; i += 4) { sum += 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2]; count++; }
+  const mean = sum / count;
+  let variance = 0;
+  for (let i = 0; i < data.length; i += 4) { const g = 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2]; variance += (g - mean) ** 2; }
+  return Math.sqrt(variance / count);
+}
+
+function updateMotion(landmarks) {
+  const nose = landmarks.getNose();
+  if (!nose || nose.length < 4) return 0;
+  const tip = nose[3];
+  noseHistory.push({ x: tip.x, y: tip.y });
+  if (noseHistory.length > LIVENESS.MOTION_WIN) noseHistory.shift();
+  if (noseHistory.length < LIVENESS.MOTION_WIN) return 0;
+  let total = 0;
+  for (let i = 1; i < noseHistory.length; i++) total += Math.hypot(noseHistory[i].x - noseHistory[i-1].x, noseHistory[i].y - noseHistory[i-1].y);
+  return total / (noseHistory.length - 1);
+}
+
+function updateDrift(descriptor) {
+  descHistory.push(descriptor);
+  if (descHistory.length > LIVENESS.DRIFT_WIN) descHistory.shift();
+  if (descHistory.length < LIVENESS.DRIFT_WIN) return 0;
+  let total = 0;
+  for (let i = 1; i < descHistory.length; i++) total += faceapi.euclideanDistance(descHistory[i], descHistory[i-1]);
+  return total / (descHistory.length - 1);
+}
+
 function checkPassiveLiveness(video, box, landmarks, descriptor) {
+  if (!video || !box || !landmarks || !descriptor) return false;
+  const tex = computeTexture(video, box);
+  textureHistory.push(tex);
+  if (textureHistory.length > LIVENESS.TEXTURE_WIN) textureHistory.shift();
+  const avgTex = textureHistory.reduce((a, b) => a + b, 0) / textureHistory.length;
+  const motion = updateMotion(landmarks) || 0;
+  const drift  = updateDrift(descriptor) || 0;
   updateBlinkDetection(landmarks);
   let passes = 0;
-  // simplified: assume texture/motion/drift always pass for demo, but blink is required
-  passes++; // texture
-  passes++; // motion
-  passes++; // drift
+  if (avgTex > LIVENESS.TEXTURE_THRESH && textureHistory.length >= LIVENESS.TEXTURE_WIN) passes++;
+  else if (avgTex < LIVENESS.TEXTURE_STRICT && textureHistory.length >= LIVENESS.TEXTURE_WIN) livenessFail = true;
+  if (motion > LIVENESS.MOTION_PX_MIN && noseHistory.length >= LIVENESS.MOTION_WIN) passes++;
+  if (drift  > LIVENESS.DRIFT_THRESH  && descHistory.length  >= LIVENESS.DRIFT_WIN)  passes++;
   if (blinkDetected) passes++;
-  if (passes>=3) livenessPassCount++;
-  return livenessPassCount >= LIVENESS_PASS_NEED;
+  if (livenessFail) return false;
+  if (passes >= LIVENESS.PASS_NEEDED) livenessPassCount++;
+  return livenessPassCount >= LIVENESS.PASS_NEEDED;
 }
-function resetLivenessBuffers() { earHistory=[]; blinkDetected=false; livenessPassCount=0; }
 
-// ---------- Main Loop ----------
+function resetLivenessBuffers() {
+  textureHistory = []; noseHistory = []; descHistory = [];
+  earHistory = []; blinkDetected = false; livenessPassCount = 0; livenessFail = false;
+}
+
+/* -------------------------------------------------------
+   DETECTION LOOP
+------------------------------------------------------- */
 async function detectionLoop() {
   if (!cameraActive || !modelsLoaded || processing) { rafHandle = requestAnimationFrame(detectionLoop); return; }
-  const video = document.getElementById('cam'), overlay = document.getElementById('overlay');
+
+  const video = document.getElementById('cam');
+  const overlay = document.getElementById('overlay');
   if (!video || !overlay || video.readyState < 2) { rafHandle = requestAnimationFrame(detectionLoop); return; }
+
   overlay.width = video.videoWidth; overlay.height = video.videoHeight;
-  const ctx = overlay.getContext('2d'); ctx.clearRect(0,0,overlay.width,overlay.height);
+  overlay.getContext('2d').clearRect(0, 0, overlay.width, overlay.height);
+
   let detection;
   try {
-    detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: DETECT_MIN_CONFIDENCE }))
-      .withFaceLandmarks().withFaceDescriptor();
-  } catch(e) { rafHandle = requestAnimationFrame(detectionLoop); return; }
-  document.getElementById('hudDot').className='hud-dot on'; document.getElementById('hudText').textContent='Active';
-  if (!detection) { rafHandle = requestAnimationFrame(detectionLoop); return; }
+    detection = await faceapi
+      .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: DETECTION.INPUT_SIZE, scoreThreshold: DETECTION.SCORE_THRESHOLD }))
+      .withFaceLandmarks(true)
+      .withFaceDescriptor();
+  } catch (e) { rafHandle = requestAnimationFrame(detectionLoop); return; }
+
+  const hudDot = document.getElementById('hudDot'); if (hudDot) hudDot.className = 'hud-dot on';
+  const hudText = document.getElementById('hudText'); if (hudText) hudText.textContent = 'Scanning…';
+
+  if (!detection) {
+    updatePosGuide('none');
+    unknownFaceFrames = 0;
+    rafHandle = requestAnimationFrame(detectionLoop);
+    return;
+  }
+
   const { box, landmarks, descriptor } = detection;
   const posRes = evaluatePosition(box, video.videoWidth, video.videoHeight);
   updatePosGuide(posRes);
+
   const rawMatch = matchFaceWithMargin(descriptor);
-  const winner = smoothedLabel(rawMatch);
+  const winner   = smoothedLabel(rawMatch);
+
   if (winner === '__new__') {
     unknownFaceFrames++;
-    if (unknownFaceFrames >= UNKNOWN_FRAME_THRESHOLD && Date.now() - lastUnknownPopupTime > UNKNOWN_POPUP_COOLDOWN) {
-      lastUnknownPopupTime = Date.now(); showUnknownFacePopup(); unknownFaceFrames = 0;
+    if (unknownFaceFrames >= UNKNOWN.FRAME_THRESHOLD &&
+        Date.now() - lastUnknownPopupTime > UNKNOWN.POPUP_COOLDOWN) {
+      lastUnknownPopupTime = Date.now();
+      unknownFaceFrames = 0;
+      showUnknownFacePopup();
     }
-  } else { unknownFaceFrames = 0; }
-  if (winner !== '__new__') {
-    const today = new Date().toDateString();
-    const markedKey = `${winner}__${today}`;
+  } else {
+    unknownFaceFrames = 0;
+    const todayStr = new Date().toDateString();
+    const markedKey = `${winner}__${todayStr}`;
     if (markedToday[markedKey]) {
-      showAlreadyMarked(winner); resumeScanning(500);
+      showAlreadyMarked(winner);
+      resumeScanning(600);
     } else if (posRes === 'good' && checkPassiveLiveness(video, box, landmarks, descriptor)) {
       processing = true;
-      await doMarkAttendance(winner, rawMatch.dist);
+      await doMarkAttendance(winner, rawMatch.dist || 0);
     }
   }
+
   rafHandle = requestAnimationFrame(detectionLoop);
 }
 
-function showUnknownFacePopup() {
-  const ov = document.createElement('div'); ov.className = 'popup-right-overlay';
-  ov.innerHTML = `<div class="popup-right-card"><h1 style="color:#7c4dff">🤔</h1><h3 style="color:#7c4dff">New Face!</h3><p>Please register first</p><button class="btn btn-p btn-block" onclick="closePopupAndNavReg(this)">Go to Register</button></div>`;
-  document.body.appendChild(ov);
-  setTimeout(()=>{ ov.style.opacity='0'; ov.style.transition='opacity 0.15s'; setTimeout(()=>ov.remove(),150); },8000);
-}
-function closePopupAndNavReg(el) { const ov = el.closest('.popup-right-overlay'); if (ov) ov.remove(); nav('reg'); }
-function showCamFlash() { /* ... */ }
-function resumeScanning(delay=300) { setTimeout(()=>{ processing=false; smoothBuffer=[]; resetLivenessBuffers(); }, delay); }
-
-// ---------- Mark Attendance ----------
+/* -------------------------------------------------------
+   MARK ATTENDANCE
+------------------------------------------------------- */
 async function doMarkAttendance(studentId, dist) {
-  const now = Date.now(), todayKey = new Date().toDateString(), markedKey = `${studentId}__${todayKey}`;
-  if (cooldowns[studentId] && now - cooldowns[studentId] < COOLDOWN_MS) { resumeScanning(200); return; }
+  const now = Date.now();
+  if (cooldowns[studentId] && now - cooldowns[studentId] < DETECTION.COOLDOWN_MS) { resumeScanning(200); return; }
   cooldowns[studentId] = now;
+
   const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
-  const displayName = stu ? stu.StudentName : studentId;
-  markedToday[markedKey] = true; saveMarkedToday();
-  showSuccessPopup(displayName, getTimeSession().label);
-  addMarkedChip(displayName);
-  apiCall('markAttendance', { studentId, studentName: displayName, confidence: (1-dist).toFixed(3) });
+  const displayName = stu ? stu.StudentName : `ID:${studentId}`;
+  const todayStr = new Date().toDateString();
+  const markedKey = `${studentId}__${todayStr}`;
+  const sessionLabel = getTimeSession().label;
+
+  markedToday[markedKey] = true;
+  saveMarkedToday();
+
+  showSuccessPopup(displayName, sessionLabel);
+  addMarkedChip(displayName, studentId);
+
+  // Fire-and-forget to API — UI already updated optimistically
+  apiCall('markAttendance', {
+    studentId,
+    studentName: displayName,
+    confidence: (1 - dist).toFixed(3)
+  });
+
+  resumeScanning(DETECTION.COOLDOWN_MS);
 }
+
+function resumeScanning(delay = 300) {
+  setTimeout(() => {
+    processing = false;
+    smoothBuffer = [];
+    resetLivenessBuffers();
+  }, delay);
+}
+
+/* -------------------------------------------------------
+   POPUPS
+------------------------------------------------------- */
 function showSuccessPopup(name, status) {
-  const ov = document.createElement('div'); ov.className = 'popup-right-overlay';
-  ov.innerHTML = `<div class="popup-right-card"><h1 style="color:#00c853">✅</h1><h3>${status}</h3><p><strong>${name}</strong></p></div>`;
+  const ov = document.createElement('div');
+  ov.className = 'popup-right-overlay';
+  ov.innerHTML = `<div class="popup-right-card"><h1>✅</h1><h3 style="color:#059669">${status}</h3><p><strong>${escapeHtml(name)}</strong></p></div>`;
   document.body.appendChild(ov);
-  setTimeout(()=>{ ov.style.opacity='0'; ov.style.transition='opacity 0.15s'; setTimeout(()=>ov.remove(),150); }, POPUP_DURATION_MS);
+  setTimeout(() => { ov.style.opacity = '0'; ov.style.transition = 'opacity .2s'; setTimeout(() => ov.remove(), 200); }, DETECTION.POPUP_DURATION_MS);
 }
+
 function showAlreadyMarked(studentId) {
   const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
-  const name = stu ? stu.StudentName : studentId;
-  const ov = document.createElement('div'); ov.className = 'popup-right-overlay';
-  ov.innerHTML = `<div class="popup-right-card"><h1 style="color:#ff9800">⚠️</h1><h3>Already Marked</h3><p><strong>${name}</strong></p></div>`;
+  const name = stu ? stu.StudentName : `ID:${studentId}`;
+  const ov = document.createElement('div');
+  ov.className = 'popup-right-overlay';
+  ov.innerHTML = `<div class="popup-right-card"><h1>⚠️</h1><h3 style="color:#d97706">Already Marked</h3><p>${escapeHtml(name)}</p></div>`;
   document.body.appendChild(ov);
-  setTimeout(()=>{ ov.style.opacity='0'; ov.style.transition='opacity 0.15s'; setTimeout(()=>ov.remove(),150); }, POPUP_DURATION_MS);
+  setTimeout(() => { ov.style.opacity = '0'; ov.style.transition = 'opacity .2s'; setTimeout(() => ov.remove(), 200); }, DETECTION.POPUP_DURATION_MS);
 }
-function addMarkedChip(name) {
+
+function showUnknownFacePopup() {
+  const ov = document.createElement('div');
+  ov.className = 'popup-right-overlay';
+  ov.id = '_unknownPopup';
+  ov.innerHTML = `<div class="popup-right-card">
+    <h1>🤔</h1><h3 style="color:var(--s)">Face Not Recognized</h3>
+    <p style="margin-bottom:14px">Please register first</p>
+    <button class="btn btn-p btn-block btn-sm" onclick="document.getElementById('_unknownPopup').remove();nav('reg')">Go to Register</button>
+  </div>`;
+  document.body.appendChild(ov);
+  setTimeout(() => { const e = document.getElementById('_unknownPopup'); if (e) { e.style.opacity='0'; e.style.transition='opacity .2s'; setTimeout(()=>e.remove(),200); } }, 8000);
+}
+
+function addMarkedChip(name, studentId) {
   const strip = document.getElementById('markedStrip');
   if (!strip) return;
-  const chip = document.createElement('div'); chip.className = 'marked-chip'; chip.innerHTML = `<i class="fas fa-check"></i>${name}`;
+  // Remove placeholder
+  strip.querySelectorAll('span').forEach(s => s.remove());
+  // Deduplicate
+  if (strip.querySelector(`[data-id="${studentId}"]`)) return;
+  const chip = document.createElement('div');
+  chip.className = 'marked-chip';
+  chip.setAttribute('data-id', studentId);
+  chip.innerHTML = `<i class="fas fa-check"></i>${escapeHtml(name)}`;
   strip.appendChild(chip);
-  document.getElementById('markedCount').textContent = strip.querySelectorAll('.marked-chip').length;
+  const cnt = document.getElementById('markedCount');
+  if (cnt) cnt.textContent = strip.querySelectorAll('.marked-chip').length;
 }
 
-// ---------- Students List ----------
+/* -------------------------------------------------------
+   STUDENTS LIST
+------------------------------------------------------- */
 async function loadStudents(c) {
-  c.innerHTML = '<div style="text-align:center;padding:40px"><div class="spinner"></div></div>';
+  c.innerHTML = `<div class="page-loading"><div class="spinner"></div><span>Loading students…</span></div>`;
   await fetchStudents();
+
   if (!studentsCache.length) {
-    c.innerHTML = '<div class="card" style="text-align:center;padding:60px"><h3>No students yet</h3><button class="btn btn-p" onclick="nav(\'reg\')">Register Now</button></div>';
+    c.innerHTML = `<div class="card"><div class="empty-state"><div class="icon">👤</div><h3>No students yet</h3><p>Register your first student to get started.</p><button class="btn btn-p" onclick="nav('reg')">Register Now</button></div></div>`;
     return;
   }
-  let rows = '';
-  studentsCache.forEach((s,i) => {
-    const sid = s.StudentID || '', sname = s.StudentName || '';
-    rows += `<tr><td>${i+1}</td><td><small>${sid}</small></td><td><strong>${sname}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td><td>
-      <button class="btn btn-ghost btn-sm" onclick="showEditStudentModal('${sid}')"><i class="fas fa-edit"></i></button>
-      <button class="btn btn-ghost btn-sm" style="color:var(--d)" onclick="deleteStudent('${sid}','${sname}')"><i class="fas fa-trash-alt"></i></button>
-      <button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${sid}','${sname}')"><i class="fas fa-camera"></i></button>
-    </td></tr>`;
-  });
-  c.innerHTML = `<div class="card"><h2>Students (${studentsCache.length})</h2><div class="tbc"><table><thead><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
-}
-function showEditStudentModal(studentId) { /* same as before – omit for brevity */ }
-function deleteStudent(studentId, name) {
-  if (!confirm(`Delete ${name}?`)) return;
-  apiCall('deleteStudent', { studentId }).then(r => {
-    if (r && r.success) { notify('Deleted','success'); studentsCache = []; loadStudents(document.getElementById('pc')); }
-    else notify('Failed','error');
-  });
-}
-function showImproveFaceModal(studentId, name) { /* same */ }
 
-// ---------- Reports ----------
+  const rows = studentsCache.map((s, i) => {
+    const sid = s.StudentID || '';
+    return `<tr>
+      <td style="color:var(--muted)">${i + 1}</td>
+      <td><code style="font-size:.72rem;background:var(--surface2);padding:2px 6px;border-radius:4px">${sid}</code></td>
+      <td><strong>${escapeHtml(s.StudentName || '—')}</strong></td>
+      <td>${s.Class || '—'}</td>
+      <td>${s.Section || '—'}</td>
+      <td>${s.RollNumber || '—'}</td>
+      <td>${s.Gender || '—'}</td>
+      <td>${s.GuardianPhone || '—'}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm btn-icon" title="Edit" onclick="showEditStudentModal('${sid}')"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-ghost btn-sm btn-icon" title="Improve face" onclick="showImproveFaceModal('${sid}','${escapeJs(s.StudentName||'')}')"><i class="fas fa-camera"></i></button>
+          <button class="btn btn-ghost btn-sm btn-icon" title="Delete" style="color:var(--d)" onclick="deleteStudent('${sid}','${escapeJs(s.StudentName||'')}')"><i class="fas fa-trash-alt"></i></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  c.innerHTML = `<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="margin:0">👥 Students (${studentsCache.length})</h2>
+      <button class="btn btn-p btn-sm" onclick="nav('reg')"><i class="fas fa-plus"></i> Add New</button>
+    </div>
+    <div class="tbc">
+      <table>
+        <thead><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Actions</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function showEditStudentModal(studentId) {
+  const s = studentsCache.find(x => String(x.StudentID) === String(studentId));
+  if (!s) return notify('Student not found', 'error');
+  const classOpts = [1,2,3,4,5,6,7,8,9,10].map(i => `<option ${s.Class == String(i) ? 'selected' : ''}>${i}</option>`).join('');
+  const secOpts = ['JUPITER','SATURN','URANUS','NEPTUNE'].map(sec => `<option ${s.Section===sec?'selected':''}>${sec}</option>`).join('');
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Student</div>
+      <div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Full Name</label><input id="editName" value="${escapeHtml(s.StudentName||'')}"></div>
+      <div class="fg"><label class="fl">Admission No.</label><input id="editAdm" value="${escapeHtml(s.AdmissionNumber||'')}"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Date of Birth</label><input type="date" id="editDob" value="${s.DateOfBirth||''}"></div>
+      <div class="fg"><label class="fl">Gender</label><select id="editGender"><option value="">Select</option><option ${s.Gender==='Male'?'selected':''}>Male</option><option ${s.Gender==='Female'?'selected':''}>Female</option><option ${s.Gender==='Other'?'selected':''}>Other</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Class</label><select id="editClass"><option value="">Select</option>${classOpts}</select></div>
+      <div class="fg"><label class="fl">Section</label><select id="editSection"><option value="">Select</option>${secOpts}</select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Roll No.</label><input id="editRoll" value="${escapeHtml(s.RollNumber||'')}"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Father's Name</label><input id="editFather" value="${escapeHtml(s.FatherName||'')}"></div>
+      <div class="fg"><label class="fl">Mother's Name</label><input id="editMother" value="${escapeHtml(s.MotherName||'')}"></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Phone</label><input id="editPhone" value="${escapeHtml(s.GuardianPhone||'')}"></div>
+      <div class="fg"><label class="fl">Address</label><textarea id="editAddr">${escapeHtml(s.Address||'')}</textarea></div>
+    </div>
+    <div class="fg" style="margin-bottom:16px"><label class="fl">🔒 Edit Password (required)</label><input type="password" id="editPwd" placeholder="Enter edit password"></div>
+    <button class="btn btn-p btn-block" onclick="submitEditStudent('${studentId}')"><i class="fas fa-save"></i> Save Changes</button>`);
+}
+
+async function submitEditStudent(studentId) {
+  const pwd = (document.getElementById('editPwd').value || '').trim();
+  if (pwd !== 'editsys123') { notify('❌ Incorrect password', 'error'); return; }
+  const btn = document.querySelector('#modalContainer .btn-p');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+  const payload = {
+    studentId,
+    studentName:     document.getElementById('editName').value.trim(),
+    admissionNumber: document.getElementById('editAdm').value.trim(),
+    dateOfBirth:     document.getElementById('editDob').value,
+    class:           document.getElementById('editClass').value,
+    section:         document.getElementById('editSection').value,
+    rollNumber:      document.getElementById('editRoll').value.trim(),
+    gender:          document.getElementById('editGender').value,
+    fatherName:      document.getElementById('editFather').value.trim(),
+    motherName:      document.getElementById('editMother').value.trim(),
+    guardianPhone:   document.getElementById('editPhone').value.trim(),
+    address:         document.getElementById('editAddr').value.trim()
+  };
+  const r = await apiCall('updateStudent', payload);
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+  if (r && r.success) {
+    notify('✅ Student updated!', 'success');
+    closeModal(); studentsCache = [];
+    await fetchStudents();
+    loadStudents(document.getElementById('pc'));
+  } else notify('❌ Update failed: ' + (r?.error || 'unknown'), 'error');
+}
+
+function deleteStudent(studentId, studentName) {
+  showPasswordPrompt(`Delete "${studentName}"?`, `(pwd) => {
+    if (pwd !== 'editsys123') { window._notifyFn('❌ Incorrect password','error'); return; }
+    window._confirmDeleteFn('${studentId}', '${escapeJs(studentName)}');
+  }`);
+}
+
+window._notifyFn = notify;
+window._confirmDeleteFn = (studentId, studentName) => {
+  showConfirm({
+    icon: '🗑️',
+    title: 'Delete Student?',
+    message: `This will permanently delete <strong>${escapeHtml(studentName)}</strong> and their attendance records. This cannot be undone.`,
+    confirmText: 'Delete',
+    confirmClass: 'btn-d',
+    onConfirm: async () => {
+      const r = await apiCall('deleteStudent', { studentId });
+      if (r && r.success) {
+        notify('✅ Student deleted', 'success');
+        studentsCache = studentsCache.filter(s => String(s.StudentID) !== String(studentId));
+        loadStudents(document.getElementById('pc'));
+      } else notify('❌ Deletion failed', 'error');
+    }
+  });
+};
+
+/* -------------------------------------------------------
+   IMPROVE FACE
+------------------------------------------------------- */
+function showImproveFaceModal(studentId, studentName) {
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">📸 Improve Face: ${escapeHtml(studentName)}</div>
+      <div class="modal-close" onclick="closeModal();stopImproveCam()"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="cam-box" style="max-width:400px;margin:0 auto"><video id="impCam" autoplay playsinline muted></video></div>
+    <div class="cam-footer">
+      <button class="btn btn-p" onclick="startImproveCam()"><i class="fas fa-video"></i> Start</button>
+      <button class="btn btn-o" onclick="captureImproveSample()"><i class="fas fa-camera"></i> Capture</button>
+      <button class="btn btn-d" onclick="stopImproveCam()"><i class="fas fa-stop"></i> Stop</button>
+    </div>
+    <div id="impSamples" style="margin:10px 0;font-size:.8rem;color:var(--sub);text-align:center">0 samples captured (need 3)</div>
+    <button class="btn btn-s btn-block" onclick="saveImproveSamples('${studentId}','${escapeHtml(studentName)}')" id="impSaveBtn" disabled>
+      <i class="fas fa-save"></i> Save Face Samples
+    </button>`);
+  window._impSamples = [];
+}
+
+async function startImproveCam() {
+  stopImproveCam();
+  try {
+    window._impStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
+    const v = document.getElementById('impCam'); if (v) v.srcObject = window._impStream;
+  } catch (e) { notify('Camera error: ' + e.message, 'error'); }
+}
+
+function stopImproveCam() {
+  if (window._impStream) { window._impStream.getTracks().forEach(t => t.stop()); window._impStream = null; }
+  const v = document.getElementById('impCam'); if (v) v.srcObject = null;
+}
+
+async function captureImproveSample() {
+  const video = document.getElementById('impCam');
+  if (!video || video.readyState < 2) return notify('Camera not ready', 'error');
+  if (!modelsLoaded) return notify('Models not loaded', 'warning');
+  const detection = await faceapi.detectSingleFace(video,
+    new faceapi.TinyFaceDetectorOptions({ inputSize: DETECTION.INPUT_SIZE, scoreThreshold: 0.5 })
+  ).withFaceDescriptor();
+  if (!detection) return notify('No face detected', 'error');
+  window._impSamples = window._impSamples || [];
+  window._impSamples.push(Array.from(detection.descriptor));
+  const el = document.getElementById('impSamples');
+  if (el) el.textContent = `${window._impSamples.length} samples captured (need 3)`;
+  const btn = document.getElementById('impSaveBtn');
+  if (btn) btn.disabled = window._impSamples.length < 3;
+  notify(`✅ Sample ${window._impSamples.length} captured`, 'success');
+}
+
+async function saveImproveSamples(studentId, studentName) {
+  if (!window._impSamples || window._impSamples.length < 3) return notify('Need at least 3 samples', 'error');
+  const btn = document.getElementById('impSaveBtn');
+  btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+  const r = await apiCall('improveEmbeddings', { studentId, embeddings: window._impSamples });
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Face Samples';
+  if (r && r.success) {
+    notify('✅ Face data updated!', 'success');
+    closeModal(); stopImproveCam();
+    try { localStorage.removeItem(FACE_CACHE_KEY); } catch (e) {}
+    faceMatcher = null; faceMatcherReady = false;
+    await loadEmbeddings();
+  } else notify('❌ Failed: ' + (r?.error || 'unknown'), 'error');
+}
+
+/* -------------------------------------------------------
+   REPORTS
+------------------------------------------------------- */
 function loadReports(c) {
-  c.innerHTML = `<div class="card"><h2>Attendance Reports</h2>
-    <div class="fr"><div class="fg"><label class="fl">From</label><input type="date" id="repFrom"></div><div class="fg"><label class="fl">To</label><input type="date" id="repTo"></div></div>
-    <div class="fr"><div class="fg"><label class="fl">Class</label><select id="repClass"><option value="">All</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section</label><select id="repSection"><option value="">All</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div>
-    <div class="fg"><label class="fl">Status</label><select id="repStatus"><option value="">All</option><option>Present</option><option>Late</option><option>Absent</option></select></div>
-    <button class="btn btn-p" onclick="runReport()">Generate</button>
-    <button class="btn btn-ghost" onclick="exportReportCSV()" id="exportBtn" style="display:none">Export CSV</button>
-    <div id="reportArea" style="margin-top:16px"></div></div>`;
-}
-async function runReport() {
-  const from = document.getElementById('repFrom').value, to = document.getElementById('repTo').value;
-  if (!from || !to) return notify('Select date range','warning');
-  const res = await apiGetParams('getReport', { from, to, class: document.getElementById('repClass').value, section: document.getElementById('repSection').value, status: document.getElementById('repStatus').value });
-  const data = res?.attendance || [];
-  let rows = data.map(r => `<tr><td>${r.Date||''}</td><td>${r.StudentName||''}</td><td>${r.Class||''}</td><td>${r.Section||''}</td><td><span class="badge badge-${r.Status==='Present'?'present':r.Status==='Late'?'late':'absent'}">${r.Status||'Absent'}</span></td><td>${r.Timestamp||''}</td></tr>`).join('');
-  document.getElementById('reportArea').innerHTML = `<div class="tbc"><table><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Section</th><th>Status</th><th>Time</th></tr></thead><tbody>${rows||'<tr><td colspan="6">No records</td></tr>'}</tbody></table></div>`;
-  document.getElementById('exportBtn').style.display = 'inline-flex';
-  window._reportData = data;
-}
-function exportReportCSV() {
-  if (!window._reportData || !window._reportData.length) return notify('No data','warning');
-  let csv = 'Date,Name,Class,Section,Status,Time\n';
-  window._reportData.forEach(r => { csv += `"${r.Date||''}","${r.StudentName||''}","${r.Class||''}","${r.Section||''}","${r.Status||''}","${r.Timestamp||''}"\n`; });
-  const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'report.csv'; a.click(); URL.revokeObjectURL(url);
+  const today = new Date().toISOString().split('T')[0];
+  c.innerHTML = `
+    <div class="cw">
+      <div class="card">
+        <h2>📊 Attendance Reports / हाजिरी रिपोर्ट</h2>
+        <div class="fr">
+          <div class="fg"><label class="fl">From / देखि</label><input type="date" id="repFrom" value="${today}"></div>
+          <div class="fg"><label class="fl">To / सम्म</label><input type="date" id="repTo" value="${today}"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="fl">Class / कक्षा</label><select id="repClass"><option value="">All Classes</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div>
+          <div class="fg"><label class="fl">Section / सेक्सन</label><select id="repSection"><option value="">All Sections</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
+        </div>
+        <div class="fg" style="margin-bottom:16px">
+          <label class="fl">Status / स्थिति</label>
+          <select id="repStatus"><option value="">All Status</option><option>Present</option><option>Late</option><option>Absent</option></select>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="runReport()"><i class="fas fa-search"></i> Generate Report</button>
+          <button class="btn btn-ghost" onclick="exportReportCSV()" id="exportBtn" style="display:none"><i class="fas fa-download"></i> Export CSV</button>
+        </div>
+        <div id="reportArea" style="margin-top:20px"></div>
+      </div>
+    </div>`;
 }
 
-// ---------- Initialization ----------
-function init() {
-  updateClock(); setInterval(updateClock, 1000);
-  loadMarkedToday();
-  if (localStorage.getItem('sebsLoggedIn') === '1') { showApp(); nav('db'); }
-  if (localStorage.getItem('sebsTheme') === 'dark') setDark(true);
+async function runReport() {
+  const from = document.getElementById('repFrom').value;
+  const to   = document.getElementById('repTo').value;
+  if (!from || !to) return notify('Please select a date range', 'warning');
+
+  const area = document.getElementById('reportArea');
+  area.innerHTML = `<div class="page-loading"><div class="spinner"></div><span>Generating report…</span></div>`;
+
+  const res = await apiGetParams('getReport', {
+    from, to,
+    class:   document.getElementById('repClass').value,
+    section: document.getElementById('repSection').value,
+    status:  document.getElementById('repStatus').value
+  });
+
+  const data = res?.attendance || [];
+  window._reportData = data;
+
+  if (!data.length) {
+    area.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h3>No records found</h3><p>No attendance data matches your filter criteria.</p></div>`;
+    document.getElementById('exportBtn').style.display = 'none';
+    return;
+  }
+
+  const rows = data.map(r => `<tr>
+    <td>${r.Date || ''}</td>
+    <td><strong>${escapeHtml(r.StudentName || '—')}</strong></td>
+    <td>${r.Class || '—'}</td>
+    <td>${r.Section || '—'}</td>
+    <td><span class="badge ${r.Status==='Present'?'badge-present':r.Status==='Late'?'badge-late':'badge-absent'}">${r.Status || 'Absent'}</span></td>
+    <td style="color:var(--sub);font-size:.78rem">${r.Timestamp || ''}</td>
+  </tr>`).join('');
+
+  area.innerHTML = `
+    <div style="margin-bottom:10px;font-size:.8rem;color:var(--sub)">${data.length} record${data.length !== 1 ? 's' : ''} found</div>
+    <div class="tbc">
+      <table>
+        <thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Section</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+  document.getElementById('exportBtn').style.display = 'inline-flex';
 }
+
+function exportReportCSV() {
+  if (!window._reportData || !window._reportData.length) return notify('No data to export', 'warning');
+  let csv = 'Date,Name,Class,Section,Status,Time\n';
+  window._reportData.forEach(r => {
+    csv += `"${r.Date||''}","${(r.StudentName||'').replace(/"/g,'""')}","${r.Class||''}","${r.Section||''}","${r.Status||''}","${r.Timestamp||''}"\n`;
+  });
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `sebs_attendance_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+/* -------------------------------------------------------
+   UTILITIES
+------------------------------------------------------- */
+function escapeHtml(text) {
+  if (!text) return '';
+  return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function escapeJs(text) {
+  if (!text) return '';
+  return String(text).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n');
+}
+
+/* -------------------------------------------------------
+   INIT
+------------------------------------------------------- */
+function init() {
+  updateClock();
+  setInterval(updateClock, 1000);
+  loadMarkedToday();
+  // Use sessionStorage (tab-scoped) instead of localStorage for auth
+  if (sessionStorage.getItem('sebsLoggedIn') === '1') {
+    showApp(); nav('db');
+  }
+  const savedTheme = localStorage.getItem('sebsTheme');
+  if (savedTheme === 'dark') setDark(true);
+}
+
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
