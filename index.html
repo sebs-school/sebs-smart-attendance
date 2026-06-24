@@ -13,6 +13,7 @@
 body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba4c8}
 *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}a{text-decoration:none;color:inherit}ul{list-style:none}button{cursor:pointer;border:none;outline:none;font-family:inherit}input,select,textarea{font-family:inherit;font-size:.88rem;border:2px solid var(--border);border-radius:12px;padding:11px 15px;background:var(--card);color:var(--text);width:100%}textarea{resize:vertical;min-height:52px}
 @keyframes spin{to{transform:rotate(360deg)}}@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
 .ac{display:flex;min-height:100vh}.mc{flex:1;margin-left:260px;display:flex;flex-direction:column}.pc{flex:1;padding:28px 32px;overflow-y:auto}
 .sb{width:260px;height:100vh;background:linear-gradient(180deg,#07111f,#0f2044,#1a3a6b);position:fixed;left:0;top:0;z-index:1000;display:flex;flex-direction:column;box-shadow:4px 0 24px rgba(0,0,0,.18)}.sh{padding:22px 20px;display:flex;align-items:center;gap:13px;border-bottom:1px solid rgba(255,255,255,.07)}.slogo{width:44px;height:44px;border-radius:13px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,.25)}.slogo img{width:34px;height:34px;object-fit:contain}.sn{font-weight:800;font-size:1.08rem;color:#fff}.snv{flex:1;overflow-y:auto;padding:14px 10px}.sm{display:flex;flex-direction:column;gap:3px}.sg{margin-bottom:6px}.sg-label{font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.28);padding:8px 16px 4px;text-transform:uppercase}.si{border-radius:11px}.si:hover .sl{background:rgba(255,255,255,.07);color:#c8daf4}.si.act .sl{background:rgba(255,255,255,.14);color:#fff}.sl{display:flex;align-items:center;gap:12px;padding:11px 17px;color:rgba(255,255,255,.55);font-size:.83rem;font-weight:500;border-radius:11px}.sl i{font-size:1rem;width:20px;text-align:center;color:rgba(255,255,255,.35)}.sf{padding:14px 10px;border-top:1px solid rgba(255,255,255,.07);margin-top:auto}.slo{width:100%;display:flex;align-items:center;gap:12px;padding:11px 17px;background:rgba(231,76,60,.08);color:#f4877a;font-size:.83rem;font-weight:500;border-radius:11px}.so{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:999;backdrop-filter:blur(2px)}.so.act{display:block}
 .tb{height:68px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:900;backdrop-filter:blur(12px)}#pt{font-size:1.15rem;font-weight:800}.td{font-size:.72rem;color:var(--sub)}.tt{font-size:.8rem;font-weight:700;color:var(--p);font-family:monospace;background:rgba(26,58,107,.07);padding:5px 10px;border-radius:8px}.ttb{background:var(--border);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:.9rem}.ttb:hover{background:var(--p);color:#fff}.mtb{display:none;background:var(--border);width:36px;height:36px;border-radius:10px;align-items:center;justify-content:center;cursor:pointer;color:var(--text)}
@@ -38,6 +39,32 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 @media(max-width:1100px){.sr{grid-template-columns:repeat(3,1fr)}.db-grid{grid-template-columns:1fr}}
 @media(max-width:860px){.mc{margin-left:0}.sb{transform:translateX(-100%);transition:transform .25s}.sb.mo{transform:translateX(0)}.sr{grid-template-columns:repeat(2,1fr)}.db-grid{grid-template-columns:1fr}.mtb{display:flex}}
 @media(max-width:600px){.sr{grid-template-columns:1fr}.fr{grid-template-columns:1fr}.pc{padding:14px}.tb{padding:0 14px}.cam-box{max-height:320px}.modal{padding:20px 16px}.stc{padding:16px 18px}.sti h3{font-size:1.5rem}.capture-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ── LARGE RIGHT-SIDE ATTENDANCE POPUPS ── */
+.popup-right-overlay{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:transparent;
+  z-index:2500;
+  display:flex;align-items:flex-start;justify-content:flex-end;
+  padding:20px;
+  pointer-events:none;
+}
+.popup-right-card{
+  pointer-events:auto;
+  background:var(--card);
+  border-radius:18px;
+  padding:24px 28px;
+  max-width:380px;width:100%;
+  box-shadow:0 20px 50px rgba(0,0,0,0.25);
+  border:1px solid var(--border);
+  animation:slideInRight 0.35s ease-out;
+  text-align:left;
+}
+.popup-right-card h1{font-size:2.2rem;margin-bottom:6px}
+.popup-right-card h3{font-size:1.2rem;margin-bottom:8px}
+.popup-right-card p{font-size:1rem;font-weight:500;margin-top:4px;color:var(--text)}
+.popup-right-card .sub{font-size:0.8rem;color:var(--sub);margin-top:6px}
+@keyframes slideInRight{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
 </style>
 </head>
 <body>
@@ -131,9 +158,9 @@ const POS_BAD_FRAMES_RESET = 6;
 const SMOOTH_WINDOW      = 3;
 const COOLDOWN_MS        = 5000;
 const ACTION_DEBOUNCE_MS = 150;
-const POPUP_DURATION_MS  = 1800;
+const POPUP_DURATION_MS  = 2000;
 
-// ── PASSIVE LIVENESS ────────────────────────────────────────────
+// ── PASSIVE LIVENESS (fast anti‑photo) ──────────────────────────
 const TEXTURE_WIN        = 3;
 const TEXTURE_THRESH     = 32;
 const TEXTURE_STRICT     = 20;
@@ -284,7 +311,7 @@ function tmsb(){ document.getElementById('sb').classList.toggle('mo'); document.
 function cmsb(){ document.getElementById('sb').classList.remove('mo'); document.getElementById('so').classList.remove('act'); }
 
 // ══════════════════════════════════════════════════════════════════
-// NOTIFICATIONS
+// NOTIFICATIONS (top-right bar)
 // ══════════════════════════════════════════════════════════════════
 function notify(msg, type='info') {
   const nc    = document.getElementById('nc');
@@ -495,7 +522,7 @@ async function loadDashboard(c) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REGISTRATION
+// REGISTRATION (unchanged)
 // ══════════════════════════════════════════════════════════════════
 function loadRegister(c) {
   regCaptureSamples = [];
@@ -891,11 +918,98 @@ function smoothedLabel(rawMatch) {
 // ══════════════════════════════════════════════════════════════════
 // PASSIVE LIVENESS
 // ══════════════════════════════════════════════════════════════════
-function computeTexture(video, box) { /* unchanged */ }
-function updateMotion(landmarks) { /* unchanged */ }
-function updateDrift(descriptor) { /* unchanged */ }
-function checkPassiveLiveness(video, box, landmarks, descriptor) { /* unchanged */ }
-function resetLivenessBuffers() { /* unchanged */ }
+function computeTexture(video, box) {
+  try {
+    const off = document.createElement('canvas');
+    off.width = 32; off.height = 32;
+    const ctx = off.getContext('2d');
+    const sx = box.x + box.width  * 0.2;
+    const sy = box.y + box.height * 0.15;
+    const sw = box.width  * 0.6;
+    const sh = box.height * 0.65;
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, 32, 32);
+    const data = ctx.getImageData(0, 0, 32, 32).data;
+    const g = [];
+    for (let i = 0; i < data.length; i += 4)
+      g.push(0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2]);
+    let sum = 0, sumSq = 0, n = 0;
+    for (let y = 1; y < 31; y++) {
+      for (let x = 1; x < 31; x++) {
+        const idx = y * 32 + x;
+        const lap = -4*g[idx] + g[idx-1] + g[idx+1] + g[idx-32] + g[idx+32];
+        sum += lap; sumSq += lap * lap; n++;
+      }
+    }
+    const mean = sum / n;
+    return Math.sqrt(Math.abs(sumSq / n - mean * mean));
+  } catch(e) { return 999; }
+}
+
+function updateMotion(landmarks) {
+  if (!landmarks) return 0;
+  const p    = landmarks.positions;
+  const nose = { x: p[30].x, y: p[30].y };
+  noseHistory.push(nose);
+  if (noseHistory.length > MOTION_WIN) noseHistory.shift();
+  if (noseHistory.length < MOTION_FRAMES_NEED) return 0;
+  let totalMove = 0;
+  for (let i = 1; i < noseHistory.length; i++) {
+    totalMove += Math.hypot(
+      noseHistory[i].x - noseHistory[i-1].x,
+      noseHistory[i].y - noseHistory[i-1].y
+    );
+  }
+  return totalMove / (noseHistory.length - 1);
+}
+
+function updateDrift(descriptor) {
+  if (!descriptor) return 0;
+  const d32 = new Float32Array(descriptor);
+  descHistory.push(d32);
+  if (descHistory.length > DRIFT_WIN) descHistory.shift();
+  if (descHistory.length < DRIFT_FRAMES_NEED) return 0;
+  let totalDrift = 0, pairs = 0;
+  for (let i = 1; i < descHistory.length; i++) {
+    totalDrift += faceapi.euclideanDistance(descHistory[i-1], descHistory[i]);
+    pairs++;
+  }
+  return totalDrift / pairs;
+}
+
+function checkPassiveLiveness(video, box, landmarks, descriptor) {
+  const tex = computeTexture(video, box);
+  textureHistory.push(tex);
+  if (textureHistory.length > TEXTURE_WIN) textureHistory.shift();
+  const avgMotion = updateMotion(landmarks);
+  const avgDrift = updateDrift(descriptor);
+
+  const hasEnoughData = textureHistory.length >= TEXTURE_WIN &&
+                        noseHistory.length    >= MOTION_FRAMES_NEED &&
+                        descHistory.length    >= DRIFT_FRAMES_NEED;
+
+  if (!hasEnoughData) {
+    return { live: true, reason: 'collecting', confidence: 'low' };
+  }
+
+  const avgTex   = textureHistory.reduce((a,b)=>a+b,0) / textureHistory.length;
+  const texOk    = avgTex    >= TEXTURE_THRESH;
+  const motionOk = avgMotion >= MOTION_PX_MIN;
+  const driftOk  = avgDrift  >= DRIFT_THRESH;
+
+  const passCount = (texOk?1:0) + (motionOk?1:0) + (driftOk?1:0);
+  if (passCount >= 2) {
+    return { live: true, reason: '✅ Live face', confidence: passCount===3?'high':'medium' };
+  }
+  return { live: false, reason: '🚫 Photo/screen — असली अनुहार देखाउनुहोस्', confidence: 'medium' };
+}
+
+function resetLivenessBuffers() {
+  textureHistory  = [];
+  noseHistory     = [];
+  descHistory     = [];
+  livenessPassCount = 0;
+  livenessFail      = false;
+}
 
 // ══════════════════════════════════════════════════════════════════
 // MAIN DETECTION LOOP
@@ -1062,10 +1176,37 @@ async function detectionLoop() {
   if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
 }
 
-function showCamFlash() { /* unchanged */ }
-function drawCircle(ctx,cx,cy,rad,color) { /* unchanged */ }
-function drawLabel(ctx,text,cx,cy,rad) { /* unchanged */ }
-function roundRect(ctx,x,y,w,h,r) { /* unchanged */ }
+function showCamFlash() {
+  const box = document.querySelector('.cam-box');
+  if (!box) return;
+  const flash = document.createElement('div');
+  flash.className = 'mark-flash';
+  box.appendChild(flash);
+  setTimeout(()=>flash.remove(), 500);
+}
+
+function drawCircle(ctx,cx,cy,rad,color) {
+  ctx.save();
+  ctx.shadowColor=color; ctx.shadowBlur=18;
+  ctx.strokeStyle=color; ctx.lineWidth=3.5;
+  ctx.beginPath(); ctx.arc(cx,cy,rad,0,2*Math.PI); ctx.stroke();
+  ctx.restore();
+}
+function drawLabel(ctx,text,cx,cy,rad) {
+  ctx.font='bold 13px Inter';
+  const tw=ctx.measureText(text).width;
+  const lx=cx-tw/2-10, ly=cy+rad+12;
+  ctx.fillStyle='rgba(0,0,0,.78)';
+  roundRect(ctx,lx,ly,tw+20,24,6); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.fillText(text,cx-tw/2,ly+16);
+}
+function roundRect(ctx,x,y,w,h,r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
+}
 
 function resumeScanning(delay=300) {
   setTimeout(()=>{
@@ -1077,11 +1218,97 @@ function resumeScanning(delay=300) {
   }, delay);
 }
 
-async function doMarkAttendance(studentId, dist) { /* unchanged */ }
+// ── MARK ATTENDANCE ────────────────────────────────────────────
+async function doMarkAttendance(studentId, dist) {
+  const now       = Date.now();
+  const todayKey  = new Date().toDateString();
+  const markedKey = `${studentId}__${todayKey}`;
+  if (cooldowns[studentId] && now - cooldowns[studentId] < COOLDOWN_MS) { resumeScanning(200); return; }
+  cooldowns[studentId] = now;
 
-function showSuccessPopup(name, status) { /* unchanged */ }
-function showAlreadyMarked(studentId) { /* unchanged */ }
-function addMarkedChip(name) { /* unchanged */ }
+  const stu         = studentsCache.find(s => String(s.StudentID) === String(studentId));
+  const displayName = stu ? stu.StudentName : studentId;
+
+  markedToday[markedKey] = true;
+  saveMarkedToday();
+
+  const confidence       = Math.round((1 - dist) * 100);
+  const session          = getTimeSession();
+  const optimisticStatus = session.label === 'Late' ? 'Late' : 'Present';
+
+  showSuccessPopup(displayName, optimisticStatus);
+  addMarkedChip(displayName);
+
+  apiCall('markAttendance', {
+    studentId, studentName: displayName, confidence: (1 - dist).toFixed(3)
+  }).then(r => {
+    if (!r) return;
+    if (r.reason === 'already_marked') { /* already shown */ }
+    else if (r.reason === 'outside_window') {
+      notify(`⛔ Window closed: ${r.label}`, 'warning');
+      delete markedToday[markedKey];
+      saveMarkedToday();
+    } else if (!r.success) {
+      notify('❌ Attendance save failed — will retry on next detection','error');
+      delete markedToday[markedKey];
+      saveMarkedToday();
+    }
+    if (!studentsCache.length) fetchStudents();
+  }).catch(() => {
+    notify('❌ Network error — check connection','error');
+  });
+}
+
+// ── LARGE RIGHT-SIDE POPUPS ────────────────────────────────────
+function showSuccessPopup(name, status) {
+  const ov = document.createElement('div');
+  ov.className = 'popup-right-overlay';
+  ov.innerHTML = `
+    <div class="popup-right-card">
+      <h1 style="color:#00c853">✅</h1>
+      <h3 style="color:#00c853">${status}</h3>
+      <p><strong>${name}</strong></p>
+      <p class="sub">हाजिर भयो!</p>
+    </div>`;
+  document.body.appendChild(ov);
+  setTimeout(() => {
+    ov.style.opacity = '0';
+    ov.style.transition = 'opacity 0.15s';
+    setTimeout(() => { ov.remove(); resumeScanning(0); }, 150);
+  }, POPUP_DURATION_MS);
+}
+
+function showAlreadyMarked(studentId) {
+  const stu  = studentsCache.find(s => String(s.StudentID) === String(studentId));
+  const name = stu ? stu.StudentName : studentId;
+  const ov   = document.createElement('div');
+  ov.className = 'popup-right-overlay';
+  ov.innerHTML = `
+    <div class="popup-right-card">
+      <h1 style="color:#ff9800">⚠️</h1>
+      <h3 style="color:#ff9800">Already Marked / पहिल्यै हाजिर</h3>
+      <p><strong>${name}</strong></p>
+      <p class="sub">Already marked today!</p>
+    </div>`;
+  document.body.appendChild(ov);
+  setTimeout(() => {
+    ov.style.opacity = '0';
+    ov.style.transition = 'opacity 0.15s';
+    setTimeout(() => { ov.remove(); resumeScanning(0); }, 150);
+  }, POPUP_DURATION_MS);
+}
+
+function addMarkedChip(name) {
+  const strip=document.getElementById('markedStrip');
+  const cnt  =document.getElementById('markedCount');
+  if (!strip) return;
+  const ph=strip.querySelector('span:not(.marked-chip)'); if (ph) ph.remove();
+  const chip=document.createElement('div');
+  chip.className='marked-chip';
+  chip.innerHTML=`<i class="fas fa-check"></i>${name}`;
+  strip.appendChild(chip);
+  if (cnt) cnt.textContent=`${strip.querySelectorAll('.marked-chip').length} students`;
+}
 
 // ══════════════════════════════════════════════════════════════════
 // STUDENTS LIST – with Edit / Delete
@@ -1097,11 +1324,13 @@ async function loadStudents(c) {
   let rows = '';
   studentsCache.forEach((s,i) => {
     const sid   = s.StudentID || '';
-    const sname = (s.StudentName || '').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    const sname = (s.StudentName || '');
+    // escape for onclick
+    const escName = escapeHtml(sname);
     rows += `<tr>
       <td>${i+1}</td>
       <td><small>${sid}</small></td>
-      <td><strong>${s.StudentName||'-'}</strong></td>
+      <td><strong>${escName}</strong></td>
       <td>${s.Class||'-'}</td>
       <td>${s.Section||'-'}</td>
       <td>${s.RollNumber||'-'}</td>
@@ -1110,8 +1339,8 @@ async function loadStudents(c) {
       <td>${(s.Address||'-').substring(0,22)}</td>
       <td style="white-space:nowrap">
         <button class="btn btn-ghost btn-sm" onclick="showEditStudentModal('${sid}')" title="Edit"><i class="fas fa-edit"></i></button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--d)" onclick="deleteStudent('${sid}','${sname}')" title="Delete"><i class="fas fa-trash-alt"></i></button>
-        <button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${sid}','${sname}')" title="Improve Face"><i class="fas fa-camera"></i></button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--d)" onclick="deleteStudent('${sid}','${escName}')" title="Delete"><i class="fas fa-trash-alt"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${sid}','${escName}')" title="Improve Face"><i class="fas fa-camera"></i></button>
       </td>
     </tr>`;
   });
@@ -1256,12 +1485,266 @@ function deleteStudent(studentId, studentName) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// QUICK REGISTER (unchanged)
+// QUICK REGISTER (not auto-called)
 // ══════════════════════════════════════════════════════════════════
-// ... (all remaining code: showQuickRegister, submitQuickRegister, showImproveFaceModal,
-//      captureImproveSample, saveImproveSamples, loadReports, runReport, exportReportCSV,
-//      BOOT event listener) – these remain exactly as before.
+function showQuickRegister() {
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">🆕 New Student / नयाँ विद्यार्थी</div>
+      <div class="modal-close" onclick="closeModal();resumeScanning()"><i class="fas fa-times"></i></div>
+    </div>
+    <div style="background:rgba(255,152,0,.07);border:1px solid rgba(255,152,0,.2);border-radius:12px;padding:10px 14px;margin-bottom:18px;font-size:.76rem;color:#e08600">
+      ℹ️ 1 face sample captured. Add 2 more later from Students → Improve Face Data.
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Full Name *</label><input id="qn" placeholder="Student Name" required></div>
+      <div class="fg"><label class="fl">Admission No.</label><input id="qa" placeholder="Admission No."></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Class *</label><select id="qc" required><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div>
+      <div class="fg"><label class="fl">Section</label><select id="qs"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Roll No. *</label><input id="qr" placeholder="Roll No." required></div>
+      <div class="fg"><label class="fl">Gender *</label><select id="qg" required><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label class="fl">Father</label><input id="qf" placeholder="Father's Name"></div>
+      <div class="fg"><label class="fl">Phone</label><input id="qp" placeholder="Guardian Phone"></div>
+    </div>
+    <div class="fg"><label class="fl">Address</label><textarea id="qad" placeholder="Address"></textarea></div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn btn-p btn-lg" style="flex:1" onclick="submitQuickRegister()"><i class="fas fa-save"></i> Register & Mark Present</button>
+      <button class="btn btn-ghost" onclick="closeModal();resumeScanning()">Skip</button>
+    </div>`);
+}
+
+async function submitQuickRegister() {
+  const name   = document.getElementById('qn').value.trim();
+  const cls    = document.getElementById('qc').value;
+  const gender = document.getElementById('qg').value;
+  const roll   = document.getElementById('qr').value.trim();
+  if (!name||!cls||!gender||!roll) { notify('Fill required fields incl. Roll No.','warning'); return; }
+  const btn = document.querySelector('#modalContainer .btn-p');
+  btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';
+  const payload = {
+    studentName:name, admissionNumber:document.getElementById('qa').value,
+    dateOfBirth:'', class:cls, section:document.getElementById('qs').value,
+    rollNumber:roll, gender, fatherName:document.getElementById('qf').value,
+    motherName:'', guardianPhone:document.getElementById('qp').value,
+    address:document.getElementById('qad').value
+  };
+  if (pendingDescriptor) payload.embeddings=[Array.from(pendingDescriptor)];
+  const r = await apiCall('registerStudent',payload);
+  if (r&&r.success) {
+    const sid = r.studentId;
+    closeModal();
+    const todayKey  = new Date().toDateString();
+    const markedKey = `${sid}__${todayKey}`;
+    markedToday[markedKey] = true;
+    saveMarkedToday();
+    showSuccessPopup(name,'Present');
+    addMarkedChip(name);
+    apiCall('markAttendance',{
+      studentId:sid, studentName:name, class:cls,
+      section:document.getElementById('qs')?.value||'', rollNumber:roll, confidence:'0.99'
+    });
+    localStorage.removeItem(FACE_CACHE_KEY);
+    faceMatcher=null; faceMatcherReady=false; pendingDescriptor=null; studentsCache=[];
+    await loadEmbeddings();
+  } else {
+    notify('❌ Registration failed','error');
+    btn.disabled=false; btn.innerHTML='<i class="fas fa-save"></i> Register & Mark Present';
+  }
+}
+
 // ══════════════════════════════════════════════════════════════════
+// IMPROVE FACE DATA
+// ══════════════════════════════════════════════════════════════════
+function showImproveFaceModal(studentId, studentName) {
+  window._improveSamples=[];
+  showModal(`
+    <div class="modal-header">
+      <div class="modal-title">📸 Improve Face — ${studentName}</div>
+      <div class="modal-close" onclick="stopImproveCam();closeModal()"><i class="fas fa-times"></i></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--sub);margin-bottom:12px">Capture up to 3 new samples (added to existing data).</p>
+    <div class="cam-box" style="max-width:380px;margin:0 auto;aspect-ratio:4/3">
+      <video id="impCam" autoplay playsinline muted></video>
+    </div>
+    <div class="capture-grid" id="impGrid" style="max-width:380px;margin:0 auto">
+      ${[0,1,2].map(i=>`<div class="capture-slot" id="impSlot${i}"><i class="fas fa-user"></i></div>`).join('')}
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;margin:14px 0">
+      <button class="btn btn-p" id="impStartBtn" onclick="startImproveCam()"><i class="fas fa-video"></i> Start Camera</button>
+      <button class="btn btn-s" id="impCapBtn" style="display:none" onclick="captureImproveSample()"><i class="fas fa-camera"></i> Capture</button>
+    </div>
+    <button class="btn btn-p btn-block" id="impSaveBtn" style="display:none" onclick="saveImproveSamples('${studentId}','${escapeHtml(studentName)}')">
+      <i class="fas fa-save"></i> Save Samples
+    </button>`);
+}
+
+async function startImproveCam() {
+  if (!modelsLoaded) { notify('⏳ Loading models...'); await preloadModels(); if (!modelsLoaded) return; }
+  try {
+    window._improveStream=await navigator.mediaDevices.getUserMedia({video:{width:480,height:360,facingMode:'user'}});
+    const v=document.getElementById('impCam');
+    v.srcObject=window._improveStream;
+    await v.play();
+    document.getElementById('impStartBtn').style.display='none';
+    document.getElementById('impCapBtn').style.display='inline-flex';
+  } catch(e) { notify('❌ Camera error: '+e.message,'error'); }
+}
+
+function stopImproveCam() {
+  if (window._improveStream) { window._improveStream.getTracks().forEach(t=>t.stop()); window._improveStream=null; }
+}
+
+async function captureImproveSample() {
+  const v=document.getElementById('impCam');
+  if (!v||!v.videoWidth) return;
+  const capBtn = document.getElementById('impCapBtn');
+  if (capBtn) { capBtn.disabled=true; capBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i>'; }
+
+  let det = null;
+  try {
+    const tinyOpts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.3 });
+    det = await faceapi.detectSingleFace(v, tinyOpts).withFaceLandmarks(true).withFaceDescriptor();
+  } catch(e) {}
+
+  if (!det) {
+    const levels = [0.4, 0.3, 0.2, 0.1];
+    for (const conf of levels) {
+      const opts = new faceapi.SsdMobilenetv1Options({ minConfidence: conf });
+      det = await faceapi.detectSingleFace(v, opts).withFaceLandmarks().withFaceDescriptor();
+      if (det) break;
+      await new Promise(r => setTimeout(r, 80));
+    }
+  }
+
+  if (capBtn) { capBtn.disabled=false; capBtn.innerHTML='<i class="fas fa-camera"></i> Capture'; }
+  if (!det) { notify('❌ No face found — better lighting & face the camera','error'); return; }
+
+  window._improveSamples=window._improveSamples||[];
+  if (window._improveSamples.length>=3) return;
+  window._improveSamples.push(Array.from(det.descriptor));
+  const slot=document.getElementById(`impSlot${window._improveSamples.length-1}`);
+  if (slot) { slot.classList.add('filled'); slot.innerHTML='<i class="fas fa-check" style="color:var(--s)"></i>'; }
+  document.getElementById('impSaveBtn').style.display='flex';
+  if (window._improveSamples.length>=3) {
+    document.getElementById('impCapBtn').style.display='none';
+    stopImproveCam();
+  }
+}
+
+async function saveImproveSamples(studentId, studentName) {
+  const samples=window._improveSamples||[];
+  if (samples.length===0) { notify('No samples captured','warning'); return; }
+  const r=await apiCall('updateEmbedding',{studentId,studentName,embeddings:samples});
+  stopImproveCam(); closeModal();
+  if (r&&r.success) {
+    notify(`✅ Added ${samples.length} sample(s) for ${studentName}`,'success');
+    localStorage.removeItem(FACE_CACHE_KEY);
+    faceMatcherReady=false;
+    await loadEmbeddings();
+  } else { notify('❌ Failed to save samples','error'); }
+  window._improveSamples=[];
+}
+
+// ══════════════════════════════════════════════════════════════════
+// REPORTS
+// ══════════════════════════════════════════════════════════════════
+function loadReports(c) {
+  const today   = new Date().toISOString().split('T')[0];
+  const weekAgo = new Date(Date.now()-6*24*60*60*1000).toISOString().split('T')[0];
+  c.innerHTML=`
+    <div class="card no-print">
+      <h2>📊 Reports / रिपोर्ट</h2>
+      <p style="font-size:.78rem;color:var(--sub);margin:8px 0 16px">Present / Late / Absent per student per day.</p>
+      <div class="fr">
+        <div class="fg"><label class="fl">From</label><input type="date" id="repStart" value="${weekAgo}"></div>
+        <div class="fg"><label class="fl">To</label><input type="date" id="repEnd" value="${today}"></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-p btn-lg" onclick="runReport()"><i class="fas fa-search"></i> Generate</button>
+        <button class="btn btn-s btn-lg" onclick="exportReportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+        <button class="btn btn-o btn-lg" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+      </div>
+    </div>
+    <div id="reportOutput"></div>`;
+  runReport();
+}
+
+let lastReportData = null;
+
+async function runReport() {
+  const start=document.getElementById('repStart').value;
+  const end  =document.getElementById('repEnd').value;
+  const out  =document.getElementById('reportOutput');
+  out.innerHTML='<div style="text-align:center;padding:30px"><div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+  const d=await apiGetParams('getAttendanceReport',{start,end});
+  if (!d||!d.days) { out.innerHTML='<div class="card" style="text-align:center;padding:40px">Failed to load report.</div>'; return; }
+  lastReportData=d;
+  let html=`<div class="card" id="printArea">
+    <div style="text-align:center;margin-bottom:18px">
+      <h2>Systematic English Boarding School</h2>
+      <p style="color:var(--sub);font-size:.82rem">Attendance Report: ${d.start} to ${d.end}</p>
+    </div>`;
+  d.days.forEach(day=>{
+    const presentCt  = day.records.filter(r=>r.status==='Present').length;
+    const lateCt     = day.records.filter(r=>r.status==='Late').length;
+    const absentCt   = day.records.filter(r=>r.status==='Absent').length;
+    const unmarkedCt = day.records.filter(r=>r.status==='Unmarked').length;
+    html+=`<div style="margin-bottom:26px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+        <h3>${formatDateNice(day.date)}</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-present">${presentCt} Present</span>
+          <span class="badge badge-late">${lateCt} Late</span>
+          <span class="badge badge-absent">${absentCt} Absent</span>
+          ${unmarkedCt>0?`<span class="badge badge-unmarked">${unmarkedCt} Unmarked</span>`:''}
+        </div>
+      </div>
+      <div class="tbc"><table>
+        <thead><tr><th>#</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody>${day.records.map((r,i)=>`<tr>
+          <td>${i+1}</td><td><strong>${r.studentName}</strong></td><td>${r.class}</td>
+          <td>${r.section}</td><td>${r.rollNumber}</td>
+          <td><span class="badge badge-${r.status.toLowerCase()}">${r.status}</span></td>
+          <td>${r.time||'-'}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>`;
+  });
+  html+='</div>';
+  out.innerHTML=html;
+}
+
+function formatDateNice(dateStr) {
+  const d=new Date(dateStr+'T00:00:00');
+  return d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+function exportReportCSV() {
+  if (!lastReportData) { notify('Generate a report first','warning'); return; }
+  let csv='Date,StudentID,Name,Class,Section,Roll,Status,Time\n';
+  lastReportData.days.forEach(day=>{
+    day.records.forEach(r=>{
+      csv+=`${day.date},"${r.studentId}","${r.studentName}","${r.class}","${r.section}","${r.rollNumber}","${r.status}","${r.time}"\n`;
+    });
+  });
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url =URL.createObjectURL(blob);
+  const a   =document.createElement('a');
+  a.href=url; a.download=`sebs-report-${lastReportData.start}-to-${lastReportData.end}.csv`; a.click();
+  URL.revokeObjectURL(url);
+  notify('✅ CSV downloaded!','success');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// BOOT
+// ══════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
