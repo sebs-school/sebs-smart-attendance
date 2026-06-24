@@ -23,6 +23,9 @@ body.dark{--bg:#0d1b2a;--card:#111e30;--border:#1e3050;--text:#e8f0fe;--sub:#8ba
 .fg{margin-bottom:14px}.fl{display:block;font-size:.7rem;font-weight:700;margin-bottom:6px;text-transform:uppercase;color:var(--sub)}.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}.st{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--p);margin:20px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--p);display:inline-block}
 .cw{max-width:720px;margin:0 auto}.cam-box{position:relative;background:#000;border-radius:22px;overflow:hidden;width:100%;aspect-ratio:4/3;box-shadow:0 20px 60px rgba(0,0,0,.35)}.cam-box video{width:100%;height:100%;object-fit:cover;display:block}.cam-box canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}.cam-hud{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;z-index:5;gap:8px}.hud-badge{background:rgba(7,17,31,.72);backdrop-filter:blur(8px);color:#fff;padding:8px 14px;border-radius:22px;font-size:.72rem;display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.08)}.hud-dot{width:9px;height:9px;border-radius:50%}.hud-dot.on{background:#00e676;animation:pulse .9s infinite}.hud-dot.off{background:#e74c3c}.cam-footer{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;flex-wrap:wrap}.cam-status{text-align:center;margin-top:10px;font-size:.8rem;color:var(--sub)}.time-badge{background:rgba(0,0,0,.5);color:#fff;padding:6px 14px;border-radius:16px;font-size:.7rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}.marked-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.marked-chip{display:flex;align-items:center;gap:6px;background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);color:#00a544;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;animation:slideIn .25s}.pending-chip{display:flex;align-items:center;gap:6px;background:rgba(124,77,255,.08);border:1px solid rgba(124,77,255,.2);color:#7c4dff;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600}
 .ltip{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(7,17,31,.82);backdrop-filter:blur(8px);color:#fff;padding:10px 20px;border-radius:20px;font-size:.75rem;text-align:center;white-space:nowrap;z-index:10;border:1px solid rgba(255,255,255,.1)}
+.pos-guide{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46%;height:72%;border:3px dashed rgba(255,255,255,.45);border-radius:50%;pointer-events:none;z-index:3;transition:opacity .25s,border-color .25s,transform .25s}.pos-guide.good{opacity:0;transform:translate(-50%,-50%) scale(1.04)}.pos-guide.warn{border-color:rgba(255,152,0,.7)}
+.pos-msg{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(7,17,31,.78);backdrop-filter:blur(8px);color:#fff;padding:9px 18px;border-radius:20px;font-size:.78rem;font-weight:600;white-space:nowrap;z-index:6;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:7px}
+.vote-pill{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(7,17,31,.82);backdrop-filter:blur(8px);color:#fff;padding:8px 16px;border-radius:20px;font-size:.74rem;text-align:center;white-space:nowrap;z-index:11;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:8px}.vote-dots{display:flex;gap:4px}.vote-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.25)}.vote-dot.filled{background:#00e676}
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.modal{background:var(--card);border-radius:22px;padding:30px 34px;max-width:580px;width:100%;max-height:90vh;overflow-y:auto;animation:scaleIn .25s;box-shadow:0 30px 80px rgba(0,0,0,.3);border:1px solid var(--border)}.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.modal-title{font-size:1.1rem;font-weight:800}.modal-close{width:32px;height:32px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--sub)}.modal-close:hover{background:var(--d);color:#fff}
 .nc{position:fixed;top:18px;right:18px;z-index:3000;display:flex;flex-direction:column;gap:8px;pointer-events:none}.nt{background:var(--card);border-radius:12px;padding:14px 18px;box-shadow:0 12px 40px rgba(0,0,0,.15);display:flex;align-items:flex-start;gap:10px;border-left:4px solid var(--p);min-width:260px;max-width:340px;animation:slideIn .25s;font-size:.82rem;pointer-events:auto;border:1px solid var(--border);border-left-width:4px}.nt.success{border-left-color:var(--s)}.nt.error{border-left-color:var(--d)}.nt.warning{border-left-color:var(--w)}.nt-icon{font-size:1.1rem}.nt-body{flex:1}.nt-msg{color:var(--sub);font-size:.78rem}
 .db-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}.rate-ring{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:32px}.rate-num{font-size:4rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--p),#2a5298);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.rate-label{font-size:.72rem;color:var(--sub);text-transform:uppercase;margin-top:6px}
@@ -107,6 +110,12 @@ const MIN_FACE_BOX = 60;          // px — ignore faces smaller than this (too 
 const DETECT_MIN_CONFIDENCE = 0.5; // stricter than before (was 0.35)
 const LIVENESS_FRAMES_REQUIRED = 2;
 const CAPTURE_SAMPLES_REQUIRED = 3; // multi-sample registration
+
+// Positioning guide thresholds — purely UI guidance, do not affect matching.
+// "Good" zone = face width is this fraction of frame width.
+const POS_GOOD_MIN_RATIO = 0.28;   // below this = too far
+const POS_GOOD_MAX_RATIO = 0.55;   // above this = too close
+const POS_CENTER_TOLERANCE = 0.16; // fraction of frame width/height off-center allowed
 
 const FACE_CACHE_KEY = 'sebs-faces-v9';
 
@@ -612,12 +621,19 @@ function loadAttendance(c) {
     <div class="cam-box">
       <video id="cam" autoplay playsinline muted></video>
       <canvas id="overlay"></canvas>
+      <div class="pos-guide" id="posGuide"></div>
+      <div class="pos-msg" id="posMsg" style="display:none"></div>
       <div class="cam-hud">
         <span class="hud-badge"><span class="hud-dot off" id="hudDot"></span><span id="hudText">Inactive / बन्द</span></span>
         <span class="hud-badge" id="matchBadge" style="display:none"><span id="matchText"></span></span>
       </div>
       <div class="ltip" id="ltip" style="display:none">👀 Blink or nod / झिम्काउनुहोस् वा टाउको हल्लाउनुहोस्</div>
+      <div class="vote-pill" id="votePill" style="display:none">
+        <span>Hold still...</span>
+        <span class="vote-dots" id="voteDots"></span>
+      </div>
     </div>
+    <div class="cam-tip" id="camTip" style="font-size:.72rem;color:var(--sub);text-align:center;margin-top:6px">Tip: stand ~50cm away, face the camera, good light on your face / राम्रो उज्यालोमा क्यामेरा हेर्नुहोस्</div>
     <div class="cam-footer">
       <button class="btn btn-p btn-lg" id="startBtn" onclick="startCamera()"><i class="fas fa-play"></i> Start / सुरु</button>
       <button class="btn btn-d btn-lg" id="stopBtn" onclick="stopCamera()" style="display:none"><i class="fas fa-stop"></i> Stop / रोक</button>
@@ -704,6 +720,8 @@ function stopCamera() {
   if (g('stopBtn')) g('stopBtn').style.display = 'none';
   if (g('matchBadge')) g('matchBadge').style.display = 'none';
   if (g('ltip')) g('ltip').style.display = 'none';
+  updatePosGuide(null);
+  updateVotePill(false);
   setStatus('Stopped / रोकियो');
 }
 
@@ -767,7 +785,64 @@ function checkLiveness(det) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// MATCH WITH MARGIN CHECK
+// POSITIONING GUIDE — pure UI guidance, computed from the box face-api
+// already detected each frame. Does not affect matching/liveness logic,
+// only tells the person standing there how to adjust (closer/back/center).
+// ══════════════════════════════════════════════════════════════════
+function evaluatePosition(box, frameW, frameH) {
+  const widthRatio = box.width / frameW;
+  const cx = box.x + box.width / 2;
+  const cy = box.y + box.height / 2;
+  const frameCx = frameW / 2;
+  const frameCy = frameH / 2;
+  const offX = Math.abs(cx - frameCx) / frameW;
+  const offY = Math.abs(cy - frameCy) / frameH;
+
+  if (widthRatio < POS_GOOD_MIN_RATIO) {
+    return { status: 'far', icon: '↗️', message: 'Move closer / नजिक जानुहोस्' };
+  }
+  if (widthRatio > POS_GOOD_MAX_RATIO) {
+    return { status: 'close', icon: '↩️', message: 'Step back a little / पछाडि जानुहोस्' };
+  }
+  if (offX > POS_CENTER_TOLERANCE || offY > POS_CENTER_TOLERANCE) {
+    return { status: 'offcenter', icon: '🎯', message: 'Center your face / बीचमा राख्नुहोस्' };
+  }
+  return { status: 'good', icon: '✅', message: 'Good position / राम्रो' };
+}
+
+function updatePosGuide(positionResult) {
+  const guide = el('posGuide');
+  const msg = el('posMsg');
+  if (!guide || !msg) return;
+
+  if (!positionResult) {
+    guide.className = 'pos-guide';
+    msg.style.display = 'none';
+    return;
+  }
+
+  if (positionResult.status === 'good') {
+    guide.className = 'pos-guide good';
+    msg.style.display = 'none';
+  } else {
+    guide.className = 'pos-guide warn';
+    msg.style.display = 'flex';
+    msg.innerHTML = `<span>${positionResult.icon}</span><span>${positionResult.message}</span>`;
+  }
+}
+
+function updateVotePill(show, filled, total) {
+  const pill = el('votePill');
+  const dots = el('voteDots');
+  if (!pill || !dots) return;
+  if (!show) { pill.style.display = 'none'; return; }
+  pill.style.display = 'flex';
+  dots.innerHTML = Array.from({ length: total }, (_, i) =>
+    `<span class="vote-dot${i < filled ? ' filled' : ''}"></span>`
+  ).join('');
+}
+
+
 // Returns { isKnown, studentId, dist, margin, uncertain }
 // "uncertain" = a candidate was close to the threshold but didn't clear
 // it by a safe margin over the next-best different student — we do NOT
@@ -872,6 +947,8 @@ async function detectionLoop() {
     if (sized.length === 0) {
       el('matchBadge').style.display = 'none';
       if (el('ltip')) el('ltip').style.display = 'none';
+      updateVotePill(false);
+      updatePosGuide({ status: 'none', icon: '🚶', message: 'Step into frame / फ्रेममा आउनुहोस्' });
       setStatus('👀 Looking for face... / अनुहार खोज्दै...');
       voteBuffer = []; // no face = reset voting, avoid stale votes carrying over
       if (cameraActive) rafHandle = requestAnimationFrame(detectionLoop);
@@ -882,6 +959,8 @@ async function detectionLoop() {
       // Multiple faces in frame — recognition for attendance marking is
       // ambiguous about who's actually stepping up. Show all boxes but
       // don't auto-mark anyone until only one face remains.
+      updatePosGuide({ status: 'multi', icon: '👥', message: 'One person at a time / एक पटक एक मात्र' });
+      updateVotePill(false);
       setStatus('👥 Multiple faces detected — one person at a time / एक पटक एक मात्र');
     }
 
@@ -892,6 +971,10 @@ async function detectionLoop() {
       const cx = box.x + box.width / 2;
       const cy = box.y + box.height / 2;
       const rad = Math.max(box.width, box.height) / 1.4;
+
+      const posResult = sized.length === 1 ? evaluatePosition(box, canvas.width, canvas.height) : null;
+      if (sized.length === 1) updatePosGuide(posResult);
+      const positionGood = !posResult || posResult.status === 'good';
 
       const match = matchFaceWithMargin(det.descriptor);
 
@@ -939,16 +1022,21 @@ async function detectionLoop() {
           : (faceMatcher ? '🆕 New Face / नयाँ अनुहार' : '🆕 No registered faces');
 
       // ── LIVENESS + VOTING + ACTION ────────────────────────────────
-      if (sized.length === 1 && scanEnabled && !processing && Date.now() - lastActionTime > 2500) {
+      // Gated on positionGood: we don't want to burn liveness/vote frames
+      // while someone is still stepping closer or centering themselves —
+      // that just wastes the 5-frame vote window on a moving target.
+      if (sized.length === 1 && positionGood && scanEnabled && !processing && Date.now() - lastActionTime > 2500) {
         if (el('ltip')) el('ltip').style.display = 'block';
         const alive = checkLiveness(det);
 
         if (alive) {
+          if (el('ltip')) el('ltip').style.display = 'none';
+          updateVotePill(true, voteBuffer.length, VOTE_FRAMES);
           const decision = pushVote(match);
           if (decision && decision.settled) {
             lastActionTime = Date.now();
             scanEnabled = false;
-            if (el('ltip')) el('ltip').style.display = 'none';
+            updateVotePill(false);
             processing = true;
 
             if (decision.uncertain) {
@@ -970,10 +1058,21 @@ async function detectionLoop() {
                 resumeScanning(1000);
               }
             }
+          } else {
+            // Still collecting votes — show progress so the person knows
+            // to keep holding still rather than wondering if anything is happening.
+            updateVotePill(true, voteBuffer.length, VOTE_FRAMES);
           }
-          // else: still collecting votes, keep looping without acting
         }
       } else if (sized.length !== 1) {
+        voteBuffer = [];
+        updateVotePill(false);
+      } else if (!positionGood) {
+        // Position not good enough yet — don't show stale "hold still" UI,
+        // and don't let old votes from a previous good-position attempt
+        // carry over once the person has drifted out of the good zone.
+        if (el('ltip')) el('ltip').style.display = 'none';
+        updateVotePill(false);
         voteBuffer = [];
       }
     }
