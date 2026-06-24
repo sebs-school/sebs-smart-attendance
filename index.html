@@ -1,5 +1,6 @@
-Here's the updated code — now **photo/screen spoofing is blocked** with a very fast passive liveness check, but **attendance is marked almost instantly** (within 2-3 frames ≈ 0.1s) once a real face is detected.  
-Also, **new/unknown faces will no longer open a registration modal** — they just show "New Face" and skip.
+Photo/screen block active, fast detection, and now **refresh-safe**: attendance data persists even after page reload, so already marked students won't be re-marked.  
+I've saved the `markedToday` state in `localStorage` and restored it on every page load.  
+When you reload the Attendance page, it immediately shows the previously marked students and won't mark them again.
 
 ```html
 <!DOCTYPE html>
@@ -134,23 +135,24 @@ const POS_BAD_FRAMES_RESET = 6;
 // ── SPEED SETTINGS ────────────────────────────────────────────────
 const SMOOTH_WINDOW        = 3;
 const COOLDOWN_MS          = 5000;
-const ACTION_DEBOUNCE_MS   = 150;  // tiny debounce for real face
+const ACTION_DEBOUNCE_MS   = 150;
 const POPUP_DURATION_MS    = 1800;
 
 // ── PASSIVE LIVENESS (fast anti‑photo) ─────────────────────────────
-const TEXTURE_WIN         = 3;   // only 3 frames for texture
+const TEXTURE_WIN         = 3;
 const TEXTURE_THRESH      = 32;
 const TEXTURE_STRICT      = 20;
-const MOTION_WIN          = 4;   // smaller window for fast motion check
+const MOTION_WIN          = 4;
 const MOTION_PX_MIN       = 1.2;
-const MOTION_FRAMES_NEED  = 3;   // need 3 frames for motion
-const DRIFT_WIN           = 4;   // smaller drift window
+const MOTION_FRAMES_NEED  = 3;
+const DRIFT_WIN           = 4;
 const DRIFT_THRESH        = 0.003;
-const DRIFT_FRAMES_NEED   = 2;   // only 2 frames for drift
-const LIVENESS_PASS_NEED  = 2;   // only 2 consecutive live frames → mark
+const DRIFT_FRAMES_NEED   = 2;
+const LIVENESS_PASS_NEED  = 2;
 
 // ── CACHE ─────────────────────────────────────────────────────────
 const FACE_CACHE_KEY           = 'sebs-faces-v10';
+const MARKED_TODAY_KEY         = 'sebs-marked-today-v1';  // persist marked students
 const CAPTURE_SAMPLES_REQUIRED = 3;
 
 // ══════════════════════════════════════════════════════════════════
@@ -165,7 +167,7 @@ let modelsLoading  = false;
 let faceMatcher      = null;
 let faceMatcherReady = false;
 
-let markedToday    = {};
+let markedToday    = {};   // { "studentId__dateStr": true }
 let cooldowns      = {};
 let lastActionTime = 0;
 let scanEnabled    = true;
@@ -202,11 +204,34 @@ function getTimeSession() {
 }
 
 // ══════════════════════════════════════════════════════════════════
+// MARKED TODAY PERSISTENCE (LOCALSTORAGE)
+// ══════════════════════════════════════════════════════════════════
+function loadMarkedToday() {
+  const saved = localStorage.getItem(MARKED_TODAY_KEY);
+  if (!saved) { markedToday = {}; return; }
+  try {
+    const parsed = JSON.parse(saved);
+    // Keep only today's entries to avoid stale data
+    const today = new Date().toDateString();
+    const filtered = {};
+    for (const key in parsed) {
+      if (key.endsWith('__' + today)) filtered[key] = true;
+    }
+    markedToday = filtered;
+  } catch(e) { markedToday = {}; }
+}
+
+function saveMarkedToday() {
+  localStorage.setItem(MARKED_TODAY_KEY, JSON.stringify(markedToday));
+}
+
+// ══════════════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════════════
 function init() {
   updateClock();
   setInterval(updateClock, 1000);
+  loadMarkedToday();   // restore previously marked students
   if (localStorage.getItem('sebsLoggedIn') === '1') { showApp(); nav('db'); }
   if (localStorage.getItem('sebsTheme') === 'dark') setDark(true);
 }
@@ -647,6 +672,10 @@ async function submitRegister() {
     if (attResult&&attResult.success) notify(`✅ ${name} registered and marked ${attResult.status}!`,'success');
     else if (attResult&&attResult.reason==='already_marked') notify(`✅ ${name} registered! Already had attendance today.`,'success');
     else notify(`✅ ${name} registered!`,'success');
+    // Also save to localStorage
+    const todayKey = new Date().toDateString();
+    markedToday[`${sid}__${todayKey}`] = true;
+    saveMarkedToday();
     loadRegister(document.getElementById('pc'));
     localStorage.removeItem(FACE_CACHE_KEY);
     faceMatcherReady=false;
@@ -696,6 +725,32 @@ function loadAttendance(c) {
       <div class="marked-strip" id="markedStrip"><span style="font-size:.78rem;color:var(--sub)">None yet</span></div>
     </div>
   </div>`;
+  // Show previously marked students from localStorage
+  setTimeout(populateMarkedChips, 200);
+}
+
+// ── RESTORE MARKED CHIPS FROM LOCALSTORAGE ──────────────────────
+function populateMarkedChips() {
+  const strip = document.getElementById('markedStrip');
+  const cnt   = document.getElementById('markedCount');
+  if (!strip || !cnt) return;
+  // remove placeholder
+  const ph = strip.querySelector('span:not(.marked-chip)');
+  if (ph) ph.remove();
+  const today = new Date().toDateString();
+  const ids = Object.keys(markedToday).filter(k => k.endsWith('__' + today));
+  ids.forEach(key => {
+    const studentId = key.split('__')[0];
+    const stu = studentsCache.find(s => String(s.StudentID) === String(studentId));
+    const name = stu ? stu.StudentName : studentId;
+    if (strip.querySelector(`[data-id="${studentId}"]`)) return; // already displayed
+    const chip = document.createElement('div');
+    chip.className = 'marked-chip';
+    chip.setAttribute('data-id', studentId);
+    chip.innerHTML = `<i class="fas fa-check"></i>${name}`;
+    strip.appendChild(chip);
+  });
+  cnt.textContent = `${ids.length} students`;
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -899,7 +954,6 @@ function updateDrift(descriptor) {
   return totalDrift / pairs;
 }
 
-// Returns verdict once enough data collected
 function checkPassiveLiveness(video, box, landmarks, descriptor) {
   const tex = computeTexture(video, box);
   textureHistory.push(tex);
@@ -1049,7 +1103,6 @@ async function detectionLoop() {
     const liveness = checkPassiveLiveness(video, box, det.landmarks, det.descriptor);
 
     if (!liveness.live) {
-      // Photo / screen detected → reset pass counter, show spoof warning
       livenessFail = true;
       livenessPassCount = 0;
       el('matchBadge').style.display='flex';
@@ -1059,26 +1112,21 @@ async function detectionLoop() {
       return;
     }
 
-    // Live face (or still collecting data)
     if (liveness.confidence === 'low') {
-      // Still warming up — skip marking, keep previous pass count
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
     }
 
-    // Medium / High confidence live face → increment pass counter
     if (liveness.live && liveness.confidence !== 'low') {
       livenessFail = false;
       livenessPassCount++;
       if (livenessPassCount < LIVENESS_PASS_NEED) {
-        // Wait for another consecutive live frame
         setStatus(`👁️ Verifying... ${livenessPassCount}/${LIVENESS_PASS_NEED}`);
         if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
         return;
       }
     }
 
-    // ── GATE (check debounce + already marked) ────────────────
     if (!scanEnabled||processing||Date.now()-lastActionTime<=ACTION_DEBOUNCE_MS) {
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
@@ -1088,7 +1136,6 @@ async function detectionLoop() {
     scanEnabled    = false;
     processing     = true;
     smoothBuffer   = [];
-    // Reset liveness counter for next mark
     livenessPassCount = 0;
 
     const decision = rawMatch;
@@ -1103,7 +1150,6 @@ async function detectionLoop() {
         await doMarkAttendance(decision.studentId, decision.dist);
       }
     } else {
-      // NEW FACE → do NOT open quick register modal, just notify & resume
       notify('🆕 New face detected — use Register page to add this student', 'info');
       resumeScanning(500);
     }
@@ -1125,7 +1171,6 @@ function showCamFlash() {
   setTimeout(()=>flash.remove(), 500);
 }
 
-// Canvas helpers
 function drawCircle(ctx,cx,cy,rad,color) {
   ctx.save();
   ctx.shadowColor=color; ctx.shadowBlur=18;
@@ -1170,8 +1215,10 @@ async function doMarkAttendance(studentId, dist) {
   const stu         = studentsCache.find(s => String(s.StudentID) === String(studentId));
   const displayName = stu ? stu.StudentName : studentId;
 
-  // Instant local mark
+  // Save locally
   markedToday[markedKey] = true;
+  saveMarkedToday();
+
   const confidence       = Math.round((1 - dist) * 100);
   const session          = getTimeSession();
   const optimisticStatus = session.label === 'Late' ? 'Late' : 'Present';
@@ -1179,7 +1226,7 @@ async function doMarkAttendance(studentId, dist) {
   showSuccessPopup(displayName, optimisticStatus);
   addMarkedChip(displayName);
 
-  // Fire API in background (fire-and-forget)
+  // Fire API in background
   apiCall('markAttendance', {
     studentId, studentName: displayName, confidence: (1 - dist).toFixed(3)
   }).then(r => {
@@ -1188,9 +1235,11 @@ async function doMarkAttendance(studentId, dist) {
     else if (r.reason === 'outside_window') {
       notify(`⛔ Window closed: ${r.label}`, 'warning');
       delete markedToday[markedKey];
+      saveMarkedToday();
     } else if (!r.success) {
       notify('❌ Attendance save failed — will retry on next detection','error');
       delete markedToday[markedKey];
+      saveMarkedToday();
     }
     if (!studentsCache.length) fetchStudents();
   }).catch(() => {
@@ -1303,6 +1352,7 @@ async function submitQuickRegister() {
     const todayKey  = new Date().toDateString();
     const markedKey = `${sid}__${todayKey}`;
     markedToday[markedKey] = true;
+    saveMarkedToday();
     showSuccessPopup(name,'Present');
     addMarkedChip(name);
     apiCall('markAttendance',{
