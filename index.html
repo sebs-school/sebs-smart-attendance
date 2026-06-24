@@ -152,6 +152,9 @@ let livenessUnlocked = false;
 // Colour smoothing ring buffer (display only)
 let smoothBuffer = [];
 
+// Anti-spoofing texture buffer
+let textureBuffer = [];
+
 // Bad-position counter
 let badPositionFrames = 0;
 
@@ -644,6 +647,7 @@ function stopCamera() {
   processing        = false;
   livenessUnlocked  = false;
   smoothBuffer      = [];
+  textureBuffer     = [];
   badPositionFrames = 0;
   if (rafHandle) { cancelAnimationFrame(rafHandle); rafHandle=null; }
   if (camStream) { camStream.getTracks().forEach(t=>t.stop()); camStream=null; }
@@ -673,6 +677,63 @@ const el = id => document.getElementById(id);
 // ══════════════════════════════════════════════════════════════════
 // LIVENESS
 // ══════════════════════════════════════════════════════════════════
+// ANTI-SPOOFING — Texture/Blur Detection
+// Real face: high Laplacian variance (natural texture, micro-movement)
+// Photo/screen: low variance (flat, uniform pixels)
+// ══════════════════════════════════════════════════════════════════
+const TEXTURE_THRESHOLD = 38;  // below = likely photo/screen
+const TEXTURE_SAMPLES   = 4;   // collect N frames and average
+
+let textureBuffer = []; // rolling window of variance scores
+
+function computeFaceTexture(video, box) {
+  try {
+    const size = Math.min(box.width, box.height);
+    const sx   = Math.max(0, box.x + box.width * 0.2);
+    const sy   = Math.max(0, box.y + box.height * 0.2);
+    const sw   = size * 0.6;
+    const sh   = size * 0.6;
+    const offCanvas = document.createElement('canvas');
+    offCanvas.width  = 32;
+    offCanvas.height = 32;
+    const ctx = offCanvas.getContext('2d');
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, 32, 32);
+    const data = ctx.getImageData(0, 0, 32, 32).data;
+
+    // Convert to grayscale and compute Laplacian variance
+    const gray = [];
+    for (let i=0; i<data.length; i+=4) {
+      gray.push(0.299*data[i] + 0.587*data[i+1] + 0.114*data[i+2]);
+    }
+    // Laplacian kernel [0,1,0,1,-4,1,0,1,0]
+    let sum=0, sumSq=0, n=0;
+    for (let y=1; y<31; y++) {
+      for (let x=1; x<31; x++) {
+        const idx = y*32+x;
+        const lap = -4*gray[idx] + gray[idx-1] + gray[idx+1] + gray[idx-32] + gray[idx+32];
+        sum   += lap;
+        sumSq += lap*lap;
+        n++;
+      }
+    }
+    const mean = sum/n;
+    const variance = sumSq/n - mean*mean;
+    return Math.sqrt(Math.abs(variance));
+  } catch(e) {
+    return 999; // if error, don't block
+  }
+}
+
+function isRealFace(video, box) {
+  const score = computeFaceTexture(video, box);
+  textureBuffer.push(score);
+  if (textureBuffer.length > TEXTURE_SAMPLES) textureBuffer.shift();
+  const avg = textureBuffer.reduce((a,b)=>a+b,0) / textureBuffer.length;
+  console.log('Texture score:', score.toFixed(1), 'avg:', avg.toFixed(1));
+  // Only reject if we have enough samples AND all say fake
+  return textureBuffer.length < TEXTURE_SAMPLES || avg >= TEXTURE_THRESHOLD;
+}
+
 function resetLiveness() {
   livenessState    = { prevEar:1, blinkFrames:0, lastNose:null, headFrames:0 };
   livenessUnlocked = false;
@@ -785,7 +846,7 @@ function smoothedLabel(rawMatch) {
 
 // ══════════════════════════════════════════════════════════════════
 // MAIN DETECTION LOOP
-// Flow: detect face → check position → wait for liveness →
+// Flow: detect face → check position → INSTANT match & mark
 //       IMMEDIATELY match & mark (no vote buffer)
 // ══════════════════════════════════════════════════════════════════
 async function detectionLoop() {
@@ -818,7 +879,7 @@ async function detectionLoop() {
       if (el('livenessHint')) el('livenessHint').style.display='none';
       updatePosGuide({status:'none',icon:'🚶',message:'Step into frame / फ्रेममा आउनुहोस्'});
       setStatus('👀 Looking for face... / अनुहार खोज्दैछ...');
-      smoothBuffer=[]; livenessUnlocked=false; badPositionFrames=0;
+      smoothBuffer=[]; livenessUnlocked=false; badPositionFrames=0; textureBuffer=[];
       resetLiveness();
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
@@ -829,7 +890,7 @@ async function detectionLoop() {
       updatePosGuide({status:'multi',icon:'👥',message:'One person at a time / एक पटकमा एक जना'});
       setStatus('👥 Multiple faces — one at a time / एक एक जना गर्नुहोस्');
       if (el('livenessHint')) el('livenessHint').style.display='none';
-      livenessUnlocked=false; badPositionFrames=0;
+      livenessUnlocked=false; badPositionFrames=0; textureBuffer=[];
       for (const det of sized) {
         const box=det.detection.box;
         const cx=box.x+box.width/2, cy=box.y+box.height/2;
@@ -904,32 +965,22 @@ async function detectionLoop() {
       return;
     }
 
-    // ── PHASE 1: Wait for liveness ────────────────────────────────
-    if (!livenessUnlocked) {
-      if (el('livenessHint')) el('livenessHint').style.display='block';
-      const alive = checkLiveness(det);
-      if (alive) {
-        livenessUnlocked=true;
-        if (el('livenessHint')) el('livenessHint').style.display='none';
-        // ▶ IMMEDIATELY proceed to match & mark in Phase 2 below
-        //   (fall through — no return here)
-      } else {
-        if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
-        return;
-      }
-    }
-
-    // ── PHASE 2: Liveness confirmed → INSTANT match & mark ───────
+    // ── INSTANT match & mark (texture anti-spoof check) ──────────
     if (el('livenessHint')) el('livenessHint').style.display='none';
 
-    // Lock immediately so we don't trigger again while API call runs
-    lastActionTime   = Date.now();
-    scanEnabled      = false;
-    livenessUnlocked = false;
-    processing       = true;
-    smoothBuffer     = []; // reset so next person starts fresh
+    // Anti-spoofing: check if real face (not a photo/screen)
+    if (!isRealFace(video, box)) {
+      setStatus('🚫 Photo detected — real face required / असली अनुहार चाहिन्छ');
+      if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
+      return;
+    }
 
-    // Use raw match for the actual decision (most accurate single frame)
+    lastActionTime = Date.now();
+    scanEnabled    = false;
+    processing     = true;
+    smoothBuffer   = [];
+    textureBuffer  = []; // reset for next person
+
     const decision = rawMatch;
 
     if (decision.uncertain) {
@@ -1004,6 +1055,7 @@ function resumeScanning(delay=1800) {
     processing       = false;
     livenessUnlocked = false;
     smoothBuffer     = [];
+    textureBuffer    = [];
     badPositionFrames= 0;
     resetLiveness();
   }, delay);
