@@ -141,11 +141,11 @@ let smoothBuffer = [], badPositionFrames = 0;
 let textureHistory = [], noseHistory = [], descHistory = [], livenessPassCount = 0, livenessFail = false;
 let regCaptureSamples = [], regCamStream = null, pendingDescriptor = null;
 
-// ---- New variables for unknown face notification ----
+// NEW: unknown face tracking
 let unknownFaceFrames = 0;
 let lastUnknownPopupTime = 0;
-const UNKNOWN_FRAME_THRESHOLD = 25; // ~1 second at 25fps
-const UNKNOWN_POPUP_COOLDOWN = 30000; // 30 seconds
+const UNKNOWN_FRAME_THRESHOLD = 25;
+const UNKNOWN_POPUP_COOLDOWN = 30000;
 
 function getTimeSession() {
   const m = new Date().getHours() * 60 + new Date().getMinutes();
@@ -290,16 +290,103 @@ async function fetchStudents() { const d = await apiCall('getStudents'); if (d&&
 
 // ----- Dashboard -----
 async function loadDashboard(c) {
-  // (Dashboard code remains unchanged – omitted for brevity but present in original)
+  c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+  const todayStr = new Date().toDateString();
+  const [students, todayAtt] = await Promise.all([ apiCall('getStudents'), apiCall('getAttendance',{date:todayStr}) ]);
+  const studentsList = students?.students || [];
+  const attendanceList = todayAtt?.attendance || [];
+  const total = studentsList.length;
+  const presentCount = attendanceList.filter(r=>r.Status==='Present').length;
+  const lateCount = attendanceList.filter(r=>r.Status==='Late').length;
+  const absentCount = total - presentCount - lateCount;
+  const rate = total>0 ? Math.round((presentCount+lateCount)/total*100) : 0;
+  const session = getTimeSession();
+  let attRows = '';
+  attendanceList.slice(0,10).forEach(r=>{
+    const badge = r.Status==='Present'?'badge-present':(r.Status==='Late'?'badge-late':'badge-absent');
+    attRows += `<tr><td>${r.StudentName||'-'}</td><td>${r.Class||'-'}</td><td>${r.Section||'-'}</td><td><span class="badge ${badge}">${r.Status||'Absent'}</span></td><td>${r.Timestamp||''}</td></tr>`;
+  });
+  c.innerHTML = `
+    <div class="sr"><div class="stc"><div class="sci b"><i class="fas fa-users"></i></div><div class="sti"><h3>${total}</h3><p>Total Students</p></div></div>
+    <div class="stc"><div class="sci g"><i class="fas fa-check-circle"></i></div><div class="sti"><h3>${presentCount}</h3><p>Present</p></div></div>
+    <div class="stc"><div class="sci o"><i class="fas fa-clock"></i></div><div class="sti"><h3>${lateCount}</h3><p>Late</p></div></div>
+    <div class="stc"><div class="sci r"><i class="fas fa-times-circle"></i></div><div class="sti"><h3>${absentCount}</h3><p>Absent</p></div></div>
+    <div class="stc"><div class="sci pu"><i class="fas fa-chart-line"></i></div><div class="sti"><h3>${rate}%</h3><p>Today's Rate</p></div></div></div>
+    <div class="db-grid">
+      <div class="card"><h2 style="margin-bottom:14px">Today's Attendance</h2>
+        <div class="tbc"><table><thead><tr><th>Name</th><th>Class</th><th>Section</th><th>Status</th><th>Time</th></tr></thead><tbody>${attRows||'<tr><td colspan="5">No records yet</td></tr>'}</tbody></table></div>
+      </div>
+      <div class="card"><div class="rate-ring"><div class="rate-num">${rate}%</div><div class="rate-label">Attendance Rate</div><p style="margin-top:10px;color:var(--sub);font-size:.78rem">${session.open?session.label:'Closed'}</p></div></div>
+    </div>`;
 }
 
 // ----- Registration -----
-function loadRegister(c) { /* unchanged */ }
-async function startRegCamera() { /* unchanged */ }
-function stopRegCamera() { /* unchanged */ }
-async function captureRegSample() { /* unchanged */ }
-function resetRegCaptures() { /* unchanged */ }
-async function submitRegister() { /* unchanged */ }
+function loadRegister(c) {
+  c.innerHTML = `<div class="cw"><div class="card"><h2 style="margin-bottom:8px">📸 Register New Student / नयाँ विद्यार्थी दर्ता</h2><p style="font-size:.78rem;color:var(--sub);margin-bottom:20px">Fill details and capture 3 face samples</p>
+    <div class="fr"><div class="fg"><label class="fl">Full Name *</label><input id="regName" placeholder="Student full name"></div><div class="fg"><label class="fl">Admission No.</label><input id="regAdm" placeholder="Admission number"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Date of Birth</label><input type="date" id="regDob"></div><div class="fg"><label class="fl">Gender</label><select id="regGender"><option value="">Select</option><option>Male</option><option>Female</option></select></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Class *</label><select id="regClass"><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section</label><select id="regSection"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Roll No.</label><input id="regRoll" placeholder="Roll number"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Father's Name</label><input id="regFather" placeholder="Father's name"></div><div class="fg"><label class="fl">Mother's Name</label><input id="regMother" placeholder="Mother's name"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Phone</label><input id="regPhone" placeholder="Guardian phone"></div><div class="fg"><label class="fl">Address</label><textarea id="regAddr" placeholder="Address"></textarea></div></div>
+    <div class="st">Face Capture / अनुहार खिच्नुहोस् <small>(${CAPTURE_SAMPLES_REQUIRED} samples required)</small></div>
+    <div class="cam-box" style="max-width:400px;margin:0 auto"><video id="regCam" autoplay playsinline muted></video></div>
+    <div class="cam-footer"><button class="btn btn-p" id="regCamBtn" onclick="startRegCamera()"><i class="fas fa-video"></i> Start Camera</button><button class="btn btn-o" onclick="captureRegSample()" id="captureBtn" disabled><i class="fas fa-camera"></i> Capture</button><button class="btn btn-ghost" onclick="resetRegCaptures()">Reset</button><button class="btn btn-d" onclick="stopRegCamera()">Stop Camera</button></div>
+    <div class="capture-grid" id="captureGrid">${Array(CAPTURE_SAMPLES_REQUIRED).fill(0).map((_,i)=>`<div class="capture-slot" id="slot${i}"><i class="fas fa-image"></i></div>`).join('')}</div>
+    <button class="btn btn-s btn-block btn-lg" id="submitRegBtn" onclick="submitRegister()" disabled><i class="fas fa-save"></i> Submit Registration</button>
+  </div></div>`;
+}
+async function startRegCamera() {
+  if (regCamStream) { stopRegCamera(); }
+  try {
+    regCamStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
+    const video = el('regCam'); if (video) { video.srcObject = regCamStream; video.play(); }
+    el('regCamBtn').style.display='none'; el('captureBtn').disabled=false;
+  } catch(e) { notify('Camera error: '+e.message,'error'); }
+}
+function stopRegCamera() {
+  if (regCamStream) { regCamStream.getTracks().forEach(t=>t.stop()); regCamStream = null; }
+  const video = el('regCam'); if (video) video.srcObject = null;
+  el('regCamBtn').style.display='inline-flex'; el('captureBtn').disabled=true;
+}
+async function captureRegSample() {
+  if (regCaptureSamples.length >= CAPTURE_SAMPLES_REQUIRED) { notify('Already have enough samples','warning'); return; }
+  const video = el('regCam'); if (!video || video.readyState < 2) { notify('Camera not ready','error'); return; }
+  if (!modelsLoaded) { notify('Models not loaded yet','warning'); return; }
+  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 })).withFaceDescriptor();
+  if (!detection) { notify('No face detected!','error'); return; }
+  regCaptureSamples.push({ descriptor: Array.from(detection.descriptor), image: videoToCanvas(video).toDataURL('image/jpeg',0.9) });
+  updateRegSlots();
+  el('submitRegBtn').disabled = regCaptureSamples.length < CAPTURE_SAMPLES_REQUIRED;
+  notify(`✅ Sample ${regCaptureSamples.length}/${CAPTURE_SAMPLES_REQUIRED} captured`,'success');
+}
+function videoToCanvas(video) {
+  const c = document.createElement('canvas'); c.width = video.videoWidth; c.height = video.videoHeight;
+  c.getContext('2d').drawImage(video,0,0); return c;
+}
+function updateRegSlots() {
+  for (let i=0; i<CAPTURE_SAMPLES_REQUIRED; i++) {
+    const slot = el('slot'+i); if (!slot) continue;
+    if (regCaptureSamples[i]) { slot.innerHTML = `<img src="${regCaptureSamples[i].image}"><div class="ck"><i class="fas fa-check"></i></div>`; slot.classList.add('filled'); }
+    else { slot.innerHTML = '<i class="fas fa-image"></i>'; slot.classList.remove('filled'); }
+  }
+}
+function resetRegCaptures() { regCaptureSamples=[]; updateRegSlots(); el('submitRegBtn').disabled=true; }
+async function submitRegister() {
+  if (regCaptureSamples.length < CAPTURE_SAMPLES_REQUIRED) { notify('Capture at least 3 samples','error'); return; }
+  const btn = el('submitRegBtn'); btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  const payload = {
+    studentName: el('regName').value.trim(), admissionNumber: el('regAdm').value.trim(), dateOfBirth: el('regDob').value,
+    class: el('regClass').value, section: el('regSection').value, rollNumber: el('regRoll').value.trim(),
+    gender: el('regGender').value, fatherName: el('regFather').value.trim(), motherName: el('regMother').value.trim(),
+    guardianPhone: el('regPhone').value.trim(), address: el('regAddr').value.trim(),
+    embeddings: regCaptureSamples.map(s=>s.descriptor)
+  };
+  const r = await apiCall('registerStudent', payload);
+  btn.disabled=false; btn.innerHTML='<i class="fas fa-save"></i> Submit Registration';
+  if (r && r.success) { notify('✅ Student registered successfully!','success'); resetRegCaptures(); studentsCache = []; }
+  else notify('❌ Registration failed: '+(r?.error||'unknown'),'error');
+}
 
 // ----- Attendance Page -----
 function loadAttendance(c) {
@@ -335,22 +422,53 @@ function populateMarkedChips() {
 }
 
 // ----- Camera Start / Stop -----
-async function startCamera() { /* unchanged, but we reset unknown counter */ 
-  // existing code ...
-  unknownFaceFrames = 0; // reset unknown counter
-  // rest of startCamera as before
+async function startCamera() {
+  if (cameraActive) return;
+  if (!modelsLoaded) { notify('Models not loaded yet...','warning'); await preloadModels(); }
+  try {
+    camStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
+    const video = el('cam'); if (video) { video.srcObject = camStream; video.play(); }
+    cameraActive = true; unknownFaceFrames = 0; // reset unknown counter
+    el('startBtn').style.display='none'; el('stopBtn').style.display='inline-flex';
+    setStatus('Camera active - scanning...');
+    resetLivenessBuffers(); smoothBuffer = []; scanEnabled = true; processing = false;
+    rafHandle = requestAnimationFrame(detectionLoop);
+  } catch(e) { notify('Camera error: '+e.message,'error'); }
 }
-function stopCamera() { /* unchanged, but reset unknown counter */
-  unknownFaceFrames = 0;
-  // existing code ...
+function stopCamera() {
+  if (camStream) { camStream.getTracks().forEach(t=>t.stop()); camStream = null; }
+  cameraActive = false; unknownFaceFrames = 0;
+  if (rafHandle) cancelAnimationFrame(rafHandle);
+  el('startBtn').style.display='inline-flex'; el('stopBtn').style.display='none';
+  el('hudDot').className='hud-dot off'; el('hudText').textContent='Inactive / बन्द';
+  el('posGuide').className='pos-guide'; el('posMsg').style.display='none';
+  const ctx = el('overlay')?.getContext('2d'); if (ctx) ctx.clearRect(0,0,el('overlay').width,el('overlay').height);
+  setStatus('Stopped');
 }
 async function refreshFaces() { notify('🔄 Refreshing face data...'); localStorage.removeItem(FACE_CACHE_KEY); faceMatcher=null; faceMatcherReady=false; await loadEmbeddings(); const count = faceMatcher ? faceMatcher.labeledDescriptors.length : 0; notify(`✅ Refreshed! ${count} student(s) loaded`,'success'); }
 function setStatus(msg) { const el=document.getElementById('camStatus'); if (el) el.textContent=msg; }
 const el = id => document.getElementById(id);
 
 // ----- Position Guide -----
-function evaluatePosition(box, frameW, frameH) { /* unchanged */ }
-function updatePosGuide(res) { /* unchanged */ }
+function evaluatePosition(box, frameW, frameH) {
+  const faceW = box.width, faceH = box.height;
+  const ratioW = faceW / frameW, ratioH = faceH / frameH;
+  const centerX = box.x + faceW/2, centerY = box.y + faceH/2;
+  const cx = centerX/frameW, cy = centerY/frameH;
+  const goodW = ratioW > POS_GOOD_MIN_RATIO && ratioW < POS_GOOD_MAX_RATIO;
+  const goodH = ratioH > POS_GOOD_MIN_RATIO && ratioH < POS_GOOD_MAX_RATIO;
+  const centered = Math.abs(cx-0.5) < POS_CENTER_TOLERANCE && Math.abs(cy-0.5) < POS_CENTER_TOLERANCE;
+  if (goodW && goodH && centered) return 'good';
+  if (ratioW < POS_GOOD_MIN_RATIO || ratioH < POS_GOOD_MIN_RATIO) return 'too_far';
+  if (ratioW > POS_GOOD_MAX_RATIO || ratioH > POS_GOOD_MAX_RATIO) return 'too_close';
+  return 'misaligned';
+}
+function updatePosGuide(res) {
+  const guide = el('posGuide'), msg = el('posMsg');
+  if (res === 'good') { guide.className='pos-guide good'; msg.style.display='none'; }
+  else if (res === 'too_far' || res === 'too_close') { guide.className='pos-guide warn'; msg.style.display='flex'; msg.innerHTML = res==='too_far'?'📏 Move closer / नजिक आउनुहोस्':'📏 Move back / पछाडि जानुहोस्'; }
+  else { guide.className='pos-guide'; msg.style.display='none'; }
+}
 
 // ----- Face Matching -----
 function matchFaceWithMargin(descriptor) {
@@ -386,10 +504,53 @@ function smoothedLabel(rawMatch) {
 }
 
 // ----- Liveness -----
-function computeTexture(video, box) { /* unchanged */ }
-function updateMotion(landmarks) { /* unchanged */ }
-function updateDrift(descriptor) { /* unchanged */ }
-function checkPassiveLiveness(video, box, landmarks, descriptor) { /* unchanged */ }
+function computeTexture(video, box) {
+  const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d'); ctx.drawImage(video,0,0);
+  const x = Math.max(0,Math.floor(box.x)), y = Math.max(0,Math.floor(box.y)), w = Math.min(canvas.width-x,Math.floor(box.width)), h = Math.min(canvas.height-y,Math.floor(box.height));
+  if (w<10||h<10) return 0;
+  const imgData = ctx.getImageData(x,y,w,h); const data = imgData.data; let sum=0, count=0;
+  for (let i=0;i<data.length;i+=4){ const gray = 0.299*data[i]+0.587*data[i+1]+0.114*data[i+2]; sum+=gray; count++; }
+  const mean = sum/count; let variance=0;
+  for (let i=0;i<data.length;i+=4){ const gray = 0.299*data[i]+0.587*data[i+1]+0.114*data[i+2]; variance+=(gray-mean)**2; }
+  return Math.sqrt(variance/count);
+}
+function updateMotion(landmarks) {
+  if (!landmarks) return;
+  const nose = landmarks.getNose(); if (!nose || nose.length<3) return;
+  const tip = nose[3]; noseHistory.push({x:tip.x,y:tip.y});
+  if (noseHistory.length > MOTION_WIN) noseHistory.shift();
+  if (noseHistory.length < MOTION_WIN) return;
+  let totalMove = 0;
+  for (let i=1;i<noseHistory.length;i++) { totalMove += Math.hypot(noseHistory[i].x-noseHistory[i-1].x, noseHistory[i].y-noseHistory[i-1].y); }
+  const avgMove = totalMove/(noseHistory.length-1);
+  return avgMove;
+}
+function updateDrift(descriptor) {
+  descHistory.push(descriptor);
+  if (descHistory.length > DRIFT_WIN) descHistory.shift();
+  if (descHistory.length < DRIFT_WIN) return 0;
+  let totalDrift = 0;
+  for (let i=1;i<descHistory.length;i++) { totalDrift += faceapi.euclideanDistance(descHistory[i], descHistory[i-1]); }
+  return totalDrift/(descHistory.length-1);
+}
+function checkPassiveLiveness(video, box, landmarks, descriptor) {
+  if (!video || !box || !landmarks || !descriptor) return false;
+  const tex = computeTexture(video, box);
+  textureHistory.push(tex);
+  if (textureHistory.length > TEXTURE_WIN) textureHistory.shift();
+  const avgTex = textureHistory.reduce((a,b)=>a+b,0)/textureHistory.length;
+  const motion = updateMotion(landmarks) || 0;
+  const drift = updateDrift(descriptor) || 0;
+  let passes = 0;
+  if (avgTex > TEXTURE_THRESH && textureHistory.length >= TEXTURE_WIN) passes++;
+  else if (avgTex < TEXTURE_STRICT && textureHistory.length >= TEXTURE_WIN) livenessFail = true;
+  if (motion > MOTION_PX_MIN && noseHistory.length >= MOTION_WIN) passes++;
+  if (drift > DRIFT_THRESH && descHistory.length >= DRIFT_WIN) passes++;
+  if (livenessFail) return false;
+  if (passes >= 2) livenessPassCount++;
+  return livenessPassCount >= LIVENESS_PASS_NEED;
+}
 function resetLivenessBuffers() { textureHistory = []; noseHistory = []; descHistory = []; livenessPassCount = 0; livenessFail = false; }
 
 // ----- Main Detection Loop -----
@@ -429,7 +590,7 @@ async function detectionLoop() {
   const rawMatch = matchFaceWithMargin(descriptor);
   const winner = smoothedLabel(rawMatch);
 
-  // ---- NEW: unknown face tracking and notification ----
+  // ----- Unknown face tracking & notification -----
   if (winner === '__new__' || winner === '__uncertain__') {
     unknownFaceFrames++;
   } else {
@@ -438,7 +599,7 @@ async function detectionLoop() {
   if (unknownFaceFrames >= UNKNOWN_FRAME_THRESHOLD && Date.now() - lastUnknownPopupTime > UNKNOWN_POPUP_COOLDOWN) {
     lastUnknownPopupTime = Date.now();
     showUnknownFacePopup();
-    unknownFaceFrames = 0; // reset to avoid immediate re-trigger
+    unknownFaceFrames = 0;
   }
 
   if (winner !== '__new__' && winner !== '__uncertain__') {
@@ -458,7 +619,6 @@ async function detectionLoop() {
       }
     }
   } else {
-    // Unknown face: just update HUD (already shows "Unknown / अपरिचित" in the match badge)
     const matchBadge = el('matchBadge'); const matchText = el('matchText');
     if (matchBadge) matchBadge.style.display = 'inline-flex';
     if (matchText) matchText.textContent = 'Unknown / अपरिचित';
@@ -491,9 +651,9 @@ function showCamFlash() {
   const flash = document.createElement('div'); flash.className = 'mark-flash'; box.appendChild(flash);
   setTimeout(()=>flash.remove(), 500);
 }
-function drawCircle(ctx,cx,cy,rad,color) { /* unchanged */ }
-function drawLabel(ctx,text,cx,cy,rad) { /* unchanged */ }
-function roundRect(ctx,x,y,w,h,r) { /* unchanged */ }
+function drawCircle(ctx,cx,cy,rad,color) { ctx.beginPath(); ctx.arc(cx,cy,rad,0,2*Math.PI); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.stroke(); }
+function drawLabel(ctx,text,cx,cy,rad) { ctx.font='14px Inter'; ctx.fillStyle='#fff'; ctx.fillText(text,cx,cy-rad-8); }
+function roundRect(ctx,x,y,w,h,r) { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); }
 
 function resumeScanning(delay=300) {
   setTimeout(()=>{ scanEnabled=true; processing=false; smoothBuffer=[]; badPositionFrames=0; resetLivenessBuffers(); }, delay);
@@ -501,7 +661,6 @@ function resumeScanning(delay=300) {
 
 // ----- Mark Attendance -----
 async function doMarkAttendance(studentId, dist) {
-  // unchanged, but after marking we may want to reset unknown counter
   const now = Date.now(), todayKey = new Date().toDateString(), markedKey = `${studentId}__${todayKey}`;
   if (cooldowns[studentId] && now - cooldowns[studentId] < COOLDOWN_MS) { resumeScanning(200); return; }
   cooldowns[studentId] = now;
@@ -546,8 +705,24 @@ function addMarkedChip(name) {
 
 // ----- Students List with Edit/Delete -----
 async function loadStudents(c) {
-  // unchanged
+  c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
+  await fetchStudents();
+  if (!studentsCache.length) { c.innerHTML='<div class="card" style="text-align:center;padding:60px"><h3>No students</h3><button class="btn btn-p" onclick="nav(\'reg\')">Register</button></div>'; return; }
+  let rows = '';
+  studentsCache.forEach((s,i) => {
+    const sid = s.StudentID || '', sname = s.StudentName || '';
+    const safeNameHTML = escapeHtml(sname);
+    const safeNameJS = escapeJs(sname);
+    rows += `<tr><td>${i+1}</td><td><small>${sid}</small></td><td><strong>${safeNameHTML}</strong></td><td>${s.Class||'-'}</td><td>${s.Section||'-'}</td><td>${s.RollNumber||'-'}</td><td>${s.Gender||'-'}</td><td>${s.GuardianPhone||'-'}</td><td>${(s.Address||'-').substring(0,22)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-ghost btn-sm" onclick="showEditStudentModal('${sid}')" title="Edit"><i class="fas fa-edit"></i></button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--d)" onclick="deleteStudent('${sid}','${safeNameJS}')" title="Delete"><i class="fas fa-trash-alt"></i></button>
+        <button class="btn btn-ghost btn-sm" onclick="showImproveFaceModal('${sid}','${safeNameJS}')" title="Improve Face"><i class="fas fa-camera"></i></button>
+      </td></tr>`;
+  });
+  c.innerHTML = `<div class="card"><h2 style="margin-bottom:16px">Students (${studentsCache.length})</h2><div class="tbc"><table><thead><tr><th>#</th><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Gender</th><th>Phone</th><th>Address</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
+
 function escapeHtml(text) {
   if (!text) return '';
   return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;').replace(/`/g,'&#96;').replace(/\$/g,'&#36;');
@@ -556,26 +731,140 @@ function escapeJs(text) {
   if (!text) return '';
   return text.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"').replace(/\n/g,'\\n').replace(/\r/g,'\\r');
 }
-function showEditStudentModal(studentId) { /* unchanged */ }
-async function submitEditStudent(studentId) { /* unchanged */ }
-function deleteStudent(studentId, studentName) { /* unchanged */ }
 
-// ----- Quick Register -----
-function showQuickRegister() { /* unchanged */ }
-async function submitQuickRegister() { /* unchanged */ }
+function showEditStudentModal(studentId) {
+  const student = studentsCache.find(s => String(s.StudentID) === String(studentId));
+  if (!student) { notify('Student not found','error'); return; }
+  const classOpts = [1,2,3,4,5,6,7,8,9,10].map(i => `<option ${student.Class==String(i)?'selected':''}>${i}</option>`).join('');
+  const sectionOpts = ['JUPITER','SATURN','URANUS','NEPTUNE'].map(sec => `<option ${student.Section===sec?'selected':''}>${sec}</option>`).join('');
+  showModal(`
+    <div class="modal-header"><div class="modal-title">✏️ Edit Student / विद्यार्थी सम्पादन</div><div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Full Name</label><input id="editName" value="${escapeHtml(student.StudentName||'')}" placeholder="Student Name"></div><div class="fg"><label class="fl">Admission No.</label><input id="editAdm" value="${escapeHtml(student.AdmissionNumber||'')}" placeholder="Admission No."></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Date of Birth</label><input type="date" id="editDob" value="${student.DateOfBirth||''}"></div><div class="fg"><label class="fl">Gender</label><select id="editGender"><option value="">Select</option><option ${student.Gender==='Male'?'selected':''}>Male</option><option ${student.Gender==='Female'?'selected':''}>Female</option></select></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Class</label><select id="editClass"><option value="">Select</option>${classOpts}</select></div><div class="fg"><label class="fl">Section</label><select id="editSection"><option value="">Select</option>${sectionOpts}</select></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Roll No.</label><input id="editRoll" value="${escapeHtml(student.RollNumber||'')}" placeholder="Roll No."></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Father</label><input id="editFather" value="${escapeHtml(student.FatherName||'')}" placeholder="Father's Name"></div><div class="fg"><label class="fl">Mother</label><input id="editMother" value="${escapeHtml(student.MotherName||'')}" placeholder="Mother's Name"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Phone</label><input id="editPhone" value="${escapeHtml(student.GuardianPhone||'')}" placeholder="Guardian Phone"></div><div class="fg"><label class="fl">Address</label><textarea id="editAddr" placeholder="Address">${escapeHtml(student.Address||'')}</textarea></div></div>
+    <div class="fg"><label class="fl">Password (editsys123)</label><input type="password" id="editPwd" placeholder="Enter password to save changes"></div>
+    <button class="btn btn-p btn-block" onclick="submitEditStudent('${studentId}')"><i class="fas fa-save"></i> Save Changes</button>
+  `);
+}
+
+async function submitEditStudent(studentId) {
+  const pwd = document.getElementById('editPwd').value.trim();
+  if (pwd !== 'editsys123') { notify('❌ Wrong password! You need the edit/delete password.','error'); return; }
+  const payload = {
+    studentId, studentName: document.getElementById('editName').value.trim(), admissionNumber: document.getElementById('editAdm').value.trim(),
+    dateOfBirth: document.getElementById('editDob').value, class: document.getElementById('editClass').value, section: document.getElementById('editSection').value,
+    rollNumber: document.getElementById('editRoll').value.trim(), gender: document.getElementById('editGender').value,
+    fatherName: document.getElementById('editFather').value.trim(), motherName: document.getElementById('editMother').value.trim(),
+    guardianPhone: document.getElementById('editPhone').value.trim(), address: document.getElementById('editAddr').value.trim()
+  };
+  const btn = document.querySelector('#modalContainer .btn-p'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  const r = await apiCall('updateStudent', payload);
+  btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+  if (r && r.success) { notify('✅ Student updated successfully!','success'); closeModal(); studentsCache = []; await fetchStudents(); loadStudents(document.getElementById('pc')); }
+  else notify('❌ Update failed: ' + (r?.error || 'unknown error'),'error');
+}
+
+function deleteStudent(studentId, studentName) {
+  const pwd = prompt(`Enter password to DELETE "${studentName}" permanently:`);
+  if (!pwd) return;
+  if (pwd !== 'editsys123') { notify('❌ Wrong password! Deletion cancelled.','error'); return; }
+  if (!confirm(`Are you sure you want to delete "${studentName}"?\nThis action cannot be undone.`)) return;
+  apiCall('deleteStudent', { studentId }).then(r => {
+    if (r && r.success) { notify(`✅ ${studentName} deleted successfully.`,'success'); studentsCache = studentsCache.filter(s => String(s.StudentID) !== String(studentId)); loadStudents(document.getElementById('pc')); }
+    else notify('❌ Deletion failed: ' + (r?.error || 'unknown error'),'error');
+  }).catch(() => notify('❌ Network error','error'));
+}
+
+// ----- Quick Register (not auto) -----
+function showQuickRegister() {
+  showModal(`<div class="modal-header"><div class="modal-title">⚡ Quick Register / छिटो दर्ता</div><div class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></div></div>
+    <div class="fg"><label class="fl">Name</label><input id="qName" placeholder="Full name"></div>
+    <div class="fr"><div class="fg"><label class="fl">Class</label><select id="qClass"><option value="">Select</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section</label><select id="qSection"><option value="">Select</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div>
+    <button class="btn btn-p btn-block" onclick="submitQuickRegister()">Register</button>`);
+}
+async function submitQuickRegister() {
+  const name = document.getElementById('qName').value.trim();
+  if (!name) { notify('Name required','error'); return; }
+  const r = await apiCall('quickRegister', { studentName: name, class: document.getElementById('qClass').value, section: document.getElementById('qSection').value });
+  if (r && r.success) { notify('✅ Registered! Now capture face on Register page.','success'); closeModal(); studentsCache = []; }
+  else notify('❌ Failed: '+(r?.error||'unknown'),'error');
+}
 
 // ----- Improve Face Data -----
-function showImproveFaceModal(studentId, studentName) { /* unchanged */ }
-async function startImproveCam() { /* unchanged */ }
-function stopImproveCam() { /* unchanged */ }
-async function captureImproveSample() { /* unchanged */ }
-async function saveImproveSamples(studentId, studentName) { /* unchanged */ }
+function showImproveFaceModal(studentId, studentName) {
+  showModal(`<div class="modal-header"><div class="modal-title">📸 Improve Face: ${studentName}</div><div class="modal-close" onclick="closeModal();stopImproveCam();"><i class="fas fa-times"></i></div></div>
+    <div class="cam-box" style="max-width:400px;margin:0 auto"><video id="impCam" autoplay playsinline muted></video></div>
+    <div class="cam-footer"><button class="btn btn-p" onclick="startImproveCam()">Start Camera</button><button class="btn btn-o" onclick="captureImproveSample()">Capture</button><button class="btn btn-d" onclick="stopImproveCam()">Stop</button></div>
+    <div id="impSamples" style="margin-top:10px;font-size:.78rem;color:var(--sub)"></div>
+    <button class="btn btn-s btn-block" onclick="saveImproveSamples('${studentId}','${escapeHtml(studentName)}')" id="impSaveBtn" disabled>Save Samples</button>`);
+  window._impSamples = [];
+}
+async function startImproveCam() {
+  stopImproveCam();
+  try {
+    window._impStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } });
+    const video = document.getElementById('impCam'); if (video) { video.srcObject = window._impStream; video.play(); }
+  } catch(e) { notify('Camera error: '+e.message,'error'); }
+}
+function stopImproveCam() {
+  if (window._impStream) { window._impStream.getTracks().forEach(t=>t.stop()); window._impStream = null; }
+}
+async function captureImproveSample() {
+  const video = document.getElementById('impCam'); if (!video || video.readyState < 2) { notify('Camera not ready','error'); return; }
+  if (!modelsLoaded) { notify('Models not loaded','warning'); return; }
+  const detection = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.5 })).withFaceDescriptor();
+  if (!detection) { notify('No face detected','error'); return; }
+  window._impSamples.push(Array.from(detection.descriptor));
+  document.getElementById('impSamples').textContent = `Captured: ${window._impSamples.length} samples`;
+  document.getElementById('impSaveBtn').disabled = window._impSamples.length < 3;
+}
+async function saveImproveSamples(studentId, studentName) {
+  if (!window._impSamples || window._impSamples.length < 3) { notify('Need at least 3 samples','error'); return; }
+  const btn = document.getElementById('impSaveBtn'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  const r = await apiCall('improveEmbeddings', { studentId, embeddings: window._impSamples });
+  btn.disabled = false; btn.innerHTML = 'Save Samples';
+  if (r && r.success) { notify('✅ Face updated!','success'); closeModal(); stopImproveCam(); localStorage.removeItem(FACE_CACHE_KEY); }
+  else notify('❌ Failed: '+(r?.error||'unknown'),'error');
+}
 
 // ----- Reports -----
-function loadReports(c) { /* unchanged */ }
-async function runReport() { /* unchanged */ }
-function formatDateNice(dateStr) { /* unchanged */ }
-function exportReportCSV() { /* unchanged */ }
+function loadReports(c) {
+  c.innerHTML = `<div class="card"><h2>Attendance Reports / रिपोर्ट</h2>
+    <div class="fr"><div class="fg"><label class="fl">From Date</label><input type="date" id="repFrom"></div><div class="fg"><label class="fl">To Date</label><input type="date" id="repTo"></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Class</label><select id="repClass"><option value="">All</option>${[1,2,3,4,5,6,7,8,9,10].map(i=>`<option>${i}</option>`).join('')}</select></div><div class="fg"><label class="fl">Section</label><select id="repSection"><option value="">All</option><option>JUPITER</option><option>SATURN</option><option>URANUS</option><option>NEPTUNE</option></select></div></div>
+    <div class="fr"><div class="fg"><label class="fl">Status</label><select id="repStatus"><option value="">All</option><option>Present</option><option>Late</option><option>Absent</option></select></div></div>
+    <button class="btn btn-p" onclick="runReport()"><i class="fas fa-search"></i> Generate Report</button>
+    <button class="btn btn-ghost" onclick="exportReportCSV()" id="exportBtn" style="display:none;margin-left:8px"><i class="fas fa-download"></i> Export CSV</button>
+    <div id="reportArea" style="margin-top:16px"></div></div>`;
+}
+async function runReport() {
+  const from = document.getElementById('repFrom').value, to = document.getElementById('repTo').value;
+  if (!from || !to) { notify('Select date range','warning'); return; }
+  const cls = document.getElementById('repClass').value, sec = document.getElementById('repSection').value, status = document.getElementById('repStatus').value;
+  const res = await apiGetParams('getReport', { from, to, class: cls, section: sec, status });
+  const data = res?.attendance || [];
+  let rows = '';
+  data.forEach(r => {
+    const badge = r.Status==='Present'?'badge-present':(r.Status==='Late'?'badge-late':'badge-absent');
+    rows += `<tr><td>${r.Date||''}</td><td>${r.StudentName||''}</td><td>${r.Class||''}</td><td>${r.Section||''}</td><td><span class="badge ${badge}">${r.Status||'Absent'}</span></td><td>${r.Timestamp||''}</td></tr>`;
+  });
+  document.getElementById('reportArea').innerHTML = `<div class="tbc"><table><thead><tr><th>Date</th><th>Name</th><th>Class</th><th>Section</th><th>Status</th><th>Time</th></tr></thead><tbody>${rows||'<tr><td colspan="6">No records</td></tr>'}</tbody></table></div>`;
+  document.getElementById('exportBtn').style.display = 'inline-flex';
+  window._reportData = data;
+}
+function formatDateNice(dateStr) {
+  const d = new Date(dateStr); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function exportReportCSV() {
+  if (!window._reportData || !window._reportData.length) { notify('No data to export','warning'); return; }
+  let csv = 'Date,Name,Class,Section,Status,Time\n';
+  window._reportData.forEach(r => { csv += `"${r.Date||''}","${r.StudentName||''}","${r.Class||''}","${r.Section||''}","${r.Status||''}","${r.Timestamp||''}"\n`; });
+  const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'attendance_report.csv'; a.click(); URL.revokeObjectURL(url);
+}
 
 // BOOT
 document.addEventListener('DOMContentLoaded', init);
