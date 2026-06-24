@@ -1767,9 +1767,14 @@ async function captureRegSample() {
   const btn = document.getElementById('captureBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting…'; }
 
+  // Must explicitly request the TINY landmark net here (withFaceLandmarks(true)),
+  // matching what's actually loaded in preloadModels(). Without this, face-api
+  // defaults to the full faceLandmark68Net for descriptor computation — which
+  // was never loaded — causing a slow lazy-load (or repeated failed attempts)
+  // on every single Capture click. This was the cause of the registration lag.
   const detection = await faceapi.detectSingleFace(video,
     new faceapi.TinyFaceDetectorOptions({ inputSize: DETECTION.INPUT_SIZE, scoreThreshold: 0.5 })
-  ).withFaceDescriptor();
+  ).withFaceLandmarks(true).withFaceDescriptor();
 
   if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-camera"></i> Capture'; }
 
@@ -2549,9 +2554,11 @@ async function captureImproveSample() {
   const video = document.getElementById('impCam');
   if (!video || video.readyState < 2) return notify('Camera not ready', 'error');
   if (!modelsLoaded) return notify('Models not loaded', 'warning');
+  // Same fix as captureRegSample(): explicitly use the tiny landmark net that's
+  // actually loaded, instead of letting face-api fall back to the unloaded full net.
   const detection = await faceapi.detectSingleFace(video,
     new faceapi.TinyFaceDetectorOptions({ inputSize: DETECTION.INPUT_SIZE, scoreThreshold: 0.5 })
-  ).withFaceDescriptor();
+  ).withFaceLandmarks(true).withFaceDescriptor();
   if (!detection) return notify('No face detected', 'error');
   window._impSamples = window._impSamples || [];
   window._impSamples.push(Array.from(detection.descriptor));
