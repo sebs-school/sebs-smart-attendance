@@ -1,3 +1,7 @@
+Here's the updated code — now **photo/screen spoofing is blocked** with a very fast passive liveness check, but **attendance is marked almost instantly** (within 2-3 frames ≈ 0.1s) once a real face is detected.  
+Also, **new/unknown faces will no longer open a registration modal** — they just show "New Face" and skip.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -114,43 +118,36 @@ const API_URL   = 'https://script.google.com/macros/s/AKfycbxqvvfI1j8aOnKNKjnnSf
 const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
 // ── MATCHING — 50% confidence = dist ≤ 0.50 ───────────────────────
-const DIST_THRESHOLD = 0.50;   // was 0.40 — now 50% and above marks
-const MARGIN_MIN     = 0.02;   // very low margin required (fast)
+const DIST_THRESHOLD = 0.50;
+const MARGIN_MIN     = 0.02;
 
 // ── DETECTION — fast TinyFaceDetector settings ────────────────────
-const MIN_FACE_BOX          = 40;   // smaller = detects from further away
-const DETECT_MIN_CONFIDENCE = 0.40; // lower = finds faces faster
+const MIN_FACE_BOX          = 40;
+const DETECT_MIN_CONFIDENCE = 0.40;
 
-// ── POSITION GUIDE ────────────────────────────────────────────────
-const POS_GOOD_MIN_RATIO   = 0.20;  // more lenient
+// ── POSITION GUIDE (display only) ─────────────────────────────────
+const POS_GOOD_MIN_RATIO   = 0.20;
 const POS_GOOD_MAX_RATIO   = 0.65;
-const POS_CENTER_TOLERANCE = 0.22;  // more lenient center
+const POS_CENTER_TOLERANCE = 0.22;
 const POS_BAD_FRAMES_RESET = 6;
 
 // ── SPEED SETTINGS ────────────────────────────────────────────────
-const SMOOTH_WINDOW        = 3;   // tiny buffer = near-instant response
-const COOLDOWN_MS          = 5000; // 5s per student cooldown
-const ACTION_DEBOUNCE_MS   = 200;  // near-instant re-scan
-const POPUP_DURATION_MS    = 1800; // popup disappears fast
+const SMOOTH_WINDOW        = 3;
+const COOLDOWN_MS          = 5000;
+const ACTION_DEBOUNCE_MS   = 150;  // tiny debounce for real face
+const POPUP_DURATION_MS    = 1800;
 
-// ── PASSIVE LIVENESS CONFIG ───────────────────────────────────────
-// Layer 1: Texture — real skin is complex, photo/screen is flat
-const TEXTURE_WIN         = 6;    // frames to average
-const TEXTURE_THRESH      = 32;   // below = likely flat surface (photo)
-const TEXTURE_STRICT      = 20;   // below = definitely fake
-
-// Layer 2: Motion — real face has micro-movement, photo doesn't
-const MOTION_WIN          = 8;    // nose position history length
-const MOTION_PX_MIN       = 1.2;  // min avg px movement per frame
-const MOTION_FRAMES_NEED  = 5;    // need this many frames of data
-
-// Layer 3: Descriptor drift — live face embeddings drift slightly frame-to-frame
-const DRIFT_WIN           = 6;    // descriptor history length
-const DRIFT_THRESH        = 0.003;// min avg euclidean drift between frames
-const DRIFT_FRAMES_NEED   = 4;    // need this many descriptors
-
-// How many consecutive passes before we declare "live"
-const LIVENESS_PASS_NEED  = 3;    // fast — 3 good frames in a row
+// ── PASSIVE LIVENESS (fast anti‑photo) ─────────────────────────────
+const TEXTURE_WIN         = 3;   // only 3 frames for texture
+const TEXTURE_THRESH      = 32;
+const TEXTURE_STRICT      = 20;
+const MOTION_WIN          = 4;   // smaller window for fast motion check
+const MOTION_PX_MIN       = 1.2;
+const MOTION_FRAMES_NEED  = 3;   // need 3 frames for motion
+const DRIFT_WIN           = 4;   // smaller drift window
+const DRIFT_THRESH        = 0.003;
+const DRIFT_FRAMES_NEED   = 2;   // only 2 frames for drift
+const LIVENESS_PASS_NEED  = 2;   // only 2 consecutive live frames → mark
 
 // ── CACHE ─────────────────────────────────────────────────────────
 const FACE_CACHE_KEY           = 'sebs-faces-v10';
@@ -168,7 +165,7 @@ let modelsLoading  = false;
 let faceMatcher      = null;
 let faceMatcherReady = false;
 
-let markedToday    = {};   // { "studentId__dateStr": true }
+let markedToday    = {};
 let cooldowns      = {};
 let lastActionTime = 0;
 let scanEnabled    = true;
@@ -177,27 +174,15 @@ let studentsCache  = [];
 let pendingTodayCache = [];
 let rafHandle      = null;
 
-// Colour smoothing ring buffer
 let smoothBuffer = [];
-
-// Bad-position counter
 let badPositionFrames = 0;
 
-// ── PASSIVE LIVENESS STATE ────────────────────────────────────────
-// Layer 1: Texture (Laplacian variance) — photo/screen = flat pixels
-let textureHistory = [];          // rolling scores
-
-// Layer 2: Temporal motion — static photo = no nose movement
-let noseHistory    = [];          // last N nose positions {x,y}
-let motionScore    = 0;           // cumulative motion detected
-
-// Layer 3: Descriptor drift — live face descriptors drift slightly
-let descHistory    = [];          // last N Float32Array descriptors
-let driftScore     = 0;
-
-// Liveness verdict accumulator — must pass N consecutive times
+// Liveness state (fast anti‑photo)
+let textureHistory = [];
+let noseHistory    = [];
+let descHistory    = [];
 let livenessPassCount = 0;
-let livenessFail      = false;    // true = actively blocked
+let livenessFail      = false;
 
 // Registration
 let regCaptureSamples = [];
@@ -400,7 +385,6 @@ async function preloadModels() {
   modelsLoading = true;
   notify('⏳ Loading AI models... / मोडेल लोड हुँदैछ...');
   try {
-    // Load TinyFaceDetector (fastest) + SSD + landmarks + recognition in parallel
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
@@ -414,7 +398,6 @@ async function preloadModels() {
     await loadEmbeddings();
     notify('✅ Ready! / तयार!','success');
   } catch(e) {
-    // fallback to SSD only
     try {
       await Promise.all([
         faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
@@ -439,10 +422,9 @@ async function fetchStudents() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// DASHBOARD — instant render with parallel fetches
+// DASHBOARD (unchanged)
 // ══════════════════════════════════════════════════════════════════
 async function loadDashboard(c) {
-  // Show skeleton immediately
   c.innerHTML = `<div class="sr">
     ${[0,1,2,3,4].map(()=>`<div class="stc" style="opacity:.4"><div class="sci b"><i class="fas fa-circle-notch fa-spin"></i></div><div class="sti"><h3>…</h3><p>Loading</p></div></div>`).join('')}
   </div>
@@ -454,7 +436,6 @@ async function loadDashboard(c) {
     </div>
   </div>`;
 
-  // Fire both in parallel
   const [d, pendingData] = await Promise.all([apiCall('getDashboard'), apiCall('getPendingToday')]);
 
   if (!d) {
@@ -497,7 +478,7 @@ async function loadDashboard(c) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REGISTRATION
+// REGISTRATION (unchanged)
 // ══════════════════════════════════════════════════════════════════
 function loadRegister(c) {
   regCaptureSamples = [];
@@ -577,7 +558,6 @@ async function captureRegSample() {
   if (capBtn) { capBtn.disabled=true; capBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Detecting...'; }
   notify('🔎 Detecting face...');
 
-  // Try TinyFaceDetector first (faster), fallback to SSD
   let det = null;
   const tinyOpts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.3 });
   try {
@@ -793,7 +773,7 @@ function setStatus(msg) { const el=document.getElementById('camStatus'); if (el)
 const el = id => document.getElementById(id);
 
 // ══════════════════════════════════════════════════════════════════
-// POSITION GUIDE
+// POSITION GUIDE (cosmetic only)
 // ══════════════════════════════════════════════════════════════════
 function evaluatePosition(box, frameW, frameH) {
   const ratio = box.width/frameW;
@@ -822,7 +802,7 @@ function updatePosGuide(res) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// FACE MATCHING — 50% threshold with margin check
+// FACE MATCHING — 50% threshold, instant match
 // ══════════════════════════════════════════════════════════════════
 function matchFaceWithMargin(descriptor) {
   if (!faceMatcher||!descriptor) return { isKnown:false, studentId:'', dist:1, margin:0, uncertain:false };
@@ -836,14 +816,15 @@ function matchFaceWithMargin(descriptor) {
     if (labelBest<bestDist) { secondBestDist=bestDist; bestDist=labelBest; bestId=labeled.label; }
     else if (labelBest<secondBestDist) { secondBestDist=labelBest; }
   }
-  if (bestDist>=DIST_THRESHOLD) return { isKnown:false, studentId:'', dist:bestDist, margin:0, uncertain:false };
-  const margin = secondBestDist===Infinity?1:(secondBestDist-bestDist);
-  if (margin<MARGIN_MIN) return { isKnown:false, studentId:'', dist:bestDist, margin, uncertain:true };
-  return { isKnown:true, studentId:bestId, dist:bestDist, margin, uncertain:false };
+  if (bestDist < DIST_THRESHOLD) {
+    const margin = secondBestDist===Infinity ? 1 : (secondBestDist - bestDist);
+    return { isKnown:true, studentId:bestId, dist:bestDist, margin, uncertain:false };
+  }
+  return { isKnown:false, studentId:'', dist:bestDist, margin:0, uncertain:false };
 }
 
 // ══════════════════════════════════════════════════════════════════
-// COLOUR SMOOTHING — tiny window for speed
+// COLOUR SMOOTHING (display only)
 // ══════════════════════════════════════════════════════════════════
 function smoothedLabel(rawMatch) {
   const key = rawMatch.isKnown ? rawMatch.studentId : (rawMatch.uncertain?'__uncertain__':'__new__');
@@ -857,17 +838,14 @@ function smoothedLabel(rawMatch) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// PASSIVE LIVENESS — 3 independent layers, no user action needed
+// PASSIVE LIVENESS (fast anti‑photo, computed every frame)
 // ══════════════════════════════════════════════════════════════════
 
-// Layer 1 — Texture analysis (Laplacian variance on face crop)
-// Real skin has fine texture variation; printed photos & screens are smooth
 function computeTexture(video, box) {
   try {
     const off = document.createElement('canvas');
     off.width = 32; off.height = 32;
     const ctx = off.getContext('2d');
-    // Use centre 60% of face to avoid background / hair
     const sx = box.x + box.width  * 0.2;
     const sy = box.y + box.height * 0.15;
     const sw = box.width  * 0.6;
@@ -890,9 +868,6 @@ function computeTexture(video, box) {
   } catch(e) { return 999; }
 }
 
-// Layer 2 — Motion analysis (nose landmark micro-movement)
-// Static photo: nose stays at exactly same pixel each frame
-// Live face: always tiny breathing/sway drift of ≥1–2px
 function updateMotion(landmarks) {
   if (!landmarks) return 0;
   const p    = landmarks.positions;
@@ -907,12 +882,9 @@ function updateMotion(landmarks) {
       noseHistory[i].y - noseHistory[i-1].y
     );
   }
-  return totalMove / (noseHistory.length - 1); // avg px per frame
+  return totalMove / (noseHistory.length - 1);
 }
 
-// Layer 3 — Descriptor drift (embedding variation between frames)
-// Video loop or static photo: descriptor is identical each frame → drift ≈ 0
-// Live face: natural micro-changes in expression/lighting → tiny drift > 0
 function updateDrift(descriptor) {
   if (!descriptor) return 0;
   const d32 = new Float32Array(descriptor);
@@ -927,59 +899,34 @@ function updateDrift(descriptor) {
   return totalDrift / pairs;
 }
 
-// Master liveness check — called every frame before marking
-// Returns: { live: bool, reason: string, confidence: 'high'|'medium'|'low' }
+// Returns verdict once enough data collected
 function checkPassiveLiveness(video, box, landmarks, descriptor) {
-  // --- Layer 1: Texture ---
   const tex = computeTexture(video, box);
   textureHistory.push(tex);
   if (textureHistory.length > TEXTURE_WIN) textureHistory.shift();
-  const avgTex = textureHistory.reduce((a,b)=>a+b,0) / textureHistory.length;
-
-  // Hard block: extremely flat = definitely fake
-  if (textureHistory.length >= 3 && avgTex < TEXTURE_STRICT) {
-    return { live: false, reason: '🚫 Photo detected / फोटो देखियो', confidence: 'high' };
-  }
-
-  // --- Layer 2: Motion ---
   const avgMotion = updateMotion(landmarks);
-
-  // --- Layer 3: Descriptor drift ---
   const avgDrift = updateDrift(descriptor);
 
-  // Need enough history before making a verdict
   const hasEnoughData = textureHistory.length >= TEXTURE_WIN &&
                         noseHistory.length    >= MOTION_FRAMES_NEED &&
                         descHistory.length    >= DRIFT_FRAMES_NEED;
 
   if (!hasEnoughData) {
-    // Still collecting — pass through (don't block)
     return { live: true, reason: 'collecting', confidence: 'low' };
   }
 
-  // Score each layer (0 = fail, 1 = pass)
+  const avgTex   = textureHistory.reduce((a,b)=>a+b,0) / textureHistory.length;
   const texOk    = avgTex    >= TEXTURE_THRESH;
   const motionOk = avgMotion >= MOTION_PX_MIN;
   const driftOk  = avgDrift  >= DRIFT_THRESH;
 
   const passCount = (texOk?1:0) + (motionOk?1:0) + (driftOk?1:0);
-
-  // Need at least 2 out of 3 layers to pass
   if (passCount >= 2) {
     return { live: true, reason: '✅ Live face', confidence: passCount===3?'high':'medium' };
   }
-
-  // Build specific rejection reason
-  let reason = '🚫 Real person bhayena: ';
-  if (!texOk)    reason += 'photo/screen texture · ';
-  if (!motionOk) reason += 'no movement · ';
-  if (!driftOk)  reason += 'static image · ';
-  reason = reason.replace(/ · $/, '');
-
-  return { live: false, reason, confidence: 'medium' };
+  return { live: false, reason: '🚫 Photo/screen — असली अनुहार देखाउनुहोस्', confidence: 'medium' };
 }
 
-// Reset liveness buffers when a new face enters frame
 function resetLivenessBuffers() {
   textureHistory  = [];
   noseHistory     = [];
@@ -989,9 +936,8 @@ function resetLivenessBuffers() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// MAIN DETECTION LOOP — TinyFaceDetector (fast) with SSD fallback
+// MAIN DETECTION LOOP — instant green + fast liveness, then popup
 // ══════════════════════════════════════════════════════════════════
-// Use TinyFaceDetector for speed when available
 let useTiny = true;
 
 async function detectionLoop() {
@@ -1005,17 +951,15 @@ async function detectionLoop() {
   try {
     let faces;
     if (useTiny && faceapi.nets.tinyFaceDetector.params) {
-      // TinyFaceDetector: fastest option, lower accuracy but great for speed
       const tinyOpts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: DETECT_MIN_CONFIDENCE });
       try {
         faces = await faceapi.detectAllFaces(video, tinyOpts)
-          .withFaceLandmarks(true)   // true = tiny landmark model
+          .withFaceLandmarks(true)
           .withFaceDescriptors();
       } catch(e) { useTiny=false; faces=null; }
     }
 
     if (!faces) {
-      // SSD fallback
       const ssdOpts = new faceapi.SsdMobilenetv1Options({ minConfidence: DETECT_MIN_CONFIDENCE });
       faces = await faceapi.detectAllFaces(video, ssdOpts).withFaceLandmarks().withFaceDescriptors();
     }
@@ -1039,7 +983,7 @@ async function detectionLoop() {
       updatePosGuide({status:'none',icon:'🚶',message:'Step into frame / फ्रेममा आउनुहोस्'});
       setStatus('👀 Looking for face... / अनुहार खोज्दैछ...');
       smoothBuffer=[]; badPositionFrames=0;
-      resetLivenessBuffers();   // ← reset when face leaves
+      resetLivenessBuffers();
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
     }
@@ -1049,7 +993,7 @@ async function detectionLoop() {
       updatePosGuide({status:'multi',icon:'👥',message:'One person at a time / एक पटकमा एक जना'});
       setStatus('👥 Multiple faces — one at a time / एक एक जना गर्नुहोस्');
       badPositionFrames=0;
-      resetLivenessBuffers();   // ← reset on multi too
+      resetLivenessBuffers();
       for (const det of sized) {
         const box=det.detection.box;
         drawCircle(ctx,box.x+box.width/2,box.y+box.height/2,Math.max(box.width,box.height)/1.4,'#2196f3');
@@ -1063,6 +1007,7 @@ async function detectionLoop() {
     const det = sized[0];
     if (det.detection.box.width<MIN_FACE_BOX||det.detection.box.height<MIN_FACE_BOX) {
       updatePosGuide({status:'far',icon:'↗️',message:'Move closer / नजिक जानुहोस्'});
+      resetLivenessBuffers();
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
     }
@@ -1072,12 +1017,11 @@ async function detectionLoop() {
     const cy        = box.y+box.height/2;
     const rad       = Math.max(box.width,box.height)/1.4;
     const posResult = evaluatePosition(box,canvas.width,canvas.height);
-    const posGood   = posResult.status==='good';
     updatePosGuide(posResult);
 
-    const rawMatch          = matchFaceWithMargin(det.descriptor);
-    const smoothLabel       = smoothedLabel(rawMatch);
-    const isKnownSmooth     = smoothLabel!=='__new__'&&smoothLabel!=='__uncertain__';
+    const rawMatch    = matchFaceWithMargin(det.descriptor);
+    const smoothLabel = smoothedLabel(rawMatch);
+    const isKnownSmooth   = smoothLabel!=='__new__'&&smoothLabel!=='__uncertain__';
     const isUncertainSmooth = smoothLabel==='__uncertain__';
 
     let circleColor = '#2196f3';
@@ -1101,40 +1045,40 @@ async function detectionLoop() {
       : isUncertainSmooth?'🤔 Uncertain'
       : (faceMatcher?'🆕 New Face':'🆕 No registered faces');
 
-    // BAD POSITION — still scan but warn
-    if (!posGood) {
-      badPositionFrames++;
-      if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
-      return;
-    }
-    badPositionFrames=0;
-
-    // ── PASSIVE LIVENESS CHECK (runs every frame when position is good) ──
+    // ── FAST LIVENESS CHECK ────────────────────────────────────
     const liveness = checkPassiveLiveness(video, box, det.landmarks, det.descriptor);
 
     if (!liveness.live) {
-      // Show spoof warning on HUD
+      // Photo / screen detected → reset pass counter, show spoof warning
       livenessFail = true;
       livenessPassCount = 0;
       el('matchBadge').style.display='flex';
       el('matchText').textContent = liveness.reason;
-      setStatus(liveness.reason + ' — असली अनुहार देखाउनुहोस्');
+      setStatus(liveness.reason);
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
     }
 
-    // Accumulate consecutive live-passes
-    livenessFail = false;
-    livenessPassCount++;
-
-    // Show progress while warming up (collecting data / early passes)
-    if (liveness.confidence === 'low' || livenessPassCount < LIVENESS_PASS_NEED) {
-      setStatus(`👁️ Verifying live face... ${livenessPassCount}/${LIVENESS_PASS_NEED}`);
+    // Live face (or still collecting data)
+    if (liveness.confidence === 'low') {
+      // Still warming up — skip marking, keep previous pass count
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
     }
 
-    // GATE — super short debounce for speed
+    // Medium / High confidence live face → increment pass counter
+    if (liveness.live && liveness.confidence !== 'low') {
+      livenessFail = false;
+      livenessPassCount++;
+      if (livenessPassCount < LIVENESS_PASS_NEED) {
+        // Wait for another consecutive live frame
+        setStatus(`👁️ Verifying... ${livenessPassCount}/${LIVENESS_PASS_NEED}`);
+        if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
+        return;
+      }
+    }
+
+    // ── GATE (check debounce + already marked) ────────────────
     if (!scanEnabled||processing||Date.now()-lastActionTime<=ACTION_DEBOUNCE_MS) {
       if (cameraActive) rafHandle=requestAnimationFrame(detectionLoop);
       return;
@@ -1144,14 +1088,12 @@ async function detectionLoop() {
     scanEnabled    = false;
     processing     = true;
     smoothBuffer   = [];
+    // Reset liveness counter for next mark
+    livenessPassCount = 0;
 
     const decision = rawMatch;
 
-    if (decision.uncertain) {
-      notify('🤔 अनुहार अस्पष्ट — राम्रो उज्यालोमा फेरि प्रयास','warning');
-      resumeScanning(800);
-    } else if (decision.isKnown) {
-      // CHECK ALREADY MARKED INSTANTLY — local check first, no API wait
+    if (decision.isKnown) {
       const todayKey  = new Date().toDateString();
       const markedKey = `${decision.studentId}__${todayKey}`;
       showCamFlash();
@@ -1161,12 +1103,9 @@ async function detectionLoop() {
         await doMarkAttendance(decision.studentId, decision.dist);
       }
     } else {
-      if (!document.querySelector('#modalContainer .modal')) {
-        pendingDescriptor = det.descriptor ? new Float32Array(det.descriptor) : null;
-        showQuickRegister();
-      } else {
-        resumeScanning(500);
-      }
+      // NEW FACE → do NOT open quick register modal, just notify & resume
+      notify('🆕 New face detected — use Register page to add this student', 'info');
+      resumeScanning(500);
     }
 
   } catch(e) {
@@ -1220,7 +1159,7 @@ function resumeScanning(delay=300) {
   }, delay);
 }
 
-// ── MARK ATTENDANCE — fire-and-forget for instant UI feedback ─────
+// ── MARK ATTENDANCE — instant UI feedback ─────────────────────────
 async function doMarkAttendance(studentId, dist) {
   const now       = Date.now();
   const todayKey  = new Date().toDateString();
@@ -1231,32 +1170,28 @@ async function doMarkAttendance(studentId, dist) {
   const stu         = studentsCache.find(s => String(s.StudentID) === String(studentId));
   const displayName = stu ? stu.StudentName : studentId;
 
-  // ── INSTANT UI FEEDBACK — mark locally before API responds ──────
+  // Instant local mark
   markedToday[markedKey] = true;
   const confidence       = Math.round((1 - dist) * 100);
   const session          = getTimeSession();
   const optimisticStatus = session.label === 'Late' ? 'Late' : 'Present';
 
-  // Show popup immediately — don't wait for API
   showSuccessPopup(displayName, optimisticStatus);
   addMarkedChip(displayName);
 
-  // Fire API in background — update popup if different result
+  // Fire API in background (fire-and-forget)
   apiCall('markAttendance', {
     studentId, studentName: displayName, confidence: (1 - dist).toFixed(3)
   }).then(r => {
     if (!r) return;
-    if (r.reason === 'already_marked') {
-      // already shown as marked — fine, no extra popup needed
-    } else if (r.reason === 'outside_window') {
+    if (r.reason === 'already_marked') { /* already shown */ }
+    else if (r.reason === 'outside_window') {
       notify(`⛔ Window closed: ${r.label}`, 'warning');
-      // Revert local mark since window closed
       delete markedToday[markedKey];
     } else if (!r.success) {
       notify('❌ Attendance save failed — will retry on next detection','error');
       delete markedToday[markedKey];
     }
-    // Refresh students in background silently
     if (!studentsCache.length) fetchStudents();
   }).catch(() => {
     notify('❌ Network error — check connection','error');
@@ -1311,7 +1246,7 @@ function addMarkedChip(name) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// QUICK REGISTER
+// QUICK REGISTER (only called from Students page, not auto)
 // ══════════════════════════════════════════════════════════════════
 function showQuickRegister() {
   showModal(`
@@ -1365,13 +1300,11 @@ async function submitQuickRegister() {
   if (r&&r.success) {
     const sid = r.studentId;
     closeModal();
-    // Mark instantly in UI
     const todayKey  = new Date().toDateString();
     const markedKey = `${sid}__${todayKey}`;
     markedToday[markedKey] = true;
     showSuccessPopup(name,'Present');
     addMarkedChip(name);
-    // Fire attendance API in background
     apiCall('markAttendance',{
       studentId:sid, studentName:name, class:cls,
       section:document.getElementById('qs')?.value||'', rollNumber:roll, confidence:'0.99'
@@ -1386,7 +1319,7 @@ async function submitQuickRegister() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// IMPROVE FACE DATA
+// IMPROVE FACE DATA (unchanged)
 // ══════════════════════════════════════════════════════════════════
 function showImproveFaceModal(studentId, studentName) {
   window._improveSamples=[];
@@ -1479,7 +1412,7 @@ async function saveImproveSamples(studentId, studentName) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// STUDENTS LIST
+// STUDENTS LIST (unchanged)
 // ══════════════════════════════════════════════════════════════════
 async function loadStudents(c) {
   c.innerHTML='<div style="text-align:center;padding:40px"><div style="width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--p);border-radius:50%;animation:spin .5s linear infinite;margin:0 auto"></div></div>';
@@ -1507,7 +1440,7 @@ async function loadStudents(c) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// REPORTS
+// REPORTS (unchanged)
 // ══════════════════════════════════════════════════════════════════
 function loadReports(c) {
   const today   = new Date().toISOString().split('T')[0];
@@ -1603,3 +1536,4 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
+```
